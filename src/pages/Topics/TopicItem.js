@@ -10,14 +10,14 @@ function TopicItem(props) {
       <Col xxl={8} xl={8} lg={12} md={24}>
         <div className="topic-item">
           <div className="topic-item__avatar">
-            <Link to={`/songs/${item._id}`}>
+            <Link to={`${API_PREFIX}/songs/${item.slug}`}>
               <img src={item.avatar} alt="Logo" />
             </Link>
           </div>
           <div className="topic-item__content">
             <div className="topic-item__title">{item.title}</div>
             <div className="topic-item__description">{item.description}</div>
-            <Link to={`${API_PREFIX}/songs/${item._id}`}>
+            <Link to={`${API_PREFIX}/songs/${item.slug}`}>
               <Button>Xem chi tiết</Button>
             </Link>
           </div>

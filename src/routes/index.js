@@ -1,5 +1,6 @@
 import LayoutDefault from "../layout/LayoutDefault";
 import Dashboard from "../pages/Dashboard";
+import Songs from "../pages/Songs";
 import Topics from "../pages/Topics";
 
 export const routes = [
@@ -19,7 +20,8 @@ export const routes = [
             element: <Topics />
           },
           {
-            path: "songs/:id",
+            path: "songs/:slugTopic",
+            element: <Songs />
           }
         ]
       }
