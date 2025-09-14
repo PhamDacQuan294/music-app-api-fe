@@ -12,8 +12,16 @@ export const routes = [
         element: <Dashboard/>
       },
       {
-        path: "/api/v1/topics",
-        element: <Topics />
+        path: "/api/v1/",
+        children: [
+          {
+            path: "topics",
+            element: <Topics />
+          },
+          {
+            path: "songs/:id",
+          }
+        ]
       }
     ]
   }

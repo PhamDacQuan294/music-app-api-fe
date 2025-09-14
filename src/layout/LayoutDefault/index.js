@@ -2,8 +2,8 @@ import { Col, Input, Layout, Row } from "antd";
 import "./LayoutDefault.scss";
 import logo from "../../images/logo.png";
 import { MenuUnfoldOutlined, SearchOutlined, SettingOutlined } from "@ant-design/icons";
-import SongCollection from "../../components/SongCollection";
 import MenuSider from "../../components/MenuSider";
+import { Outlet } from "react-router-dom";
 
 const { Footer, Sider, Content } = Layout;
 
@@ -50,7 +50,7 @@ function LayoutDefault() {
         </header>
 
         <Content className="layout-default__content">
-          <SongCollection />
+          <Outlet />
         </Content>
         
         <Footer className="layout-default__footer">Footer</Footer>

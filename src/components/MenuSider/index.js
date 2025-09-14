@@ -31,7 +31,6 @@ function MenuSider() {
       <Menu
         mode="inline"
         items={items}
-        defaultSelectedKeys={["/"]}
       />
     </>
   )
