@@ -3,6 +3,7 @@ import "./LayoutDefault.scss";
 import logo from "../../images/logo.png";
 import { MenuUnfoldOutlined, SearchOutlined, SettingOutlined } from "@ant-design/icons";
 import SongCollection from "../../components/SongCollection";
+import MenuSider from "../../components/MenuSider";
 
 const { Footer, Sider, Content } = Layout;
 
@@ -15,12 +16,7 @@ function LayoutDefault() {
           <img src={logo} alt="Logo" />
         </div>
         <div className="layout-default__sider-nav">
-          <div className="layout-default__library">
-            Thư viện
-          </div>
-          <div className="layout-default__discover">
-            Khám phá
-          </div>
+          <MenuSider />
         </div>
       </Sider>
 
