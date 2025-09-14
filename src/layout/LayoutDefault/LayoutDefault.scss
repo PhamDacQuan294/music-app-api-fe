@@ -1,0 +1,60 @@
+.layout-default {
+  &__sider {
+    &-logo {
+      width: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-right: 1px solid #ddd;
+      transition: all 0.2s;
+    }
+
+    &-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-direction: column;
+      gap: 30px;
+    }
+  }
+
+  &__header {
+    background: #fff;
+
+    &-top {
+      display: flex;
+      margin: 20px 20px 0 20px; // Thứ tự: top → right → bottom → left
+      justify-content: space-between;
+    }
+
+    &-left,
+    &-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    @media (max-width: 768px) {
+      &-top {
+        flex-wrap: wrap;
+        flex-direction: column;
+      }
+
+      &-right {
+        order: -1; /* đẩy thèn right lên trên left */
+        margin-bottom: 10px; 
+      }
+    }
+  }
+
+  &__content {
+    background: #fff;
+  }
+
+  &__footer {
+    background: #fff;
+    padding: 0;
+  }
+
+
+}
