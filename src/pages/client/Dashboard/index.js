@@ -1,6 +1,6 @@
 import { Carousel, Col, Row } from "antd";
-import music1 from "../../images/music1.jpg";
-import music2 from "../../images/music2.jpg";
+import music1 from "../../../images/music1.jpg";
+import music2 from "../../../images/music2.jpg";
 import { Link } from "react-router-dom";
 import "./Dashboard.scss";
 

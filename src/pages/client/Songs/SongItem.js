@@ -1,6 +1,6 @@
 import { Col } from "antd";
 import { Link } from "react-router-dom";
-import { API_PREFIX } from "../../components/contants"; 
+import { API_PREFIX } from "../../../components/client/contants"; 
 
 function SongItem(prop) {
   const { song } = prop;

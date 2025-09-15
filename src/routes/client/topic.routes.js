@@ -1,4 +1,4 @@
-import Topics from "../../pages/Topics";
+import Topics from "../../pages/client/Topics/index";
 
 export const topicRoutes = [
   {

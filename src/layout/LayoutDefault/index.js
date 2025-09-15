@@ -2,7 +2,7 @@ import { Col, Input, Layout, Row } from "antd";
 import "./LayoutDefault.scss";
 import logo from "../../images/logo.png";
 import { MenuUnfoldOutlined, SearchOutlined, SettingOutlined } from "@ant-design/icons";
-import MenuSider from "../../components/MenuSider";
+import MenuSider from "../../components/client/MenuSider";
 import { Outlet } from "react-router-dom";
 
 const { Footer, Sider, Content } = Layout;

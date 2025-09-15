@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { getListSong } from "../../services/songService";
+import { getListSong } from "../../../services/songService";
 import { useParams } from "react-router-dom";
 import SongList from "./SongList";
 import "./Song.scss";

@@ -1,5 +1,5 @@
-import Songs from "../../pages/Songs";
-import DetailSong from "../../pages/Songs/DetailSong";
+import Songs from "../../pages/client/Songs";
+import DetailSong from "../../pages/client/Songs/DetailSong";
 
 export const songRoutes = [
   {

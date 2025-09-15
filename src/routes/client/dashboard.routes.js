@@ -1,4 +1,4 @@
-import Dashboard from "../../pages/Dashboard";
+import Dashboard from "../../pages/client/Dashboard";
 
 export const dashboardRoutes = [
   {
