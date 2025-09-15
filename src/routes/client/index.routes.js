@@ -1,4 +1,4 @@
-import LayoutDefault from "../../layout/LayoutDefault";
+import LayoutDefault from "../../layout/client/LayoutDefault";
 import { dashboardRoutes } from "./dashboard.routes";
 import { songRoutes } from "./song.routes";
 import { topicRoutes } from "./topic.routes";
