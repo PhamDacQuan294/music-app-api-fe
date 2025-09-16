@@ -1,5 +1,5 @@
 import { API_PREFIX } from "../components/client/contants";
-import { get } from "../utils/request";
+import { get, patch } from "../utils/request";
 
 export const getListSong = async (slugTopic) => {
   const result = await get(`${API_PREFIX}/songs/${slugTopic}`);
@@ -8,5 +8,10 @@ export const getListSong = async (slugTopic) => {
 
 export const getDetailSong = async (slugSong) => {
   const result = await get(`${API_PREFIX}/songs/detail/${slugSong}`);
+  return result;
+}
+
+export const likeSong = async(options) => {
+  const result = await patch(`${API_PREFIX}/songs/like/${options.typeLike}/${options.idSong}`, options);
   return result;
 }
