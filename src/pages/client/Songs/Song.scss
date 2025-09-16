@@ -81,5 +81,106 @@
   @media (max-width: 576px) {
     width: 200px;
   }
+}
 
+
+.detail-song {
+  margin: 20px 20px 20px 20px;
+
+  &__title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 10xp;
+    color: #F8820B;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+
+  &__action {
+    margin-right: 20px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    font-weight: 600;
+    color: #636361;
+
+    &-icon {
+      font-size: 16px;
+      margin-right: 5px;
+      cursor: pointer;
+    }
+
+    &-like {
+      color: #0059ff;
+    }
+
+    &-heart {
+      color: #b90000;
+    }
+  }
+
+  &__play {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  &__avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 5px solid #F57F20;
+    margin-right: 20px;
+    animation-name: spin;
+    animation-duration: 12s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    // animation-play-state: paused; 
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__audio {
+    flex: 1;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  &__desc {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 20px;
+
+    &-label {
+      font-size: 16px;
+      font-weight: 700;
+      color: #FE7F07;
+      padding: 10px 15px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    &-text {
+      font-size: 14px;
+      padding: 10px 15px;
+      white-space: pre-line;
+    }
+  }
 }

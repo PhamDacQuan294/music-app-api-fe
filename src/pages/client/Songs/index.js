@@ -17,8 +17,6 @@ function Songs() {
     fetchSongs();
   }, []);
 
-  console.log(data);
-
   return (
     <>
       <SongList songs={data.songs} />
