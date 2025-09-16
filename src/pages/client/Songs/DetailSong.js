@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { getDetailSong } from "../../../services/songService";
+import { getDetailSong } from "../../../services/client/songService";
 import { useParams } from "react-router-dom";
 import { Col, Row } from "antd";
 import {HeartOutlined } from "@ant-design/icons";

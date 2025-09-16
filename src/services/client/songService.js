@@ -1,5 +1,5 @@
-import { API_PREFIX } from "../components/client/contants";
-import { get, patch } from "../utils/request";
+import { API_PREFIX } from "../../components/client/contants";
+import { get, patch } from "../../utils/request";
 
 export const getListSong = async (slugTopic) => {
   const result = await get(`${API_PREFIX}/songs/${slugTopic}`);

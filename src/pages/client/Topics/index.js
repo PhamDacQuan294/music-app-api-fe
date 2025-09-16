@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getListTopic } from "../../../services/topicsService";
+import { getListTopic } from "../../../services/client/topicsService";
 import TopicList from "./TopicList";
 import "./Topic.scss";
 

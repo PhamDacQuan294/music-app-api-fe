@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { LikeOutlined } from "@ant-design/icons";
-import { likeSong } from "../../../services/songService";
+import { likeSong } from "../../../services/client/songService";
 
 function UseLikeSong({ idSong, like }) {
   const [likes, setLikes] = useState(like);
