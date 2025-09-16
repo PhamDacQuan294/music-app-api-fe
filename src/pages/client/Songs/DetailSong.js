@@ -3,25 +3,23 @@ import { useEffect, useState } from "react";
 import { getDetailSong } from "../../../services/client/songService";
 import { useParams } from "react-router-dom";
 import { Col, Row } from "antd";
-import {HeartOutlined } from "@ant-design/icons";
 import  AudioPlayer from "../../../components/client/APlayer/APlayer";
 
 import "./Song.scss";
 import UseLikeSong from "./LikeSong";
+import UseFavoriteSong from "./FavoriteSong";
 
 function DetailSong() {
   const [data, setData] = useState(null);
-  const [likes, setLikes] = useState(0);
   const params = useParams();
 
   useEffect(() => {
     const fetchApi = async () => {
       const song = await getDetailSong(params.slugSong);
       setData(song);
-      setLikes(song.song.like);
     };
     fetchApi();
-  }, [likes]);
+  }, []);
 
   if (!data) return null; // tránh render khi chưa có dữ liệu
 
@@ -47,20 +45,8 @@ function DetailSong() {
             <div className="detail-song__action detail-song__action--listen">
               <span>{data?.song?.listen} lượt nghe</span>
             </div>
-            <UseLikeSong idSong={data.song._id} like={data.song.like}/>
-            <div
-              className={`detail-song__action detail-song__action--heart ${
-                data?.song?.isFavoriteSong ? "detail-song__action--heart-active" : ""
-              }`}
-              data-favorite={data?.song?.id}
-            >
-              <span className="detail-song__action-icon detail-song__action-heart">
-                <HeartOutlined /> 
-              </span>
-              <span>
-                Bài hát yêu thích
-              </span>
-            </div>
+            <UseLikeSong idSong={data?.song?._id} like={data?.song?.like}/>
+            <UseFavoriteSong idSong={data?.song?._id} isFavoriteSong={data?.song?.isFavoriteSong}/>
           </div>
 
           <div className="detail-song__play">

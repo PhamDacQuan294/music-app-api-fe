@@ -10,8 +10,4 @@ export const songRoutes = [
     path: "songs/detail/:slugSong",
     element: <DetailSong />
   }, 
-  {
-    path: "songs/like/:typeLike/:idSong",
-    element: <DetailSong />
-  }
 ];

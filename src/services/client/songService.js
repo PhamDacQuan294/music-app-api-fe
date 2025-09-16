@@ -15,3 +15,8 @@ export const likeSong = async(options) => {
   const result = await patch(`${API_PREFIX}/songs/like/${options.typeLike}/${options.idSong}`, options);
   return result;
 }
+
+export const favoriteSong = async(options) => {
+  const result = await patch(`${API_PREFIX}/songs/favorite/${options.typeFavorite}/${options.idSong}`, options);
+  return result;
+}
