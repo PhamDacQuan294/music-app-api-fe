@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { getListFavoriteSong } from "../../../services/client/songService";
 import { Col, Row } from "antd";
 import { Link } from "react-router-dom";
-import { API_PREFIX } from "../../../components/client/contants";
 import { HeartOutlined } from "@ant-design/icons";
 
 function FavoriteSong() {
@@ -27,12 +26,12 @@ function FavoriteSong() {
               <Col xxl={12} xl={12} lg={12} md={24} key={index}>
                 <div className="song-item">
                   <div className="song-item__image">
-                    <Link to={`${API_PREFIX}/songs/detail/${item.infoSong.slug}`}>
+                    <Link to={`/songs/detail/${item.infoSong.slug}`}>
                       <img src={item.infoSong.avatar} alt="Logo" />
                     </Link>
                   </div>
                   <div className="song-item__body">
-                    <Link to={`${API_PREFIX}/songs/detail/${item.infoSong.slug}`}>
+                    <Link to={`/songs/detail/${item.infoSong.slug}`}>
                       <div className="song-item__title">
                         {item.infoSong.title}
                       </div>

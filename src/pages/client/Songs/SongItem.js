@@ -1,6 +1,5 @@
 import { Col } from "antd";
 import { Link } from "react-router-dom";
-import { API_PREFIX } from "../../../components/client/contants"; 
 
 function SongItem(prop) {
   const { song } = prop;
@@ -10,12 +9,12 @@ function SongItem(prop) {
       <Col xxl={12} xl={12} lg={12} md={24}>
         <div className="song-item">
           <div className="song-item__image">
-            <Link to={`${API_PREFIX}/songs/detail/${song.slug}`}>
+            <Link to={`/songs/detail/${song.slug}`}>
               <img src={song.avatar} alt="Logo" />
             </Link>
           </div>
           <div className="song-item__body">
-            <Link to={`${API_PREFIX}/songs/detail/${song.slug}`}>
+            <Link to={`/songs/detail/${song.slug}`}>
               <div className="song-item__title">
                 {song.title}
               </div>

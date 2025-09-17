@@ -1,9 +1,10 @@
-import { Col, Input, Layout, Row } from "antd";
+import { Col, Layout, Row } from "antd";
 import "./LayoutDefault.scss";
 import logo from "../../../images/logo.png";
-import { MenuUnfoldOutlined, SearchOutlined, SettingOutlined } from "@ant-design/icons";
+import { SettingOutlined } from "@ant-design/icons";
 import MenuSider from "../../../components/client/MenuSider";
 import { Outlet } from "react-router-dom";
+import SearchResult from "../../../components/client/Search";
 
 const { Footer, Sider, Content } = Layout;
 
@@ -25,17 +26,7 @@ function LayoutDefault() {
           <Row>
             <Col xxl={24} xl={24} lg={24} md={24} sm={24} xs={24}>
               <header className="layout-default__header-top">
-                <div className="layout-default__header-left">
-                  <div className="layout-default__header-collapse">
-                    <MenuUnfoldOutlined />
-                  </div>
-                  <div className="layout-default__header-search">
-                    <Input
-                      addonBefore={<SearchOutlined />}
-                      placeholder="Tìm kiếm bài hát, nghệ sĩ, lời bài hát..."
-                    />
-                  </div>
-                </div>
+                <SearchResult />
                 <div className="layout-default__header-right">
                   <div className="layout-default__header-collapse">
                     <SettingOutlined />
