@@ -6,8 +6,8 @@ import { Col, Row } from "antd";
 import  AudioPlayer from "../../../components/client/APlayer/APlayer";
 
 import "./Song.scss";
-import UseLikeSong from "./LikeSong";
-import UseFavoriteSong from "./FavoriteSong";
+import ButtonLikeSong from "./ButtonLikeSong";
+import ButtonFavoriteSong from "./ButtonFavoriteSong";
 
 function DetailSong() {
   const [data, setData] = useState(null);
@@ -45,8 +45,8 @@ function DetailSong() {
             <div className="detail-song__action detail-song__action--listen">
               <span>{data?.song?.listen} lượt nghe</span>
             </div>
-            <UseLikeSong idSong={data?.song?._id} like={data?.song?.like}/>
-            <UseFavoriteSong idSong={data?.song?._id} isFavoriteSong={data?.song?.isFavoriteSong}/>
+            <ButtonLikeSong idSong={data?.song?._id} like={data?.song?.like}/>
+            <ButtonFavoriteSong idSong={data?.song?._id} isFavoriteSong={data?.song?.isFavoriteSong}/>
           </div>
 
           <div className="detail-song__play">

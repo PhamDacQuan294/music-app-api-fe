@@ -11,12 +11,17 @@ export const getDetailSong = async (slugSong) => {
   return result;
 }
 
-export const likeSong = async(options) => {
+export const likeSong = async (options) => {
   const result = await patch(`${API_PREFIX}/songs/like/${options.typeLike}/${options.idSong}`, options);
   return result;
 }
 
-export const favoriteSong = async(options) => {
+export const favoriteSong = async (options) => {
   const result = await patch(`${API_PREFIX}/songs/favorite/${options.typeFavorite}/${options.idSong}`, options);
+  return result;
+}
+
+export const getListFavoriteSong = async () => {
+  const result = await get(`${API_PREFIX}/favorite-songs`);
   return result;
 }

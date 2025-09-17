@@ -2,7 +2,7 @@ import { useState } from "react";
 import { LikeOutlined } from "@ant-design/icons";
 import { likeSong } from "../../../services/client/songService";
 
-function UseLikeSong({ idSong, like }) {
+function ButtonLikeSong({ idSong, like }) {
   const [likes, setLikes] = useState(like);
   const [isActive, setIsActive] = useState(false);
 
@@ -41,4 +41,4 @@ function UseLikeSong({ idSong, like }) {
   );
 }
 
-export default UseLikeSong;
+export default ButtonLikeSong;

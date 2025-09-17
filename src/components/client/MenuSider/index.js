@@ -16,7 +16,7 @@ function MenuSider() {
       key: "thu-vien"
     },
     {
-      label: <Link>Bài hát yêu thích</Link>,
+      label: <Link to={`${API_PREFIX }/favorite-songs`}>Bài hát yêu thích</Link>,
       icon: <MenuUnfoldOutlined />,
       key: "bai-hat-yeu-thich"
     },
