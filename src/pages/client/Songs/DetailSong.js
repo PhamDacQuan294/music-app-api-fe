@@ -6,8 +6,8 @@ import { Col, Row } from "antd";
 import  AudioPlayer from "../../../components/client/APlayer/APlayer";
 
 import "./Song.scss";
-import ButtonLikeSong from "./ButtonLikeSong";
-import ButtonFavoriteSong from "./ButtonFavoriteSong";
+import ButtonLikeSong from "../../../components/client/Buttons/ButtonLikeSong";
+import ButtonFavoriteSong from "../../../components/client/Buttons/ButtonFavoriteSong";
 
 function DetailSong() {
   const [data, setData] = useState(null);
