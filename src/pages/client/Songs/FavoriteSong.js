@@ -17,15 +17,14 @@ function FavoriteSong() {
     fetchFavoriteSong();
   }, [])
 
-  console.log(data);
 
   return (
     <>
       <div className="favorite-songs">
         <Row>
           {data &&
-            data.map((item) => (
-              <Col xxl={12} xl={12} lg={12} md={24}>
+            data.map((item, index) => (
+              <Col xxl={12} xl={12} lg={12} md={24} key={index}>
                 <div className="song-item">
                   <div className="song-item__image">
                     <Link to={`${API_PREFIX}/songs/detail/${item.infoSong.slug}`}>
