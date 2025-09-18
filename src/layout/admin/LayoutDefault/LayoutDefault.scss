@@ -1,0 +1,57 @@
+.header {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  background: #fff;
+
+  &__logo {
+    width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid #ddd;
+    transition: all 0.2s;
+
+    &--collapsed {
+      width: 80px;
+      transition: all 0.2s;
+    }
+  }
+
+  &__nav {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    /* de cho chiem phan con lai*/
+
+    &-left {
+      display: flex;
+      align-items: center;
+      font-size: 20px;
+    }
+
+    &-account {
+      margin-right: 10px;
+      color: #000000;
+    }
+
+    &-logout {
+      color: #000000;
+    }
+
+    &-admin {
+      color: #000000;
+    }
+  }
+
+  &__collapse {
+    margin-right: 20px;
+    cursor: pointer;
+  }
+
+}
+
+.content {
+  padding: 20px;
+}

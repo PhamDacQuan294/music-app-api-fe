@@ -1,5 +1,4 @@
-import './App.css';
-import AllRoute from './components/client/AllRoute';
+import AllRoute from './components/AllRoute/index';
 import '@ant-design/v5-patch-for-react-19';
 
 function App() {
