@@ -4,11 +4,14 @@ import logo from "../../../images/logo.png";
 import { SettingOutlined } from "@ant-design/icons";
 import MenuSider from "../../../components/client/MenuSider";
 import { Outlet } from "react-router-dom";
-import SearchResult from "../../../components/client/Search";
+import SearchSong from "../../../components/client/Search";
+import { useLocation } from "react-router-dom";
 
 const { Footer, Sider, Content } = Layout;
 
 function LayoutDefault() {
+  const location = useLocation();
+
   return (
     <Layout className="layout-default">
 
@@ -26,7 +29,10 @@ function LayoutDefault() {
           <Row>
             <Col xxl={24} xl={24} lg={24} md={24} sm={24} xs={24}>
               <header className="layout-default__header-top">
-                <SearchResult />
+
+                {/* Chỉ render SearchResult khi ở trang favorite-songs */}
+                {location.pathname === "/favorite-songs" && <SearchSong />}
+
                 <div className="layout-default__header-right">
                   <div className="layout-default__header-collapse">
                     <SettingOutlined />

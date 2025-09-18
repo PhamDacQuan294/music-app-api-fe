@@ -17,7 +17,7 @@ export function SearchResult() {
   useEffect(() => {
     const fetchData = async () => {
       if (keyword) {
-        const data = await searchResult(keyword);
+        const data = await searchResult("result", keyword);
         setResults(data.songs);
       }
     };
