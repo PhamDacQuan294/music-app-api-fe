@@ -8,12 +8,10 @@ function ListTopic() {
   useEffect(() => {
     const fetchTopics = async () => {
       const data = await getListTopic();
-      setData(data);
+      setData(data.topics);
     }
     fetchTopics();
   }, [])
-
-  console.log(data);
   
   return (
     <>
