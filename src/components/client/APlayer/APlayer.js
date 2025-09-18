@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import APlayer from "aplayer";
 import "aplayer/dist/APlayer.min.css";
+import { updateListen } from "../../../services/client/songService";
 
 function AudioPlayer({ song, singer }) {
   const playerRef = useRef(null);
@@ -20,6 +21,24 @@ function AudioPlayer({ song, singer }) {
       ],
       autoplay: true,
       volume: 0.8,
+    });
+
+    const avatar = document.querySelector(".detail-song__avatar");
+
+    ap.on('play', function () {
+      avatar.style.animationPlayState = "running";
+    });
+
+    ap.on('pause', function () {
+      avatar.style.animationPlayState = "paused";
+    });
+
+    ap.on('ended', async function() {
+      const data = await updateListen(`${song._id}`);
+      if (data) {
+        const elementListen = document.querySelector(".detail-song__action--listen span");
+        elementListen.innerHTML = `${data.listen} lượt nghe`
+      }
     });
 
     // cleanup khi component bị unmount

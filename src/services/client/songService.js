@@ -25,3 +25,8 @@ export const getListFavoriteSong = async () => {
   const result = await get(`${API_PREFIX}/favorite-songs`);
   return result;
 }
+
+export const updateListen = async (songId) => {
+  const result = await patch(`${API_PREFIX}/songs/listen/${songId}`, {});
+  return result;
+};
