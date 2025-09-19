@@ -48,6 +48,11 @@ function CreateSong() {
           <Select 
             placeholder="-- Chọn chủ đề --" 
             style={{ width: "100%" }} 
+            popupRender={(menu) => (
+              <div style={{ maxHeight: 200, overflowY: "auto" }}>
+                {menu}
+              </div>
+            )}
           >
             {data?.topics?.map((item) => (
               <Option key={item._id} value={item._id}>{item.title}</Option>
@@ -56,7 +61,15 @@ function CreateSong() {
         </Form.Item>
 
         <Form.Item label="Ca sĩ" name="singer" rules={rules}>
-          <Select placeholder="-- Chọn ca sĩ --" style={{ width: "100%" }}>
+          <Select 
+            placeholder="-- Chọn ca sĩ --" 
+            style={{ width: "100%"}}
+            popupRender={(menu) => (
+              <div style={{ maxHeight: 200, overflowY: "auto" }}>
+                {menu}
+              </div>
+            )}
+          >
             {data?.singers?.map((item) => (
               <Option key={item._id} value={item._id}>{item.fullName}</Option>
             ))}
