@@ -10,12 +10,14 @@ function ListSong() {
       const data = await getListSong();
       setData(data.songs);
     }
+
+
     fetchSongs();
   }, []);
 
   return (
     <>
-      <SongTable songs={data}/>
+      <SongTable songs={data} />
     </>
   )
 }

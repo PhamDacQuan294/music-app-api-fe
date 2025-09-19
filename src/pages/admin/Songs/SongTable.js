@@ -1,10 +1,12 @@
-import { Table, Image, Tooltip, Tag, Space } from "antd";
+import { Table, Image, Tooltip, Tag, Space, Button } from "antd";
 import DeleteSong from "./DeleteSong";
 import EditSong from "./EditSong";
 import DetailSong from "./DetailSong";
+import { PlusOutlined } from "@ant-design/icons"
+import { Link } from "react-router-dom";
 
 function SongTable(props) {
-  const { songs, onReload } = props;
+  const { songs } = props;
 
   const columns = [
     {
@@ -30,6 +32,21 @@ function SongTable(props) {
       title: "Tiêu đề",
       dataIndex: "title",
       key: "title"
+    },
+    {
+      title: "Ca sĩ",
+      // dataIndex: "title",
+      // key: "title"
+    },
+    {
+      title: "Chủ đề",
+      // dataIndex: "title",
+      // key: "title"
+    },
+    {
+      title: "Ví trị",
+      // dataIndex: "title",
+      // key: "title"
     },
     {
       title: "Trạng thái",
@@ -74,6 +91,14 @@ function SongTable(props) {
 
   return (
     <>
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "20px" }}>
+        <Link to="/admin/create-song">
+          <Button type="primary" icon={<PlusOutlined />}>
+            Thêm bài hát
+          </Button>
+        </Link>
+      </div>
+
       <Table dataSource={songs} columns={columns} rowKey="_id" />
     </>
   )

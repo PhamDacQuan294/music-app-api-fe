@@ -7,3 +7,7 @@ export const getListSong = async () => {
   return result;
 }
 
+export const createSong = async () => {
+  const result = await get(`${API_PREFIX}/${PREFIX_ADMIN}/songs/create`);
+  return result;
+}

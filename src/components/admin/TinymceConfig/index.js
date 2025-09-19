@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 
 function MyEditor() {
@@ -10,7 +10,7 @@ function MyEditor() {
 
   return (
     <Editor
-      apiKey="no-api-key"
+      apiKey="3dr1athu2ipj7r6mas9tjycnidb3rugt2qzntw011g812o3g"
       onInit={(evt, editor) => (editorRef.current = editor)}
       init={{
         plugins: "image",
