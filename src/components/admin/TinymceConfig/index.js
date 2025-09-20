@@ -1,17 +1,14 @@
 import { useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 
-function MyEditor() {
+function MyEditor({ value = "", onChange }) {
   const editorRef = useRef(null);
-
-  const handleEditorChange = (content) => {
-    console.log("Content was updated:", content);
-  };
 
   return (
     <Editor
       apiKey="3dr1athu2ipj7r6mas9tjycnidb3rugt2qzntw011g812o3g"
       onInit={(evt, editor) => (editorRef.current = editor)}
+      value={value} // nhận value từ Form
       init={{
         plugins: "image",
         toolbar: "undo redo | bold italic | image",
@@ -26,8 +23,7 @@ function MyEditor() {
 
             reader.onload = () => {
               const id = "blobid" + new Date().getTime();
-              const blobCache =
-                editorRef.current.editorUpload.blobCache; 
+              const blobCache = editorRef.current.editorUpload.blobCache;
               const base64 = reader.result.split(",")[1];
               const blobInfo = blobCache.create(id, file, base64);
               blobCache.add(blobInfo);
@@ -40,7 +36,9 @@ function MyEditor() {
           input.click();
         },
       }}
-      onEditorChange={handleEditorChange}
+      onEditorChange={(content) => {
+        onChange?.(content); // đồng bộ với Form
+      }}
     />
   );
 }

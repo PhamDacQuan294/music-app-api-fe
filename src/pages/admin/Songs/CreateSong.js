@@ -1,8 +1,8 @@
-import { Button, Form, Input, Select, Switch, Upload } from "antd";
+import { Button, Form, Input, message, Select, Switch, Upload } from "antd";
 import { useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import MyEditor from "../../../components/admin/TinymceConfig/index";
-import { createSong } from "../../../services/admin/songService";
+import { createSong, createSongPost } from "../../../services/admin/songService";
 
 const { Option } = Select;
 
@@ -10,6 +10,7 @@ function CreateSong() {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
   const [data, setData] = useState([]);
+  const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,11 +31,33 @@ function CreateSong() {
     },
   ];
 
+  const handleSubmit = async (values) => {
+    const response = await createSongPost(values);
+
+    if (response) {
+      form.resetFields();
+      setFileList([]);
+      messageApi.open({
+        type: "success",
+        content: "Tạo bài hát mới thành công",
+        duration: 5,
+      });
+    } else {
+       messageApi.open({
+        type: "error",
+        content: "Tạo bài hát mới không thành công",
+        duration: 5,
+      });
+    }
+  }
+
   return (
-    <>
+    <>  
+      {contextHolder}
+
       <h2>Thêm bài hát</h2>
 
-      <Form layout="vertical" name="create-song" form={form}>
+      <Form layout="vertical" name="create-song" form={form} onFinish={handleSubmit}>
 
         <Form.Item
           label="Tiêu đề"
@@ -44,7 +67,7 @@ function CreateSong() {
           <Input />
         </Form.Item>
 
-        <Form.Item label="Chủ đề" name="topic" rules={rules}>
+        <Form.Item label="Chủ đề" name="topicId" rules={rules}>
           <Select 
             placeholder="-- Chọn chủ đề --" 
             style={{ width: "100%" }} 
@@ -60,7 +83,7 @@ function CreateSong() {
           </Select>
         </Form.Item>
 
-        <Form.Item label="Ca sĩ" name="singer" rules={rules}>
+        <Form.Item label="Ca sĩ" name="singerId" rules={rules}>
           <Select 
             placeholder="-- Chọn ca sĩ --" 
             style={{ width: "100%"}}
@@ -105,9 +128,20 @@ function CreateSong() {
           <MyEditor />
         </Form.Item>
 
-        <Form.Item valuePropName="checked" label="Trạng thái" name="status" rules={rules}>
-          <Switch checkedChildren="Hoạt động" unCheckedChildren="Dừng hoạt động" defaultChecked/>
+        <Form.Item
+          label="Trạng thái"
+          name="status"
+          valuePropName="checked"
+          rules={rules}
+          initialValue={true}
+        >
+          <Switch 
+            checkedChildren="Hoạt động" 
+            unCheckedChildren="Dừng hoạt động" 
+            defaultChecked
+          />
         </Form.Item>
+
 
         <Form.Item label={null}>
           <Button type="primary" htmlType="submit">
