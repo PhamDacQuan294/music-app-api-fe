@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import MyEditor from "../../../components/admin/TinymceConfig/index";
 import { createSong, createSongPost } from "../../../services/admin/songService";
+import TextArea from "antd/es/input/TextArea";
 
 const { Option } = Select;
 
@@ -50,6 +51,7 @@ function CreateSong() {
     formData.append("title", values.title);
     formData.append("topicId", values.topicId);
     formData.append("singerId", values.singerId);
+    formData.append("lyrics", values.lyrics || "");
     formData.append("description", values.description || "");
     formData.append("status", values.status ? "true" : "false");
 
@@ -182,6 +184,14 @@ function CreateSong() {
           </Upload>
 
         </Form.Item>
+
+        <Form.Item
+          label="Lời bài hát"
+          name="lyrics"
+        >
+          <TextArea />
+        </Form.Item>
+
 
         <Form.Item
           label="Mô tả"

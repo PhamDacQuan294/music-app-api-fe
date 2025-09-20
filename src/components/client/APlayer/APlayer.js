@@ -11,12 +11,14 @@ function AudioPlayer({ song, singer }) {
 
     const ap = new APlayer({
       container: playerRef.current,
+      lrcType: 1,
       audio: [
         {
           name: song.title,
           artist: singer.fullName,
           url: song.audio,
           cover: song.avatar,
+          lrc: song.lyrics
         },
       ],
       autoplay: true,
