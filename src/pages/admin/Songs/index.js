@@ -4,6 +4,7 @@ import SongTable from "./SongTable";
 
 function ListSong() {
   const [data, setData] = useState([]);
+  const [reload, setReload] = useState();
 
   useEffect(() => {
     const fetchSongs = async () => {
@@ -13,11 +14,15 @@ function ListSong() {
 
 
     fetchSongs();
-  }, []);
+  }, [reload]);
+
+  const handleReload = () => {
+    setReload(!reload);
+  }
 
   return (
     <>
-      <SongTable songs={data} />
+      <SongTable songs={data} onReload={handleReload }/>
     </>
   )
 }
