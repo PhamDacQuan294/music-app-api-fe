@@ -9,6 +9,7 @@ const { Option } = Select;
 function CreateSong() {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
+  const [fileListAudio, setFileListAudio] = useState([]);
   const [data, setData] = useState([]);
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -32,32 +33,53 @@ function CreateSong() {
   ];
 
   const handleSubmit = async (values) => {
-    const response = await createSongPost(values);
+    const formData = new FormData();
+
+    // append text fields
+    formData.append("title", values.title);
+    formData.append("topicId", values.topicId);
+    formData.append("singerId", values.singerId);
+    formData.append("description", values.description || "");
+    formData.append("status", values.status ? "true" : "false");
+
+    // append avatar (nếu có chọn)
+    if (fileList.length > 0) {
+      formData.append("avatar", fileList[0].originFileObj);
+    }
+
+    // append audio (nếu có chọn)
+    if (fileListAudio.length > 0) {
+      formData.append("audio", fileListAudio[0].originFileObj);
+    }
+
+    const response = await createSongPost(formData);
 
     if (response) {
       form.resetFields();
       setFileList([]);
+      setFileListAudio([]);
       messageApi.open({
         type: "success",
         content: "Tạo bài hát mới thành công",
         duration: 5,
       });
     } else {
-       messageApi.open({
+      messageApi.open({
         type: "error",
         content: "Tạo bài hát mới không thành công",
         duration: 5,
       });
     }
-  }
+  };
+
 
   return (
-    <>  
+    <>
       {contextHolder}
 
       <h2>Thêm bài hát</h2>
 
-      <Form layout="vertical" name="create-song" form={form} onFinish={handleSubmit}>
+      <Form layout="vertical" name="create-song" form={form} onFinish={handleSubmit}  initialValues={{ status: true }}>
 
         <Form.Item
           label="Tiêu đề"
@@ -68,9 +90,9 @@ function CreateSong() {
         </Form.Item>
 
         <Form.Item label="Chủ đề" name="topicId" rules={rules}>
-          <Select 
-            placeholder="-- Chọn chủ đề --" 
-            style={{ width: "100%" }} 
+          <Select
+            placeholder="-- Chọn chủ đề --"
+            style={{ width: "100%" }}
             popupRender={(menu) => (
               <div style={{ maxHeight: 200, overflowY: "auto" }}>
                 {menu}
@@ -84,9 +106,9 @@ function CreateSong() {
         </Form.Item>
 
         <Form.Item label="Ca sĩ" name="singerId" rules={rules}>
-          <Select 
-            placeholder="-- Chọn ca sĩ --" 
-            style={{ width: "100%"}}
+          <Select
+            placeholder="-- Chọn ca sĩ --"
+            style={{ width: "100%" }}
             popupRender={(menu) => (
               <div style={{ maxHeight: 200, overflowY: "auto" }}>
                 {menu}
@@ -122,8 +144,26 @@ function CreateSong() {
         </Form.Item>
 
         <Form.Item
+          label="File nhạc"
+          name="audio"
+          valuePropName="fileList"
+          getValueFromEvent={(e) => e && e.fileList}
+        >
+          <Upload
+            fileList={fileListAudio}
+            onChange={({ fileList }) => setFileListAudio(fileList)}
+            beforeUpload={() => false} // không upload ngay, chỉ preview
+            accept="audio/*"
+          >
+            {fileListAudio.length >= 1 ? null : (
+              <Button icon={<PlusOutlined />}>Upload Audio</Button>
+            )}
+          </Upload>
+        </Form.Item>
+
+        <Form.Item
           label="Mô tả"
-          name="description" 
+          name="description"
         >
           <MyEditor />
         </Form.Item>
@@ -133,12 +173,10 @@ function CreateSong() {
           name="status"
           valuePropName="checked"
           rules={rules}
-          initialValue={true}
         >
-          <Switch 
-            checkedChildren="Hoạt động" 
-            unCheckedChildren="Dừng hoạt động" 
-            defaultChecked
+          <Switch
+            checkedChildren="Hoạt động"
+            unCheckedChildren="Dừng hoạt động"
           />
         </Form.Item>
 

@@ -4,7 +4,7 @@ import EditTopic from "./EditTopic";
 import DetailTopic from "./DetailTopic";
 
 function TopicTable(props) {
-  const { topics, onReload } = props;
+  const { topics } = props;
 
   const columns = [
     {

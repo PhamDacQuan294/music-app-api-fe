@@ -1,6 +1,7 @@
-import { get, post } from "../../utils/request";
+import { get } from "../../utils/request";
 import { API_PREFIX } from "../../components/admin/Contants";
 import { PREFIX_ADMIN } from "../../components/admin/Contants";
+import { post2 } from "../../utils/request2";
 
 export const getListSong = async () => {
   const result = await get(`${API_PREFIX}/${PREFIX_ADMIN}/songs`);
@@ -12,8 +13,8 @@ export const createSong = async () => {
   return result;
 }
 
-export const createSongPost = async (options) => {
-  const result = await post(`${API_PREFIX}/${PREFIX_ADMIN}/songs/create`, options);
+export const createSongPost = async (formData) => {
+  const result = await post2(`${API_PREFIX}/${PREFIX_ADMIN}/songs/create`, formData);
   return result;
-}
+};
 
