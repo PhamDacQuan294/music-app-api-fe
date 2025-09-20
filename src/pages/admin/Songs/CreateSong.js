@@ -12,6 +12,7 @@ function CreateSong() {
   const [fileListAudio, setFileListAudio] = useState([]);
   const [data, setData] = useState([]);
   const [messageApi, contextHolder] = message.useMessage();
+  const [audioUrl, setAudioUrl] = useState(null); // State để lưu URL audio
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,6 +24,16 @@ function CreateSong() {
 
   const handleChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
+  };
+
+  const handleAudioChange = ({ fileList: newFileList }) => {
+    setFileListAudio(newFileList);
+    if (newFileList.length > 0) {
+      const file = newFileList[0].originFileObj;
+      setAudioUrl(URL.createObjectURL(file)); // Tạo URL audio để phát thử
+    } else {
+      setAudioUrl(null); // Reset audioUrl nếu không có file nào
+    }
   };
 
   const rules = [
@@ -58,6 +69,7 @@ function CreateSong() {
       form.resetFields();
       setFileList([]);
       setFileListAudio([]);
+      setAudioUrl(null);
       messageApi.open({
         type: "success",
         content: "Tạo bài hát mới thành công",
@@ -151,14 +163,24 @@ function CreateSong() {
         >
           <Upload
             fileList={fileListAudio}
-            onChange={({ fileList }) => setFileListAudio(fileList)}
+            onChange={handleAudioChange}
             beforeUpload={() => false} // không upload ngay, chỉ preview
             accept="audio/*"
           >
             {fileListAudio.length >= 1 ? null : (
               <Button icon={<PlusOutlined />}>Upload Audio</Button>
             )}
+
+            {/* Nếu có file audio, hiển thị player để nghe thử */}
+            {audioUrl && (
+              <div style={{ marginTop: 10 }}>
+                <audio controls>
+                  <source src={audioUrl} type="audio/mpeg" />
+                </audio>
+              </div>
+            )}
           </Upload>
+
         </Form.Item>
 
         <Form.Item
