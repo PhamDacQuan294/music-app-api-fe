@@ -19,3 +19,18 @@ export const post2 = async (path, formData) => {
     throw error;
   }
 };
+
+export const patch2 = async (path, formData) => {
+  try {
+    const res = await axios.patch(`${API_DOMAIN}${path}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return res.data;
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+};
+

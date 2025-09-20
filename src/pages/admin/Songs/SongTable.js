@@ -6,7 +6,7 @@ import { PlusOutlined } from "@ant-design/icons"
 import { Link } from "react-router-dom";
 
 function SongTable(props) {
-  const { songs, onReload } = props;
+  const { songs, topics, singers, onReload } = props;
 
   const columns = [
     {
@@ -19,13 +19,17 @@ function SongTable(props) {
       dataIndex: "avatar",
       key: "avatar",
       render: (avatar) => (
-        <Image
-          src={avatar}
-          alt="avatar"
-          width={80}
-          height={60}
-          style={{ objectFit: "cover", borderRadius: 8 }}
-        />
+        avatar ? (
+          <Image
+            src={avatar}
+            alt="avatar"
+            width={80}
+            height={60}
+            style={{ objectFit: "cover", borderRadius: 8 }}
+          />
+        ) : (
+          <span style={{ color: "#aaa" }}>Không có ảnh</span>
+        )
       ),
     },
     {
@@ -80,8 +84,8 @@ function SongTable(props) {
       render: (_, record) => {
         return <>
           <Space>
-            <DeleteSong record={record} onReload={onReload}/>
-            <EditSong record={record} />
+            <DeleteSong record={record} onReload={onReload} />
+            <EditSong record={record} topics={topics} singers={singers} onReload={onReload} />
             <DetailSong record={record} />
           </Space>
         </>
