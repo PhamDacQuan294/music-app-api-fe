@@ -8,6 +8,19 @@ import { Link } from "react-router-dom";
 function SongTable(props) {
   const { songs, topics, singers, onReload, messageApi } = props;
 
+  const singerList = singers?.singers || [];
+
+  const dataSource = songs.map((song) => {
+    const singer = singerList.find((s) => s._id === song.singerId);
+    const topic = topics.find((t) => t._id === song.topicId);
+
+    return {
+      ...song,
+      singerName: singer ? singer.fullName : "Không rõ",
+      topicName: topic ? topic.title : "Không rõ",
+    };
+  });
+
   const columns = [
     {
       title: "STT",
@@ -39,18 +52,18 @@ function SongTable(props) {
     },
     {
       title: "Ca sĩ",
-      // dataIndex: "title",
-      // key: "title"
+      dataIndex: "singerName",
+      key: "singerName"
     },
     {
       title: "Chủ đề",
-      // dataIndex: "title",
-      // key: "title"
+      dataIndex: "topicName",
+      key: "topicName"
     },
     {
       title: "Ví trị",
-      // dataIndex: "title",
-      // key: "title"
+      dataIndex: "position",
+      key: "position"
     },
     {
       title: "Trạng thái",
@@ -60,7 +73,7 @@ function SongTable(props) {
         return <>
           {status === "active" ? (
             <>
-              <Tooltip title="Chủ đề chưa bị dừng hoạt động" color="green">
+              <Tooltip title="Bài hát chưa bị dừng hoạt động" color="green">
                 <Tag color="green">
                   Active
                 </Tag>
@@ -68,7 +81,7 @@ function SongTable(props) {
             </>
           ) : (
             <>
-              <Tooltip title="Chủ đề đã bị dừng hoạt động" color="red">
+              <Tooltip title="Bài hát đã bị dừng hoạt động" color="red">
                 <Tag color="red">
                   InActive
                 </Tag>
@@ -103,7 +116,7 @@ function SongTable(props) {
         </Link>
       </div>
 
-      <Table dataSource={songs} columns={columns} rowKey="_id" />
+      <Table dataSource={dataSource} columns={columns} rowKey="_id" />
     </>
   )
 }

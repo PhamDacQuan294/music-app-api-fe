@@ -91,18 +91,18 @@ function EditSong(props) {
       if (response) {
         notiApi.success({
           message: 'Cập nhật thành công',
-          description: `Bạn đã cập nhật bài hát thành công ${record.title}`
+          description: `Bạn đã cập nhật bài hát thành công`
         });
         setShowModal(false);
         onReload();
       } else {
         notiApi.error({
           message: 'Cập nhật thất bại',
-          description: `Bạn đã cập nhật bài hát thất bại ${record.title}`
+          description: `Bạn đã cập nhật bài hát thất bại`
         });
       }
       setSpinning(false);
-    }, 3000);
+    }, 2000);
   };
 
   const handleAudioChange = ({ fileList: newFileList }) => {
@@ -122,7 +122,7 @@ function EditSong(props) {
 
       <Modal open={showModal} onCancel={handleCancel} title="Chỉnh sửa bài hát" footer={null}>
         <Spin spinning={spinning} tip="Đang cập nhật">
-          <Form layout="vertical" name="edit-song" onFinish={handleSubmit} form={form} initialValues={record}>
+          <Form layout="vertical" onFinish={handleSubmit} form={form} initialValues={record}>
             <SongFormFields
               topics={topics}
               singers={singers?.singers}
