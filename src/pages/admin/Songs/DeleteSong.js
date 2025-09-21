@@ -3,17 +3,24 @@ import { DeleteOutlined } from "@ant-design/icons";
 import { deleteSong } from "../../../services/admin/songService";
 
 function DeleteSong(props) {
-  const { record, onReload } = props;
+  const { record, onReload,  messageApi} = props;
 
   const handleDelete = async () => {
     const response = await deleteSong(record._id);
 
     if (response) {
-      onReload();
-      alert("Xoá bài hát thành công");
+      messageApi.open({
+        type: 'success',
+        content: 'Xoá bài hát thành công',
+        duration: 5,
+      });
       onReload();
     } else {
-      alert("Xoá bài hát chưa thành công");
+      messageApi.open({
+        type: 'error',
+        content: 'Xoá bài hát chưa thành công',
+        duration: 5,
+      });
     }
   }
 

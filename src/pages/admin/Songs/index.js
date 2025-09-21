@@ -1,36 +1,36 @@
 import { useEffect, useState } from "react";
+import { message } from "antd";  
 import { getListSong } from "../../../services/admin/songService";
-import SongTable from "./SongTable";
 import { getListTopic } from "../../../services/admin/topicsService";
 import { getListSinger } from "../../../services/admin/singerService";
+import SongTable from "./SongTable";
 
 function ListSong() {
-  const [data, setData] = useState([]);
+  const [songs, setSongs] = useState([]);
   const [topics, setTopics] = useState([]);
   const [singers, setSingers] = useState([]);
   const [reload, setReload] = useState();
 
+  const [messageApi, contextHolder] = message.useMessage();
+
   useEffect(() => {
-    const fetchSongs = async () => {
-      const data = await getListSong();
-      setData(data.songs);
-    }
-    
-    fetchSongs();
+    const fetchData = async () => {
+      try {
+        const [songRes, topicRes, singerRes] = await Promise.all([
+          getListSong(),
+          getListTopic(),
+          getListSinger(),
+        ]);
 
-    const fetchTopics = async () => {
-      const data = await getListTopic();
-      setTopics(data.topics);
-    }
+        setSongs(songRes?.songs || []);
+        setTopics(topicRes?.topics || []);
+        setSingers(singerRes || []);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-    fetchTopics();
-
-    const fetchSinger = async () => {
-      const data = await getListSinger();
-      setSingers(data);
-    }
-
-    fetchSinger();
+    fetchData();
 
   }, [reload]);
 
@@ -40,7 +40,14 @@ function ListSong() {
 
   return (
     <>
-      <SongTable songs={data} topics={topics} singers={singers} onReload={handleReload }/>
+      {contextHolder}
+      <SongTable 
+        songs={songs} 
+        topics={topics} 
+        singers={singers} 
+        onReload={handleReload} 
+        messageApi={messageApi}  
+      />
     </>
   )
 }

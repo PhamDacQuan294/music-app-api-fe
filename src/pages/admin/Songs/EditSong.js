@@ -21,7 +21,7 @@ function EditSong(props) {
     if (record.avatar) {
       setFileList([
         {
-          url: record.avatar, // ĐÂY LÀ ĐIỂM QUAN TRỌNG
+          url: record.avatar, 
         }
       ]);
     } else {
@@ -82,7 +82,6 @@ function EditSong(props) {
     }
 
     setSpinning(true);
-    console.log("Đã gửi");
     const response = await updateSong(record._id, formData);
     setTimeout(() => {
       if (response) {
@@ -194,13 +193,10 @@ function EditSong(props) {
                 <div style={{ marginTop: 10 }}>
                   <audio controls style={{ width: "100%" }}>
                     <source src={audioUrl} type="audio/mpeg" />
-                    Trình duyệt không hỗ trợ phát audio.
                   </audio>
                 </div>
               )}
             </Form.Item>
-
-
 
             <Form.Item
               label="Lời bài hát"
@@ -208,7 +204,6 @@ function EditSong(props) {
             >
               <TextArea />
             </Form.Item>
-
 
             <Form.Item
               label="Mô tả"

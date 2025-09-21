@@ -6,7 +6,7 @@ import { PlusOutlined } from "@ant-design/icons"
 import { Link } from "react-router-dom";
 
 function SongTable(props) {
-  const { songs, topics, singers, onReload } = props;
+  const { songs, topics, singers, onReload, messageApi } = props;
 
   const columns = [
     {
@@ -84,7 +84,7 @@ function SongTable(props) {
       render: (_, record) => {
         return <>
           <Space>
-            <DeleteSong record={record} onReload={onReload} />
+            <DeleteSong record={record} onReload={onReload} messageApi={messageApi} />
             <EditSong record={record} topics={topics} singers={singers} onReload={onReload} />
             <DetailSong record={record} />
           </Space>
