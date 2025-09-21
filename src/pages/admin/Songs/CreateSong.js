@@ -1,11 +1,7 @@
-import { Button, Form, Input, message, Select, Switch, Upload } from "antd";
+import { Button, Form, message } from "antd";
 import { useEffect, useState } from "react";
-import { PlusOutlined } from "@ant-design/icons";
-import MyEditor from "../../../components/admin/TinymceConfig/index";
 import { createSong, createSongPost } from "../../../services/admin/songService";
-import TextArea from "antd/es/input/TextArea";
-
-const { Option } = Select;
+import SongFormFields from "./SongFormFields";
 
 function CreateSong() {
   const [form] = Form.useForm();
@@ -94,124 +90,17 @@ function CreateSong() {
       <h2>Thêm bài hát</h2>
 
       <Form layout="vertical" name="create-song" form={form} onFinish={handleSubmit}  initialValues={{ status: true }}>
-
-        <Form.Item
-          label="Tiêu đề"
-          name="title"
+        
+        <SongFormFields 
+          topics={data?.topics}
+          singers={data?.singers}
+          fileList={fileList}
+          fileListAudio={fileListAudio}
+          audioUrl={audioUrl}
+          handleChange={handleChange}
+          handleAudioChange={handleAudioChange}
           rules={rules}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item label="Chủ đề" name="topicId" rules={rules}>
-          <Select
-            placeholder="-- Chọn chủ đề --"
-            style={{ width: "100%" }}
-            popupRender={(menu) => (
-              <div style={{ maxHeight: 200, overflowY: "auto" }}>
-                {menu}
-              </div>
-            )}
-          >
-            {data?.topics?.map((item) => (
-              <Option key={item._id} value={item._id}>{item.title}</Option>
-            ))}
-          </Select>
-        </Form.Item>
-
-        <Form.Item label="Ca sĩ" name="singerId" rules={rules}>
-          <Select
-            placeholder="-- Chọn ca sĩ --"
-            style={{ width: "100%" }}
-            popupRender={(menu) => (
-              <div style={{ maxHeight: 200, overflowY: "auto" }}>
-                {menu}
-              </div>
-            )}
-          >
-            {data?.singers?.map((item) => (
-              <Option key={item._id} value={item._id}>{item.fullName}</Option>
-            ))}
-          </Select>
-        </Form.Item>
-
-        <Form.Item
-          label="Ảnh"
-          name="avatar"
-          valuePropName="fileList"
-          getValueFromEvent={(e) => e && e.fileList}
-        >
-          <Upload
-            listType="picture-card" // hiển thị thumbnail
-            fileList={fileList}
-            onChange={handleChange}
-            beforeUpload={() => false} // chặn upload tự động, chỉ preview
-            accept="image/*"
-          >
-            {fileList.length >= 1 ? null : (
-              <div>
-                <PlusOutlined />
-                <div style={{ marginTop: 8 }}>Upload</div>
-              </div>
-            )}
-          </Upload>
-        </Form.Item>
-
-        <Form.Item
-          label="File nhạc"
-          name="audio"
-          valuePropName="fileList"
-          getValueFromEvent={(e) => e && e.fileList}
-        >
-          <Upload
-            fileList={fileListAudio}
-            onChange={handleAudioChange}
-            beforeUpload={() => false} // không upload ngay, chỉ preview
-            accept="audio/*"
-          >
-            {fileListAudio.length >= 1 ? null : (
-              <Button icon={<PlusOutlined />}>Upload Audio</Button>
-            )}
-
-            {/* Nếu có file audio, hiển thị player để nghe thử */}
-            {audioUrl && (
-              <div style={{ marginTop: 10 }}>
-                <audio controls>
-                  <source src={audioUrl} type="audio/mpeg" />
-                </audio>
-              </div>
-            )}
-          </Upload>
-
-        </Form.Item>
-
-        <Form.Item
-          label="Lời bài hát"
-          name="lyrics"
-        >
-          <TextArea />
-        </Form.Item>
-
-
-        <Form.Item
-          label="Mô tả"
-          name="description"
-        >
-          <MyEditor />
-        </Form.Item>
-
-        <Form.Item
-          label="Trạng thái"
-          name="status"
-          valuePropName="checked"
-          rules={rules}
-        >
-          <Switch
-            checkedChildren="Hoạt động"
-            unCheckedChildren="Dừng hoạt động"
-          />
-        </Form.Item>
-
+        />
 
         <Form.Item label={null}>
           <Button type="primary" htmlType="submit">
