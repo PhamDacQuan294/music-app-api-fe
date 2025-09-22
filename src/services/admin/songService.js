@@ -4,8 +4,12 @@ import { PREFIX_ADMIN } from "../../components/admin/Contants";
 import { post2 } from "../../utils/request2";
 import { patch2 } from "../../utils/request2";
 
-export const getListSong = async () => {
-  const result = await get(`${API_PREFIX}/${PREFIX_ADMIN}/songs`);
+export const getListSong = async (status) => {
+  let url = `${API_PREFIX}/${PREFIX_ADMIN}/songs`;
+  if (status) {
+    url += `?status=${status}`;
+  }
+  const result = await get(url);
   return result;
 }
 

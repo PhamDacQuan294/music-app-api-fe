@@ -1,25 +1,27 @@
-import { Table, Image, Tooltip, Tag, Space, Button } from "antd";
+import { Table, Image, Tooltip, Tag, Space, Button, Card, Row, Col } from "antd";
 import DeleteSong from "./DeleteSong";
 import EditSong from "./EditSong";
 import DetailSong from "./DetailSong";
 import { PlusOutlined } from "@ant-design/icons"
 import { Link } from "react-router-dom";
+import FilterStatus from "../../../components/admin/FilterStatus";
 
 function SongTable(props) {
-  const { songs, topics, singers, onReload, messageApi } = props;
+  const { songs, filterStatus, topics, singers, onReload, onFilterChange, messageApi } = props;
 
   const singerList = singers?.singers || [];
 
-  const dataSource = songs.map((song) => {
-    const singer = singerList.find((s) => s._id === song.singerId);
-    const topic = topics.find((t) => t._id === song.topicId);
+  const dataSource = songs
+    .map((song) => {
+      const singer = singerList.find((s) => s._id === song.singerId);
+      const topic = topics.find((t) => t._id === song.topicId);
 
-    return {
-      ...song,
-      singerName: singer ? singer.fullName : "Không rõ",
-      topicName: topic ? topic.title : "Không rõ",
-    };
-  });
+      return {
+        ...song,
+        singerName: singer ? singer.fullName : "Không rõ",
+        topicName: topic ? topic.title : "Không rõ",
+      };
+    })
 
   const columns = [
     {
@@ -106,17 +108,34 @@ function SongTable(props) {
     },
   ];
 
+  
   return (
     <>
-      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "20px" }}>
-        <Link to="/admin/create-song">
-          <Button type="primary" icon={<PlusOutlined />}>
-            Thêm bài hát
-          </Button>
-        </Link>
-      </div>
+      <FilterStatus filterStatus={filterStatus} onFilterChange={onFilterChange}/>
 
-      <Table dataSource={dataSource} columns={columns} rowKey="_id" />
+      <Card title="Danh sách">
+        <Row>
+          <Col sm={16}>
+            ok
+          </Col>
+
+          <Col sm={8} style={{ textAlign: "right", marginBottom: "20px" }}>
+            <Link to="/admin/create-song">
+              <Button type="primary" icon={<PlusOutlined />}>
+                Thêm bài hát
+              </Button>
+            </Link>
+          </Col>
+        </Row>
+
+        <Table
+          dataSource={dataSource}
+          columns={columns}
+          rowKey="_id"
+          scroll={{ x: "max-content" }}
+          className="custom-table"
+        />
+      </Card>
     </>
   )
 }

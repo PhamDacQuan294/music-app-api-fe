@@ -4,48 +4,49 @@ import { getListSong } from "../../../services/admin/songService";
 import { getListTopic } from "../../../services/admin/topicsService";
 import { getListSinger } from "../../../services/admin/singerService";
 import SongTable from "./SongTable";
+import "./Song.scss";
 
 function ListSong() {
   const [songs, setSongs] = useState([]);
   const [topics, setTopics] = useState([]);
   const [singers, setSingers] = useState([]);
-  const [reload, setReload] = useState();
+  const [filterStatus, setFilterStatus]= useState([]);
+  const [status, setStatus] = useState(""); 
 
   const [messageApi, contextHolder] = message.useMessage();
 
+  const fetchData = async (status = "") => {
+    try {
+      const [songRes, topicRes, singerRes] = await Promise.all([
+        getListSong(status), 
+        getListTopic(),
+        getListSinger(),
+      ]);
+
+      setSongs(songRes?.songs || []);
+      setFilterStatus(songRes?.filterStatus || []);
+      setTopics(topicRes?.topics || []);
+      setSingers(singerRes || []);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [songRes, topicRes, singerRes] = await Promise.all([
-          getListSong(),
-          getListTopic(),
-          getListSinger(),
-        ]);
+    fetchData(status);
+  }, [status]);
 
-        setSongs(songRes?.songs || []);
-        setTopics(topicRes?.topics || []);
-        setSingers(singerRes || []);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-
-  }, [reload]);
-
-  const handleReload = () => {
-    setReload(!reload);
-  }
 
   return (
     <>
       {contextHolder}
       <SongTable 
-        songs={songs} 
+        songs={songs}
+        filterStatus={filterStatus} 
         topics={topics} 
         singers={singers} 
-        onReload={handleReload} 
+        onReload={() => fetchData(status)} // reload giữ nguyên filter hiện tại 
+        onFilterChange={setStatus} 
         messageApi={messageApi}  
       />
     </>
