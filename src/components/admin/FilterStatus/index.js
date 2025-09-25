@@ -1,7 +1,8 @@
 import { Button, Card, Col, Row } from "antd";
 import "./FilterStatus.scss";
+import SearchSong from "../Search";
 
-function FilterStatus({ filterStatus, onFilterChange }) {
+function FilterStatus({ filterStatus, onFilterChange, onSearchResult }) {
   return (
     <>
       <Card title="Bộ lọc và tìm kiếm" className="filter-status">
@@ -22,6 +23,7 @@ function FilterStatus({ filterStatus, onFilterChange }) {
           </Col>
 
           <Col lg={12}>
+            <SearchSong onSearchResult={onSearchResult}/>
           </Col>
         </Row>
       </Card>

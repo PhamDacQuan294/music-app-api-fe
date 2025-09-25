@@ -36,6 +36,11 @@ function ListSong() {
     fetchData(status);
   }, [status]);
 
+  const handleSearchResult = (newSongs) => {
+    setSongs(newSongs);
+  }
+
+  // console.log(songs);
 
   return (
     <>
@@ -47,6 +52,7 @@ function ListSong() {
         singers={singers} 
         onReload={() => fetchData(status)} // reload giữ nguyên filter hiện tại 
         onFilterChange={setStatus} 
+        onSearchResult={handleSearchResult}
         messageApi={messageApi}  
       />
     </>

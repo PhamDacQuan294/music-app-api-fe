@@ -3,7 +3,7 @@ import { DeleteOutlined } from "@ant-design/icons";
 import { deleteSong } from "../../../services/admin/songService";
 
 function DeleteSong(props) {
-  const { record, onReload,  messageApi} = props;
+  const { record, onReload, messageApi} = props;
 
   const handleDelete = async () => {
     const response = await deleteSong(record._id);

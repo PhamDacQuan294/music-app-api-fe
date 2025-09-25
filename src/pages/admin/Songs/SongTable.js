@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import FilterStatus from "../../../components/admin/FilterStatus";
 
 function SongTable(props) {
-  const { songs, filterStatus, topics, singers, onReload, onFilterChange, messageApi } = props;
+  const { songs, filterStatus, topics, singers, onReload, onFilterChange, onSearchResult, messageApi } = props;
 
   const singerList = singers?.singers || [];
 
@@ -111,7 +111,7 @@ function SongTable(props) {
   
   return (
     <>
-      <FilterStatus filterStatus={filterStatus} onFilterChange={onFilterChange}/>
+      <FilterStatus filterStatus={filterStatus} onFilterChange={onFilterChange} onSearchResult={onSearchResult}/>
 
       <Card title="Danh sách">
         <Row>
