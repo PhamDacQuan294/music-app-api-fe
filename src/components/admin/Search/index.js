@@ -2,25 +2,24 @@ import { Input } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { searchService } from "../../../services/admin/searchService";
-import { getListSong } from "../../../services/admin/songService";
 
-function SearchSong({ onSearchResult }) {
+function Search({ onSearchResult, type, placeholder }) {
   const [keyword, setKeyword] = useState("");
   const navigate = useNavigate();
 
   const handleSearch = async () => {
     if (keyword) {
-      const data = await searchService("search-song", keyword);
-      if (data.newSongs) {
-        onSearchResult(data.newSongs.flat());
+      const data = await searchService(`${type}`, keyword);
+      if (data?.[type]) {
+        onSearchResult(data?.[type]);
       }
-      navigate(`/admin/songs?search-song=${encodeURIComponent(keyword)}`);
+      navigate(`/admin/${type}?search-${type}=${encodeURIComponent(keyword)}`);
     } else {
-      const data = await getListSong();
-      if (data.songs) {
-        onSearchResult(data.songs);
+      navigate(`/admin/${type}`)
+      const data = await searchService(`${type}`, keyword);
+      if (data?.[type]) {
+        onSearchResult(data?.[type]);
       }
-      navigate(`/admin/songs`)
     }
   }
 
@@ -31,14 +30,13 @@ function SearchSong({ onSearchResult }) {
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
           onSearch={handleSearch} // xử lý cả Enter + click nút
-          allowClear
           enterButton="Tìm"
           size="middle"
-          placeholder="Tìm kiếm bài hát"
+          placeholder={placeholder}
         />
       </div>
     </>
   )
 }
 
-export default SearchSong;
+export default Search;

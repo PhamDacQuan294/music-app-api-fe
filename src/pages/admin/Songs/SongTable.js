@@ -113,7 +113,13 @@ function SongTable() {
   
   return (
     <>
-      <FilterStatus filterStatus={songContexts.filterStatus} onFilterChange={songContexts.onFilterChange} onSearchResult={songContexts.onSearchResult}/>
+      <FilterStatus 
+        filterStatus={songContexts.filterStatus} 
+        onFilterChange={songContexts.onFilterChange} 
+        onSearchResult={songContexts.onSearchResult}
+        type="songs"
+        placeholder = "Tìm kiếm bài hát..."
+      />
 
       <Card title="Danh sách">
         <Row>
