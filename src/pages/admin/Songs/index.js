@@ -5,6 +5,8 @@ import { getListTopic } from "../../../services/admin/topicsService";
 import { getListSinger } from "../../../services/admin/singerService";
 import SongTable from "./SongTable";
 import "./Song.scss";
+import { createContext } from "react";
+export const SongContext = createContext();
 
 function ListSong() {
   const [songs, setSongs] = useState([]);
@@ -40,21 +42,23 @@ function ListSong() {
     setSongs(newSongs);
   }
 
-  // console.log(songs);
-
   return (
     <>
       {contextHolder}
-      <SongTable 
-        songs={songs}
-        filterStatus={filterStatus} 
-        topics={topics} 
-        singers={singers} 
-        onReload={() => fetchData(status)} // reload giữ nguyên filter hiện tại 
-        onFilterChange={setStatus} 
-        onSearchResult={handleSearchResult}
-        messageApi={messageApi}  
-      />
+      <SongContext.Provider
+        value={{
+          songs,
+          filterStatus,
+          topics,
+          singers,
+          onReload: () => fetchData(status),
+          onFilterChange: setStatus,
+          onSearchResult: handleSearchResult,
+          messageApi,
+        }}
+      >
+        <SongTable />
+      </SongContext.Provider>
     </>
   )
 }

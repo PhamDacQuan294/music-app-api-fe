@@ -5,16 +5,18 @@ import DetailSong from "./DetailSong";
 import { PlusOutlined } from "@ant-design/icons"
 import { Link } from "react-router-dom";
 import FilterStatus from "../../../components/admin/FilterStatus";
+import { useContext } from "react";
+import { SongContext } from "./index"
 
-function SongTable(props) {
-  const { songs, filterStatus, topics, singers, onReload, onFilterChange, onSearchResult, messageApi } = props;
+function SongTable() {
+  const songContexts = useContext(SongContext);
 
-  const singerList = singers?.singers || [];
+  const singerList = songContexts.singers?.singers || [];
 
-  const dataSource = songs
+  const dataSource = songContexts.songs
     .map((song) => {
       const singer = singerList.find((s) => s._id === song.singerId);
-      const topic = topics.find((t) => t._id === song.topicId);
+      const topic = songContexts.topics.find((t) => t._id === song.topicId);
 
       return {
         ...song,
@@ -99,8 +101,8 @@ function SongTable(props) {
       render: (_, record) => {
         return <>
           <Space>
-            <DeleteSong record={record} onReload={onReload} messageApi={messageApi} />
-            <EditSong record={record} topics={topics} singers={singers} onReload={onReload} />
+            <DeleteSong record={record} />
+            <EditSong record={record} />
             <DetailSong record={record} />
           </Space>
         </>
@@ -111,7 +113,7 @@ function SongTable(props) {
   
   return (
     <>
-      <FilterStatus filterStatus={filterStatus} onFilterChange={onFilterChange} onSearchResult={onSearchResult}/>
+      <FilterStatus filterStatus={songContexts.filterStatus} onFilterChange={songContexts.onFilterChange} onSearchResult={songContexts.onSearchResult}/>
 
       <Card title="Danh sách">
         <Row>

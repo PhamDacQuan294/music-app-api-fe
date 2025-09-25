@@ -5,16 +5,7 @@ import MyEditor from "../../../components/admin/TinymceConfig";
 
 const { Option } = Select;
 
-function SongFormFields({
-  topics,
-  singers,
-  fileList,
-  fileListAudio,
-  audioUrl,
-  handleChange,
-  handleAudioChange,
-  rules,
-}) {
+function SongFormFields({ topics, singers, fileList, fileListAudio, audioUrl, handleChange, handleAudioChange, rules}) {
   return (
     <>
       <Form.Item label="Tiêu đề" name="title" rules={rules}>

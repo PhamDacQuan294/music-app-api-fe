@@ -1,22 +1,26 @@
 import { Button, Popconfirm } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { deleteSong } from "../../../services/admin/songService";
+import { SongContext } from "./index";
+import { useContext } from "react";
 
 function DeleteSong(props) {
-  const { record, onReload, messageApi} = props;
+  const  songContexts = useContext(SongContext);
+
+  const { record } = props;
 
   const handleDelete = async () => {
     const response = await deleteSong(record._id);
 
     if (response) {
-      messageApi.open({
+      songContexts.messageApi.open({
         type: 'success',
         content: 'Xoá bài hát thành công',
         duration: 5,
       });
-      onReload();
+      songContexts.onReload();
     } else {
-      messageApi.open({
+      songContexts.messageApi.open({
         type: 'error',
         content: 'Xoá bài hát chưa thành công',
         duration: 5,

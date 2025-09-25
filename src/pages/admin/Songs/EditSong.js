@@ -2,11 +2,14 @@ import { Button, Form, Modal, notification, Spin } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { updateSong } from "../../../services/admin/songService"
-
+import { SongContext } from "./index";
+import { useContext } from "react";
 import SongFormFields from "./SongFormFields";
 
 function EditSong(props) {
-  const { record, topics, singers, onReload } = props;
+  const  songContexts = useContext(SongContext);
+  const { record } = props;
+
   const [fileList, setFileList] = useState([]);
   const [fileListAudio, setFileListAudio] = useState([]);
   const [audioUrl, setAudioUrl] = useState(null);
@@ -94,7 +97,7 @@ function EditSong(props) {
           description: `Bạn đã cập nhật bài hát thành công`
         });
         setShowModal(false);
-        onReload();
+        songContexts.onReload();
       } else {
         notiApi.error({
           message: 'Cập nhật thất bại',
@@ -124,8 +127,8 @@ function EditSong(props) {
         <Spin spinning={spinning} tip="Đang cập nhật">
           <Form layout="vertical" onFinish={handleSubmit} form={form} initialValues={record}>
             <SongFormFields
-              topics={topics}
-              singers={singers?.singers}
+              topics={songContexts.topics}
+              singers={songContexts.singers?.singers}
               fileList={fileList}
               fileListAudio={fileListAudio}
               audioUrl={audioUrl}
