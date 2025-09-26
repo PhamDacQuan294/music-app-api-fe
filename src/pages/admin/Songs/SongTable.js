@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import FilterStatus from "../../../components/admin/FilterStatus";
 import { useContext } from "react";
 import { SongContext } from "./index"
-import { changeStatus } from "../../../services/admin/songService";
+import { hanleStatusChange } from "../../../components/admin/ChangeStatus";
 
 function SongTable() {
   const songContexts = useContext(SongContext);
@@ -26,21 +26,7 @@ function SongTable() {
       };
     })
   
-  const hanleStatusChange = async (record) => {
-    const newStatus = record.status === "active" ? "inactive" : "active";
-
-    try {
-      const data = await changeStatus(newStatus, record._id);
-      if (data.code === 200) {
-        songContexts.onReload();
-        songContexts.messageApi.success("Cập nhật trạng thái thành công");
-      } else {
-        songContexts.messageApi.error("Cập nhật trạng thái thất bại");
-      }
-    } catch (error) {
-      songContexts.messageApi.error("Lỗi hệ thống, vui lòng thử lại");
-    }
-  }
+  
 
   const columns = [
     {
@@ -98,7 +84,7 @@ function SongTable() {
                 <Tag 
                   color="green" 
                   style={{ cursor: "pointer" }} 
-                  onClick={() => hanleStatusChange(record)}
+                  onClick={() => hanleStatusChange(record, "songs", songContexts)}
                 >
                   Active
                 </Tag>
@@ -107,7 +93,7 @@ function SongTable() {
           ) : (
             <>
               <Tooltip title="Bài hát đã bị dừng hoạt động" color="red">
-                <Tag color="red" style={{ cursor: "pointer" }} onClick={() => hanleStatusChange(record)}>
+                <Tag color="red" style={{ cursor: "pointer" }} onClick={() => hanleStatusChange(record, "songs", songContexts)}>
                   InActive
                 </Tag>
               </Tooltip>

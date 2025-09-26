@@ -1,4 +1,4 @@
-import { del, get, patch } from "../../utils/request";
+import { del, get } from "../../utils/request";
 import { API_PREFIX } from "../../components/admin/Contants";
 import { PREFIX_ADMIN } from "../../components/admin/Contants";
 import { post2 } from "../../utils/request2";
@@ -20,11 +20,6 @@ export const createSong = async () => {
 
 export const deleteSong = async (id) => {
   const result = await del(`${API_PREFIX}/${PREFIX_ADMIN}/songs/delete/${id}`);
-  return result;
-}
-
-export const changeStatus = async (status, id) => {
-  const result = await patch(`${API_PREFIX}/${PREFIX_ADMIN}/songs/change-status/${status}/${id}`);
   return result;
 }
 
