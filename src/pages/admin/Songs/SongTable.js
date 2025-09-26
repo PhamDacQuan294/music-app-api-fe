@@ -69,11 +69,6 @@ function SongTable() {
       key: "topicName"
     },
     {
-      title: "Ví trị",
-      dataIndex: "position",
-      key: "position"
-    },
-    {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
