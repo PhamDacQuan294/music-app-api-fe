@@ -5,12 +5,15 @@ import DetailSong from "./DetailSong";
 import { PlusOutlined } from "@ant-design/icons"
 import { Link } from "react-router-dom";
 import FilterStatus from "../../../components/admin/FilterStatus";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { SongContext } from "./index"
 import { hanleStatusChange } from "../../../components/admin/ChangeStatus";
+import { ChangeStatusMulti } from "../../../components/admin/ChangeMulti";
 
 function SongTable() {
   const songContexts = useContext(SongContext);
+
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   const singerList = songContexts.singers?.singers || [];
 
@@ -25,8 +28,6 @@ function SongTable() {
         topicName: topic ? topic.title : "Không rõ",
       };
     })
-  
-  
 
   const columns = [
     {
@@ -81,9 +82,9 @@ function SongTable() {
           {status === "active" ? (
             <>
               <Tooltip title="Bài hát chưa bị dừng hoạt động" color="green">
-                <Tag 
-                  color="green" 
-                  style={{ cursor: "pointer" }} 
+                <Tag
+                  color="green"
+                  style={{ cursor: "pointer" }}
                   onClick={() => hanleStatusChange(record, "songs", songContexts)}
                 >
                   Active
@@ -117,21 +118,25 @@ function SongTable() {
     },
   ];
 
-  
+
   return (
     <>
-      <FilterStatus 
-        filterStatus={songContexts.filterStatus} 
-        onFilterChange={songContexts.onFilterChange} 
+      <FilterStatus
+        filterStatus={songContexts.filterStatus}
+        onFilterChange={songContexts.onFilterChange}
         onSearchResult={songContexts.onSearchResult}
         type="songs"
-        placeholder = "Tìm kiếm bài hát..."
+        placeholder="Tìm kiếm bài hát..."
       />
 
       <Card title="Danh sách">
         <Row>
           <Col sm={16}>
-            ok
+            <ChangeStatusMulti 
+              selectedRowKeys={selectedRowKeys} 
+              songContexts={songContexts}
+              type="songs"
+            />
           </Col>
 
           <Col sm={8} style={{ textAlign: "right", marginBottom: "20px" }}>
@@ -150,6 +155,12 @@ function SongTable() {
           scroll={{ x: "max-content" }}
           className="custom-table"
           pagination={{ pageSize: 5 }}
+          rowSelection={{
+            selectedRowKeys,
+            onChange: (newSelectedRowKeys) => {
+              setSelectedRowKeys(newSelectedRowKeys);
+            },
+          }}
         />
       </Card>
     </>
