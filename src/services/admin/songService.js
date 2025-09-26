@@ -1,4 +1,4 @@
-import { del, get } from "../../utils/request";
+import { del, get, patch } from "../../utils/request";
 import { API_PREFIX } from "../../components/admin/Contants";
 import { PREFIX_ADMIN } from "../../components/admin/Contants";
 import { post2 } from "../../utils/request2";
@@ -23,6 +23,11 @@ export const deleteSong = async (id) => {
   return result;
 }
 
+export const changeStatus = async (status, id) => {
+  const result = await patch(`${API_PREFIX}/${PREFIX_ADMIN}/songs/change-status/${status}/${id}`);
+  return result;
+}
+
 export const updateSong = async (id, formData) => {
   const result = await patch2(`${API_PREFIX}/${PREFIX_ADMIN}/songs/edit/${id}`, formData);
   return result;
@@ -32,4 +37,3 @@ export const createSongPost = async (formData) => {
   const result = await post2(`${API_PREFIX}/${PREFIX_ADMIN}/songs/create`, formData);
   return result;
 };
-

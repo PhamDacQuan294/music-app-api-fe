@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import FilterStatus from "../../../components/admin/FilterStatus";
 import { useContext } from "react";
 import { SongContext } from "./index"
+import { changeStatus } from "../../../services/admin/songService";
 
 function SongTable() {
   const songContexts = useContext(SongContext);
@@ -24,6 +25,22 @@ function SongTable() {
         topicName: topic ? topic.title : "Không rõ",
       };
     })
+  
+  const hanleStatusChange = async (record) => {
+    const newStatus = record.status === "active" ? "inactive" : "active";
+
+    try {
+      const data = await changeStatus(newStatus, record._id);
+      if (data.code === 200) {
+        songContexts.onReload();
+        songContexts.messageApi.success("Cập nhật trạng thái thành công");
+      } else {
+        songContexts.messageApi.error("Cập nhật trạng thái thất bại");
+      }
+    } catch (error) {
+      songContexts.messageApi.error("Lỗi hệ thống, vui lòng thử lại");
+    }
+  }
 
   const columns = [
     {
@@ -73,12 +90,16 @@ function SongTable() {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      render: (status) => {
+      render: (status, record) => {
         return <>
           {status === "active" ? (
             <>
               <Tooltip title="Bài hát chưa bị dừng hoạt động" color="green">
-                <Tag color="green">
+                <Tag 
+                  color="green" 
+                  style={{ cursor: "pointer" }} 
+                  onClick={() => hanleStatusChange(record)}
+                >
                   Active
                 </Tag>
               </Tooltip>
@@ -86,7 +107,7 @@ function SongTable() {
           ) : (
             <>
               <Tooltip title="Bài hát đã bị dừng hoạt động" color="red">
-                <Tag color="red">
+                <Tag color="red" style={{ cursor: "pointer" }} onClick={() => hanleStatusChange(record)}>
                   InActive
                 </Tag>
               </Tooltip>
@@ -142,6 +163,7 @@ function SongTable() {
           rowKey="_id"
           scroll={{ x: "max-content" }}
           className="custom-table"
+          pagination={{ pageSize: 5 }}
         />
       </Card>
     </>
