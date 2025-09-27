@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { message } from "antd";  
+import { message } from "antd";
 import { getListSong } from "../../../services/admin/songService";
 import { getListTopic } from "../../../services/admin/topicsService";
 import { getListSinger } from "../../../services/admin/singerService";
@@ -13,23 +13,25 @@ function ListSong() {
   const [songs, setSongs] = useState([]);
   const [topics, setTopics] = useState([]);
   const [singers, setSingers] = useState([]);
-  const [filterStatus, setFilterStatus]= useState([]);
-  const [status, setStatus] = useState(""); 
+  const [filterStatus, setFilterStatus] = useState([]);
+  const [pagination, setPagination] = useState({});
+  const [status, setStatus] = useState("");
   const [sortKey, setSortKey] = useState(null);
   const [sortValue, setSortValue] = useState(null);
 
   const [messageApi, contextHolder] = message.useMessage();
 
-  const fetchData = async (status = "", key = sortKey, value = sortValue) => {
+  const fetchData = async (status = "", key = sortKey, value = sortValue, page = pagination.currentPage || 1, pageSize = pagination.limitItems || 2) => {
     try {
       const [songRes, topicRes, singerRes] = await Promise.all([
-        getListSong(status, key, value), 
+        getListSong(status, key, value, page, pageSize),
         getListTopic(),
         getListSinger(),
       ]);
 
       setSongs(songRes?.songs || []);
       setFilterStatus(songRes?.filterStatus || []);
+      setPagination(songRes?.pagination || "");
       setTopics(topicRes?.topics || []);
       setSingers(singerRes || []);
     } catch (error) {
@@ -50,6 +52,10 @@ function ListSong() {
     setSortValue(sortValue);
   }
 
+  const handlePaginationChange = ({ page, pageSize }) => {
+    fetchData(status, sortKey, sortValue, page, pageSize);
+  };
+
   return (
     <>
       {contextHolder}
@@ -59,10 +65,13 @@ function ListSong() {
           filterStatus,
           topics,
           singers,
-          onReload: () => fetchData(status, sortKey, sortValue),
+          pagination,
+          onReload: (page = pagination.currentPage) =>
+            fetchData(status, sortKey, sortValue, page, pagination.limitItems),
           onFilterChange: setStatus,
           onSearchResult: handleSearchResult,
           onSort: handleSort,
+          onPaginationChange: handlePaginationChange,
           messageApi,
         }}
       >

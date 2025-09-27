@@ -98,7 +98,7 @@ function EditSong(props) {
           description: `Bạn đã cập nhật bài hát thành công`
         });
         setShowModal(false);
-        songContexts.onReload();
+        songContexts.onReload(songContexts.pagination.currentPage);
       } else {
         notiApi.error({
           message: 'Cập nhật thất bại',

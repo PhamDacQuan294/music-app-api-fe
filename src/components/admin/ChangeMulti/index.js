@@ -49,7 +49,7 @@ export const ChangeStatusMulti = ({ selectedRowKeys, type, songContexts }) => {
         } else {
           message.success("Cập nhật thành công!");
         }
-        songContexts.onReload();
+        songContexts.onReload(songContexts.pagination.currentPage);
       } else {
         message.error("Có lỗi xảy ra!");
       }

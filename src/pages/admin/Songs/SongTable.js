@@ -87,7 +87,7 @@ function SongTable() {
       render: (position, record) => (
         <InputNumber
           min={1}
-          value={positions[record._id]} 
+          value={positions[record._id]}
           onChange={(value) => {
             setPositions(prev => ({
               ...prev,
@@ -98,7 +98,7 @@ function SongTable() {
             const updatedSelectedRowKeys = selectedRowKeys.map((key) => {
               const [id] = key.split("-");
               if (id === record._id) {
-                return `${id}-${value}`; 
+                return `${id}-${value}`;
               }
               return key;
             });
@@ -195,7 +195,15 @@ function SongTable() {
           rowKey="_id"
           scroll={{ x: "max-content" }}
           className="custom-table"
-          pagination={{ pageSize: 5 }}
+          pagination={{
+            current: songContexts.pagination.currentPage, 
+            pageSize: songContexts.pagination.limitItems, 
+            total: songContexts.pagination.totalPage * songContexts.pagination.limitItems, 
+            onChange: (page, pageSize) => {
+              songContexts.onPaginationChange({ page, pageSize });
+            },
+            showSizeChanger: false, 
+          }}
           rowSelection={{
             onChange: (newSelectedRowKeys) => {
               setSelectedRowKeys(newSelectedRowKeys);
