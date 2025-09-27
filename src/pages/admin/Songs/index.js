@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { message } from "antd";  
 import { getListSong } from "../../../services/admin/songService";
@@ -14,13 +15,15 @@ function ListSong() {
   const [singers, setSingers] = useState([]);
   const [filterStatus, setFilterStatus]= useState([]);
   const [status, setStatus] = useState(""); 
+  const [sortKey, setSortKey] = useState(null);
+  const [sortValue, setSortValue] = useState(null);
 
   const [messageApi, contextHolder] = message.useMessage();
 
-  const fetchData = async (status = "") => {
+  const fetchData = async (status = "", key = sortKey, value = sortValue) => {
     try {
       const [songRes, topicRes, singerRes] = await Promise.all([
-        getListSong(status), 
+        getListSong(status, key, value), 
         getListTopic(),
         getListSinger(),
       ]);
@@ -35,11 +38,16 @@ function ListSong() {
   };
 
   useEffect(() => {
-    fetchData(status);
-  }, [status]);
+    fetchData(status, sortKey, sortValue);
+  }, [status, sortKey, sortValue]);
 
   const handleSearchResult = (newSongs) => {
     setSongs(newSongs);
+  }
+
+  const handleSort = (sortKey, sortValue) => {
+    setSortKey(sortKey);
+    setSortValue(sortValue);
   }
 
   return (
@@ -51,9 +59,10 @@ function ListSong() {
           filterStatus,
           topics,
           singers,
-          onReload: () => fetchData(status),
+          onReload: () => fetchData(status, sortKey, sortValue),
           onFilterChange: setStatus,
           onSearchResult: handleSearchResult,
+          onSort: handleSort,
           messageApi,
         }}
       >

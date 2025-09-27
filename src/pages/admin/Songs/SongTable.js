@@ -9,6 +9,7 @@ import { useContext, useState } from "react";
 import { SongContext } from "./index"
 import { hanleStatusChange } from "../../../components/admin/ChangeStatus";
 import { ChangeStatusMulti } from "../../../components/admin/ChangeMulti";
+import { SortType } from "../../../components/admin/Sort";
 
 function SongTable() {
   const songContexts = useContext(SongContext);
@@ -69,6 +70,11 @@ function SongTable() {
       key: "topicName"
     },
     {
+      title: "Vị trí",
+      dataIndex: "position",
+      key: "position"
+    },
+    {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
@@ -124,6 +130,11 @@ function SongTable() {
         placeholder="Tìm kiếm bài hát..."
       />
 
+      <SortType
+        songContexts={songContexts}
+        type="songs"
+      />
+      
       <Card title="Danh sách">
         <Row>
           <Col sm={16}>

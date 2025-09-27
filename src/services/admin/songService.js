@@ -4,14 +4,26 @@ import { PREFIX_ADMIN } from "../../components/admin/Contants";
 import { post2 } from "../../utils/request2";
 import { patch2 } from "../../utils/request2";
 
-export const getListSong = async (status) => {
+export const getListSong = async (status, sortKey, sortValue) => {
   let url = `${API_PREFIX}/${PREFIX_ADMIN}/songs`;
+
+  const params = [];
+
   if (status) {
-    url += `?status=${status}`;
+    params.push(`status=${status}`);
   }
+
+  if (sortKey && sortValue) {
+    params.push(`sortKey=${sortKey}&sortValue=${sortValue}`);
+  }
+
+  if (params.length > 0) {
+    url += `?${params.join("&")}`;
+  }
+
   const result = await get(url);
   return result;
-}
+};
 
 export const createSong = async () => {
   const result = await get(`${API_PREFIX}/${PREFIX_ADMIN}/songs/create`);
