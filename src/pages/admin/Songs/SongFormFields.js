@@ -1,4 +1,4 @@
-import { Form, Input, Select, Upload, Button, Switch } from "antd";
+import { Form, Input, Select, Upload, Button, Switch, InputNumber } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
 import MyEditor from "../../../components/admin/TinymceConfig";
@@ -42,6 +42,10 @@ function SongFormFields({ topics, singers, fileList, fileListAudio, audioUrl, ha
             </Option>
           ))}
         </Select>
+      </Form.Item>
+        
+      <Form.Item label="Vị trí" name="position">
+        <InputNumber min={1} style={{ width: "100%" }} placeholder="Nhập vị trí hiển thị" />
       </Form.Item>
 
       <Form.Item label="Ảnh" name="avatar">

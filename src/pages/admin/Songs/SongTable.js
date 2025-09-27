@@ -1,11 +1,11 @@
-import { Table, Image, Tooltip, Tag, Space, Button, Card, Row, Col } from "antd";
+import { Table, Image, Tooltip, Tag, Space, Button, Card, Row, Col, InputNumber } from "antd";
 import DeleteSong from "./DeleteSong";
 import EditSong from "./EditSong";
 import DetailSong from "./DetailSong";
 import { PlusOutlined } from "@ant-design/icons"
 import { Link } from "react-router-dom";
 import FilterStatus from "../../../components/admin/FilterStatus";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { SongContext } from "./index"
 import { hanleStatusChange } from "../../../components/admin/ChangeStatus";
 import { ChangeStatusMulti } from "../../../components/admin/ChangeMulti";
@@ -15,6 +15,17 @@ function SongTable() {
   const songContexts = useContext(SongContext);
 
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+
+  const [positions, setPositions] = useState({});
+
+  // Khi songContexts.songs thay đổi, cập nhật positions
+  useEffect(() => {
+    const pos = {};
+    songContexts.songs.forEach(song => {
+      pos[song._id] = song.position;
+    });
+    setPositions(pos);
+  }, [songContexts.songs]);
 
   const singerList = songContexts.singers?.singers || [];
 
@@ -72,7 +83,31 @@ function SongTable() {
     {
       title: "Vị trí",
       dataIndex: "position",
-      key: "position"
+      key: "position",
+      render: (position, record) => (
+        <InputNumber
+          min={1}
+          value={positions[record._id]} 
+          onChange={(value) => {
+            setPositions(prev => ({
+              ...prev,
+              [record._id]: value,
+            }));
+
+            // Cập nhật selectedRowKeys theo logic cũ
+            const updatedSelectedRowKeys = selectedRowKeys.map((key) => {
+              const [id] = key.split("-");
+              if (id === record._id) {
+                return `${id}-${value}`; 
+              }
+              return key;
+            });
+
+            setSelectedRowKeys(updatedSelectedRowKeys);
+          }}
+          style={{ width: "70px" }}
+        />
+      ),
     },
     {
       title: "Trạng thái",
@@ -134,12 +169,12 @@ function SongTable() {
         songContexts={songContexts}
         type="songs"
       />
-      
+
       <Card title="Danh sách">
         <Row>
           <Col sm={16}>
-            <ChangeStatusMulti 
-              selectedRowKeys={selectedRowKeys} 
+            <ChangeStatusMulti
+              selectedRowKeys={selectedRowKeys}
               songContexts={songContexts}
               type="songs"
             />
@@ -162,7 +197,6 @@ function SongTable() {
           className="custom-table"
           pagination={{ pageSize: 5 }}
           rowSelection={{
-            selectedRowKeys,
             onChange: (newSelectedRowKeys) => {
               setSelectedRowKeys(newSelectedRowKeys);
             },

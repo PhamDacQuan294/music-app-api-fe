@@ -50,6 +50,7 @@ function CreateSong() {
     formData.append("lyrics", values.lyrics || "");
     formData.append("description", values.description || "");
     formData.append("status", values.status ? "true" : "false");
+    formData.append("position", values.position);
 
     // append avatar (nếu có chọn)
     if (fileList.length > 0) {

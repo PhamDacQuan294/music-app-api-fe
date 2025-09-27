@@ -70,6 +70,7 @@ function EditSong(props) {
     formData.append("lyrics", values.lyrics || "");
     formData.append("description", values.description || "");
     formData.append("status", values.status ? "true" : "false");
+    formData.append("position", values.position);
 
     if (fileList.length > 0) {
       if (fileList[0].originFileObj) {

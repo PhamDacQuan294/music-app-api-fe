@@ -66,6 +66,7 @@ export const ChangeStatusMulti = ({ selectedRowKeys, type, songContexts }) => {
           <Option value="active">Hoạt động</Option>
           <Option value="inactive">Dừng hoạt động</Option>
           <Option value="delete-all">Xoá tất cả</Option>
+          <Option value="change-position">Thay đổi vị trí</Option>
         </Select>
       </Form.Item>
 
