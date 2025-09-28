@@ -1,21 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import TopicTable from "./TopicTable";
 import { getListTopic } from "../../../services/admin/topicsService";
+import { useDispatch, useSelector } from "react-redux";
+import { getListTopics } from "../../../actions/admin/topics.actions";
 
 function ListTopic() {
-  const [data, setData] = useState([]);
+  const dispatch = useDispatch();
+  const topics = useSelector((state) => state.admin.topics);
 
   useEffect(() => {
     const fetchTopics = async () => {
       const data = await getListTopic();
-      setData(data.topics);
-    }
+      dispatch(getListTopics(data.topics));
+    };
     fetchTopics();
-  }, [])
+  }, [dispatch]);
   
   return (
     <>
-      <TopicTable topics={data}/>
+      <TopicTable topics={topics}/>
     </>
   )
 }
