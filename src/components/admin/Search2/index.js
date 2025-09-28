@@ -4,13 +4,13 @@ import "./Search.scss"
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { resetSearchTopics, searchTopics } from "../../../actions/admin/search.actions";
+import { resetSearchAction, searchAction } from "../../../actions/admin/search.actions"
 
-function Search2({ placeholder }) {
+function Search2({ placeholder, type }) {
   const [keyword, setKeyword] = useState("");
   const [suggests, setSuggests] = useState([]);
   const [skipSearch, setSkipSearch] = useState(false);
-  const { list } = useSelector((state) => state.admin.topics);
+  const { list } = useSelector((state) => state.admin[type]);
 
   const dispatch = useDispatch();
 
@@ -22,15 +22,15 @@ function Search2({ placeholder }) {
 
     const delayDebounce = setTimeout(async () => {
       if (keyword.trim()) {
-        dispatch(searchTopics(keyword.trim()));
-        // Lọc các chủ đề có chứa keyword
-        const filteredTopics = list.topics.filter(item =>
+        dispatch(searchAction(keyword.trim(), type));
+        // Lọc có chứa keyword
+        const filtered = list[type].filter(item =>
           item.title.toLowerCase().includes(keyword.toLowerCase()) // Kiểm tra nếu title chứa keyword
         );
-        setSuggests(filteredTopics); // Cập nhật gợi ý với các chủ đề đã lọc
+        setSuggests(filtered); // Cập nhật gợi ý đã lọc
       } else {
         setSuggests([]);
-        dispatch(resetSearchTopics());
+        dispatch(resetSearchAction(type));
       }
     }, 300);
 
@@ -40,9 +40,9 @@ function Search2({ placeholder }) {
 
   const handleSearch = async () => {
     if (keyword.trim()) {
-      dispatch(searchTopics(keyword.trim()));
+      dispatch(searchAction(keyword.trim(), type));
     } else {
-      dispatch(resetSearchTopics());
+      dispatch(resetSearchAction(type));
     }
   }
 
@@ -52,7 +52,7 @@ function Search2({ placeholder }) {
         <Input.Search
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
-          onSearch={handleSearch} // xử lý cả Enter + click nút
+          onSearch={handleSearch} 
           enterButton="Tìm"
           size="middle"
           allowClear={true}
@@ -68,7 +68,7 @@ function Search2({ placeholder }) {
                   onClick={() => {
                     setSkipSearch(true);
                     setKeyword(item.title);      // set lại input value
-                    dispatch(searchTopics(item.title)); // click gợi ý nó trả về bái hát đó
+                    dispatch(searchAction(item.title, type)); // click gợi ý nó trả về bái hát đó
                     setSuggests([]);             // clear gợi ý
                   }}
                   style={{ cursor: "pointer" }}

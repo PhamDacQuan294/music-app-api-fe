@@ -7,9 +7,12 @@ import { getListSinger } from "../../../services/admin/singerService";
 import SongTable from "./SongTable";
 import "./Song.scss";
 import { createContext } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getListSongsAction } from "../../../actions/admin/songs.actions";
 export const SongContext = createContext();
 
 function ListSong() {
+  const dispatch = useDispatch();
   const [songs, setSongs] = useState([]);
   const [topics, setTopics] = useState([]);
   const [singers, setSingers] = useState([]);
@@ -19,12 +22,14 @@ function ListSong() {
   const [sortKey, setSortKey] = useState(null);
   const [sortValue, setSortValue] = useState(null);
 
+  const { filter, keyword } = useSelector((state) => state.admin.songs);
+
   const [messageApi, contextHolder] = message.useMessage();
 
   const fetchData = async (status = "", key = sortKey, value = sortValue, page = pagination.currentPage || 1, pageSize = pagination.limitItems || 2) => {
     try {
       const [songRes, topicRes, singerRes] = await Promise.all([
-        getListSong(status, key, value, page, pageSize),
+        getListSong(filter, key, value, page, pageSize),
         getListTopic(),
         getListSinger(),
       ]);
@@ -34,6 +39,8 @@ function ListSong() {
       setPagination(songRes?.pagination || "");
       setTopics(topicRes?.topics || []);
       setSingers(singerRes || []);
+
+      dispatch(getListSongsAction(songRes));
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -41,7 +48,7 @@ function ListSong() {
 
   useEffect(() => {
     fetchData(status, sortKey, sortValue);
-  }, [status, sortKey, sortValue]);
+  }, [filter, sortKey, sortValue]);
 
   const handleSearchResult = (newSongs) => {
     setSongs(newSongs);

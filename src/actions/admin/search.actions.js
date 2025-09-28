@@ -1,12 +1,14 @@
-export const searchTopics = (keyword) => {
+export const searchAction = (keyword, type) => {
+  const typeUpper = type.toUpperCase(); // chuyển type sang in hoa
   return {
-    type: "SEARCH_TOPICS",
+    type: `SEARCH_${typeUpper}`,
     keyword: keyword,
-  }
-}
+  };
+};
 
-export const resetSearchTopics = () => {
+export const resetSearchAction = (type) => {
+  const typeUpper = type.toUpperCase();
   return {
-    type: "RESET_SEARCH_TOPICS",
+    type: `RESET_SEARCH_${typeUpper}`,
   };
 };

@@ -11,8 +11,11 @@ import { hanleStatusChange } from "../../../components/admin/ChangeStatus";
 import { ChangeStatusMulti } from "../../../components/admin/ChangeMulti";
 import { SortType } from "../../../components/admin/Sort";
 import { getPaginationConfig } from "../../../components/admin/PaginationConfig";
+import { useSelector } from "react-redux";
 
 function SongTable() {
+  const { list } = useSelector((state) => state.admin.songs);
+
   const songContexts = useContext(SongContext);
 
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -159,8 +162,7 @@ function SongTable() {
   return (
     <>
       <FilterStatus
-        filterStatus={songContexts.filterStatus}
-        onFilterChange={songContexts.onFilterChange}
+        filterStatus={list?.filterStatus || []}
         onSearchResult={songContexts.onSearchResult}
         type="songs"
         placeholder="Tìm kiếm bài hát..."
