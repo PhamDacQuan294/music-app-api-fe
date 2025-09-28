@@ -1,24 +1,34 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
 import TopicTable from "./TopicTable";
 import { getListTopic } from "../../../services/admin/topicsService";
 import { useDispatch, useSelector } from "react-redux";
-import { getListTopics } from "../../../actions/admin/topics.actions";
+import { getListTopicsAction} from "../../../actions/admin/topics.actions";
 
 function ListTopic() {
   const dispatch = useDispatch();
-  const topics = useSelector((state) => state.admin.topics);
+  const { filter, keyword } = useSelector((state) => state.admin.topics);
+
+  const fetchData = async () => {
+    try {
+      const [topicRes] = await Promise.all([
+        getListTopic(filter, keyword)
+      ]);
+
+      dispatch(getListTopicsAction(topicRes));
+
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchTopics = async () => {
-      const data = await getListTopic();
-      dispatch(getListTopics(data.topics));
-    };
-    fetchTopics();
-  }, [dispatch]);
+    fetchData();
+  }, [filter, keyword])
   
   return (
     <>
-      <TopicTable topics={topics}/>
+      <TopicTable />
     </>
   )
 }

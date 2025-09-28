@@ -2,9 +2,11 @@ import { Table, Image, Tooltip, Tag, Space } from "antd";
 import DeleteTopic from "./DeleteTopic";
 import EditTopic from "./EditTopic";
 import DetailTopic from "./DetailTopic";
+import { useSelector } from "react-redux";
+import FilterStatus2 from "../../../components/admin/FilterStatus2";
 
-function TopicTable(props) {
-  const { topics } = props;
+function TopicTable() {
+   const { list } = useSelector((state) => state.admin.topics);
 
   const columns = [
     {
@@ -74,7 +76,13 @@ function TopicTable(props) {
 
   return (
     <>
-      <Table dataSource={topics} columns={columns} rowKey="_id" />
+      <FilterStatus2 
+        filterStatus={list?.filterStatus || []}
+        type="topics"
+        placeholder="Tìm kiếm chủ đe"
+      />
+
+      <Table dataSource={list.topics} columns={columns} rowKey="_id" />
     </>
   )
 }
