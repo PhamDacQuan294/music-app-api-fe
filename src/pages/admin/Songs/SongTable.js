@@ -10,6 +10,7 @@ import { SongContext } from "./index"
 import { hanleStatusChange } from "../../../components/admin/ChangeStatus";
 import { ChangeStatusMulti } from "../../../components/admin/ChangeMulti";
 import { SortType } from "../../../components/admin/Sort";
+import { getPaginationConfig } from "../../../components/admin/PaginationConfig";
 
 function SongTable() {
   const songContexts = useContext(SongContext);
@@ -195,15 +196,7 @@ function SongTable() {
           rowKey="_id"
           scroll={{ x: "max-content" }}
           className="custom-table"
-          pagination={{
-            current: songContexts.pagination.currentPage, 
-            pageSize: songContexts.pagination.limitItems, 
-            total: songContexts.pagination.totalPage * songContexts.pagination.limitItems, 
-            onChange: (page, pageSize) => {
-              songContexts.onPaginationChange({ page, pageSize });
-            },
-            showSizeChanger: false, 
-          }}
+          pagination={getPaginationConfig(songContexts.pagination, songContexts.onPaginationChange)}
           rowSelection={{
             onChange: (newSelectedRowKeys) => {
               setSelectedRowKeys(newSelectedRowKeys);
