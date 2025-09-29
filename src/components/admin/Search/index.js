@@ -3,14 +3,12 @@ import { Input } from "antd";
 import "./Search.scss"
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { resetSearchAction, searchAction } from "../../../actions/admin/search.actions"
 
-function Search2({ placeholder, type }) {
+function Search({ placeholder, type, list }) {
   const [keyword, setKeyword] = useState("");
   const [suggests, setSuggests] = useState([]);
   const [skipSearch, setSkipSearch] = useState(false);
-  const { list } = useSelector((state) => state.admin[type]);
 
   const dispatch = useDispatch();
 
@@ -24,8 +22,8 @@ function Search2({ placeholder, type }) {
       if (keyword.trim()) {
         dispatch(searchAction(keyword.trim(), type));
         // Lọc có chứa keyword
-        const filtered = list[type].filter(item =>
-          item.title.toLowerCase().includes(keyword.toLowerCase()) // Kiểm tra nếu title chứa keyword
+        const filtered = list.filter(item =>
+          item.title.toLowerCase().includes(keyword.toLowerCase())
         );
         setSuggests(filtered); // Cập nhật gợi ý đã lọc
       } else {
@@ -52,7 +50,7 @@ function Search2({ placeholder, type }) {
         <Input.Search
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
-          onSearch={handleSearch} 
+          onSearch={handleSearch}
           enterButton="Tìm"
           size="middle"
           allowClear={true}
@@ -92,4 +90,4 @@ function Search2({ placeholder, type }) {
   )
 }
 
-export default Search2;
+export default Search;

@@ -1,32 +1,33 @@
 const initialState = {
-  list: [],
-  filter: null, 
+  listSongs: [],   
+  filterSong: null,
   keyword: "",
 };
 
 const songsReducer = (state = initialState, action) => {
   switch (action.type) {
     case "GET_LIST_SONGS":
-      return { ...state, list: action.payload };
+      return { ...state, listSongs: action.payload }; 
 
-    case "ACTIVE":
-      return { ...state, filter: "active" };
+    case "ACTIVE_SONGS":
+      return { ...state, filterSong: "active" };
 
-    case "INACTIVE":
-      return { ...state, filter: "inactive" };
+    case "INACTIVE_SONGS":
+      return { ...state, filterSong: "inactive" };
 
-    case "RESET_STATUS":
-      return { ...state, filter: null };
+    case "RESET_STATUS_SONGS":
+      return { ...state, filterSong: null };
 
     case "SEARCH_SONGS":
       return { ...state, keyword: action.keyword };
-    
+
     case "RESET_SEARCH_SONGS":
       return { ...state, keyword: "" };
-      
+
     default:
       return state;
   }
 };
+
 
 export default songsReducer;

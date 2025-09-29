@@ -1,17 +1,17 @@
-export const active = () => {
+export const active = (type) => {
   return {
-    type: "ACTIVE",
+    type: `ACTIVE_${type}`,
   }
 }
 
-export const inActive = () => {
+export const inActive = (type) => {
   return {
-    type: "INACTIVE",
+    type: `INACTIVE_${type}`,
   }
 }
 
-export const resetStatus = () => {
+export const resetStatus = (type) => {
   return {
-    type: "RESET_STATUS"
+    type: `RESET_STATUS_${type}`
   }
 }

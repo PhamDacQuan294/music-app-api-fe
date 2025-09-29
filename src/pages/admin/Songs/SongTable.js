@@ -1,33 +1,11 @@
-import { Table, Image, Tooltip, Tag, Space, Button, Card, Row, Col } from "antd";
-import DeleteSong from "./DeleteSong";
-import EditSong from "./EditSong";
-import DetailSong from "./DetailSong";
-import { PlusOutlined } from "@ant-design/icons"
-import { Link } from "react-router-dom";
+import { Table, Image, Tooltip, Tag, Space } from "antd";
 import FilterStatus from "../../../components/admin/FilterStatus";
-import { useContext } from "react";
-import { SongContext } from "./index"
-import { hanleStatusChange } from "../../../components/admin/ChangeStatus";
-import { ChangeStatusMulti } from "../../../components/admin/ChangeMulti";
 import { useSelector } from "react-redux";
 
 function SongTable() {
-  const { list } = useSelector((state) => state.admin.songs);
+  const { listSongs } = useSelector((state) => state.admin.songs);
 
-  const songContexts = useContext(SongContext)
-
-  const singerList = songContexts.singers?.singers || [];
-
-  const dataSource = (list?.songs || []).map((song) => {
-    const singer = singerList.find((s) => s._id === song.singerId);
-    const topic = songContexts.topics.find((t) => t._id === song.topicId);
-
-    return {
-      ...song,
-      singerName: singer ? singer.fullName : "Không rõ",
-      topicName: topic ? topic.title : "Không rõ",
-    };
-  });
+  console.log(listSongs);
 
   const columns = [
     {
@@ -77,24 +55,20 @@ function SongTable() {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      render: (status, record) => {
+      render: (status) => {
         return <>
           {status === "active" ? (
             <>
-              <Tooltip title="Bài hát chưa bị dừng hoạt động" color="green">
-                <Tag
-                  color="green"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => hanleStatusChange(record, "songs", songContexts)}
-                >
+              <Tooltip title="Chủ đề chưa bị dừng hoạt động" color="green">
+                <Tag color="green">
                   Active
                 </Tag>
               </Tooltip>
             </>
           ) : (
             <>
-              <Tooltip title="Bài hát đã bị dừng hoạt động" color="red">
-                <Tag color="red" style={{ cursor: "pointer" }} onClick={() => hanleStatusChange(record, "songs", songContexts)}>
+              <Tooltip title="Chủ đề đã bị dừng hoạt động" color="red">
+                <Tag color="red">
                   InActive
                 </Tag>
               </Tooltip>
@@ -109,9 +83,6 @@ function SongTable() {
       render: (_, record) => {
         return <>
           <Space>
-            <DeleteSong record={record} />
-            <EditSong record={record} />
-            <DetailSong record={record} />
           </Space>
         </>
       }
@@ -122,35 +93,13 @@ function SongTable() {
   return (
     <>
       <FilterStatus
-        filterStatus={list?.filterStatus || []}     
+        filterStatus={listSongs?.filterStatus || []}     
         placeholder="Tìm kiếm bài hát..."
         searchType="songs"
+        list={listSongs?.songs || []}
       />
 
-      <Card title="Danh sách">
-        <Row>
-          <Col sm={16}>
-            <ChangeStatusMulti
-              songContexts={songContexts}
-              type="songs"
-            />
-          </Col>
-
-          <Col sm={8} style={{ textAlign: "right", marginBottom: "20px" }}>
-            <Link to="/admin/create-song">
-              <Button type="primary" icon={<PlusOutlined />}>
-                Thêm bài hát
-              </Button>
-            </Link>
-          </Col>
-        </Row>
-
-        <Table
-          dataSource={dataSource}
-          columns={columns}
-          rowKey="_id"
-        />
-      </Card>
+      <Table dataSource={listSongs.songs} columns={columns} rowKey="_id" />
     </>
   )
 }

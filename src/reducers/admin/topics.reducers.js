@@ -1,5 +1,5 @@
 const initialState = {
-  list: [],
+  listTopics: [],
   filter: null, 
   keyword: "",
 };
@@ -7,15 +7,15 @@ const initialState = {
 const topicsReducer = (state = initialState, action) => {
   switch (action.type) {
     case "GET_LIST_TOPICS":
-      return { ...state, list: action.payload };
+      return { ...state, listTopics: action.payload };
 
-    case "ACTIVE":
+    case "ACTIVE_TOPICS":
       return { ...state, filter: "active" };
 
-    case "INACTIVE":
+    case "INACTIVE_TOPICS":
       return { ...state, filter: "inactive" };
 
-    case "RESET_STATUS":
+    case "RESET_STATUS_TOPICS":
       return { ...state, filter: null };
 
     case "SEARCH_TOPICS":

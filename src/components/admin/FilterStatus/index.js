@@ -4,19 +4,20 @@ import { useDispatch } from "react-redux";
 import { active, inActive, resetStatus } from "../../../actions/admin/filterStatus.actions";
 import Search from "../Search";
 
-function FilterStatus({ filterStatus, placeholder, searchType }) {
+function FilterStatus({ filterStatus, placeholder, searchType, list }) {
   const dispatch = useDispatch();
+  const typeFilterStatus = searchType.toUpperCase();
 
   const handleClick = (status) => {
     switch (status) {
       case "active":
-        dispatch(active());
+        dispatch(active(typeFilterStatus));
         break;
       case "inactive":
-        dispatch(inActive());
+        dispatch(inActive(typeFilterStatus));
         break;
       default:
-        dispatch(resetStatus());
+        dispatch(resetStatus(typeFilterStatus));
         break;
     }
   };
@@ -42,7 +43,8 @@ function FilterStatus({ filterStatus, placeholder, searchType }) {
         <Col lg={12}>
           <Search
             placeholder={placeholder}
-            type={searchType}         
+            type={searchType}    
+            list={list}     
           />
         </Col>
       </Row>

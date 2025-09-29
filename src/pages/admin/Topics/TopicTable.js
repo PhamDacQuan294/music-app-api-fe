@@ -6,7 +6,9 @@ import { useSelector } from "react-redux";
 import FilterStatus from "../../../components/admin/FilterStatus";
 
 function TopicTable() {
-  const { list } = useSelector((state) => state.admin.topics);
+  const { listTopics } = useSelector((state) => state.admin.topics);
+
+  console.log(listTopics);
 
   const columns = [
     {
@@ -77,12 +79,13 @@ function TopicTable() {
   return (
     <>
       <FilterStatus 
-        filterStatus={list?.filterStatus || []}
+        filterStatus={listTopics?.filterStatus || []}
         placeholder="Tìm kiếm chủ đe"
         searchType="topics"
+        list={listTopics?.topics || []}
       />
 
-      <Table dataSource={list.topics} columns={columns} rowKey="_id" />
+      <Table dataSource={listTopics.topics} columns={columns} rowKey="_id" />
     </>
   )
 }

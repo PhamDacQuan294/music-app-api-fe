@@ -4,7 +4,7 @@ import { PREFIX_ADMIN } from "../../components/admin/Contants";
 import { post2 } from "../../utils/request2";
 import { patch2 } from "../../utils/request2";
 
-export const getListSong = async (status, sortKey, sortValue, page) => {
+export const getListSong = async (status, keyword) => {
   let url = `${API_PREFIX}/${PREFIX_ADMIN}/songs`;
 
   const params = [];
@@ -13,13 +13,17 @@ export const getListSong = async (status, sortKey, sortValue, page) => {
     params.push(`status=${status}`);
   }
 
-  if (sortKey && sortValue) {
-    params.push(`sortKey=${sortKey}&sortValue=${sortValue}`);
+  if (keyword) {
+    params.push(`keyword=${keyword}`);
   }
+  
+  // if (sortKey && sortValue) {
+  //   params.push(`sortKey=${sortKey}&sortValue=${sortValue}`);
+  // }
 
-  if (page) {
-    params.push(`page=${page}`);
-  }
+  // if (page) {
+  //   params.push(`page=${page}`);
+  // }
 
   if (params.length > 0) {
     url += `?${params.join("&")}`;

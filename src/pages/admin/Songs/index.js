@@ -1,9 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
-import { message } from "antd";
+import { useEffect } from "react";
 import { getListSong } from "../../../services/admin/songService";
-import { getListTopic } from "../../../services/admin/topicsService";
-import { getListSinger } from "../../../services/admin/singerService";
 import SongTable from "./SongTable";
 import "./Song.scss";
 import { createContext } from "react";
@@ -13,25 +10,16 @@ export const SongContext = createContext();
 
 function ListSong() {
   const dispatch = useDispatch();
-  const [topics, setTopics] = useState([]);
-  const [singers, setSingers] = useState([]);
- 
-  const { filter, keyword } = useSelector((state) => state.admin.songs);
-
-  const [messageApi, contextHolder] = message.useMessage();
+  const { filterSong, keyword } = useSelector((state) => state.admin.songs);
 
   const fetchData = async () => {
     try {
-      const [songRes, topicRes, singerRes] = await Promise.all([
-        getListSong(filter, keyword),
-        getListTopic(),
-        getListSinger(),
+      const [songRes] = await Promise.all([
+        getListSong(filterSong, keyword),
       ]);
 
-      setTopics(topicRes?.topics || []);
-      setSingers(singerRes || []);
-
       dispatch(getListSongsAction(songRes));
+
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -39,20 +27,11 @@ function ListSong() {
 
   useEffect(() => {
     fetchData();
-  }, [filter, keyword]);
+  }, [filterSong, keyword]);
 
   return (
     <>
-      {contextHolder}
-      <SongContext.Provider
-        value={{
-          topics,
-          singers,
-          messageApi,
-        }}
-      >
-        <SongTable />
-      </SongContext.Provider>
+      <SongTable />
     </>
   )
 }
