@@ -1,49 +1,33 @@
-import { Table, Image, Tooltip, Tag, Space, Button, Card, Row, Col, InputNumber } from "antd";
+import { Table, Image, Tooltip, Tag, Space, Button, Card, Row, Col } from "antd";
 import DeleteSong from "./DeleteSong";
 import EditSong from "./EditSong";
 import DetailSong from "./DetailSong";
 import { PlusOutlined } from "@ant-design/icons"
 import { Link } from "react-router-dom";
 import FilterStatus from "../../../components/admin/FilterStatus";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { SongContext } from "./index"
 import { hanleStatusChange } from "../../../components/admin/ChangeStatus";
 import { ChangeStatusMulti } from "../../../components/admin/ChangeMulti";
-import { SortType } from "../../../components/admin/Sort";
-import { getPaginationConfig } from "../../../components/admin/PaginationConfig";
 import { useSelector } from "react-redux";
 
 function SongTable() {
   const { list } = useSelector((state) => state.admin.songs);
 
-  const songContexts = useContext(SongContext);
-
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-
-  const [positions, setPositions] = useState({});
-
-  // Khi songContexts.songs thay đổi, cập nhật positions
-  useEffect(() => {
-    const pos = {};
-    songContexts.songs.forEach(song => {
-      pos[song._id] = song.position;
-    });
-    setPositions(pos);
-  }, [songContexts.songs]);
+  const songContexts = useContext(SongContext)
 
   const singerList = songContexts.singers?.singers || [];
 
-  const dataSource = songContexts.songs
-    .map((song) => {
-      const singer = singerList.find((s) => s._id === song.singerId);
-      const topic = songContexts.topics.find((t) => t._id === song.topicId);
+  const dataSource = (list?.songs || []).map((song) => {
+    const singer = singerList.find((s) => s._id === song.singerId);
+    const topic = songContexts.topics.find((t) => t._id === song.topicId);
 
-      return {
-        ...song,
-        singerName: singer ? singer.fullName : "Không rõ",
-        topicName: topic ? topic.title : "Không rõ",
-      };
-    })
+    return {
+      ...song,
+      singerName: singer ? singer.fullName : "Không rõ",
+      topicName: topic ? topic.title : "Không rõ",
+    };
+  });
 
   const columns = [
     {
@@ -88,30 +72,6 @@ function SongTable() {
       title: "Vị trí",
       dataIndex: "position",
       key: "position",
-      render: (position, record) => (
-        <InputNumber
-          min={1}
-          value={positions[record._id]}
-          onChange={(value) => {
-            setPositions(prev => ({
-              ...prev,
-              [record._id]: value,
-            }));
-
-            // Cập nhật selectedRowKeys theo logic cũ
-            const updatedSelectedRowKeys = selectedRowKeys.map((key) => {
-              const [id] = key.split("-");
-              if (id === record._id) {
-                return `${id}-${value}`;
-              }
-              return key;
-            });
-
-            setSelectedRowKeys(updatedSelectedRowKeys);
-          }}
-          style={{ width: "70px" }}
-        />
-      ),
     },
     {
       title: "Trạng thái",
@@ -162,22 +122,15 @@ function SongTable() {
   return (
     <>
       <FilterStatus
-        filterStatus={list?.filterStatus || []}
-        onSearchResult={songContexts.onSearchResult}
-        type="songs"
+        filterStatus={list?.filterStatus || []}     
         placeholder="Tìm kiếm bài hát..."
-      />
-
-      <SortType
-        songContexts={songContexts}
-        type="songs"
+        searchType="songs"
       />
 
       <Card title="Danh sách">
         <Row>
           <Col sm={16}>
             <ChangeStatusMulti
-              selectedRowKeys={selectedRowKeys}
               songContexts={songContexts}
               type="songs"
             />
@@ -196,14 +149,6 @@ function SongTable() {
           dataSource={dataSource}
           columns={columns}
           rowKey="_id"
-          scroll={{ x: "max-content" }}
-          className="custom-table"
-          pagination={getPaginationConfig(songContexts.pagination, songContexts.onPaginationChange)}
-          rowSelection={{
-            onChange: (newSelectedRowKeys) => {
-              setSelectedRowKeys(newSelectedRowKeys);
-            },
-          }}
         />
       </Card>
     </>

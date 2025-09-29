@@ -3,7 +3,7 @@ import DeleteTopic from "./DeleteTopic";
 import EditTopic from "./EditTopic";
 import DetailTopic from "./DetailTopic";
 import { useSelector } from "react-redux";
-import FilterStatus2 from "../../../components/admin/FilterStatus2";
+import FilterStatus from "../../../components/admin/FilterStatus";
 
 function TopicTable() {
   const { list } = useSelector((state) => state.admin.topics);
@@ -76,7 +76,7 @@ function TopicTable() {
 
   return (
     <>
-      <FilterStatus2 
+      <FilterStatus 
         filterStatus={list?.filterStatus || []}
         placeholder="Tìm kiếm chủ đe"
         searchType="topics"

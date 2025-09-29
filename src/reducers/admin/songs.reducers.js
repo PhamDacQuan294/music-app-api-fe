@@ -18,10 +18,10 @@ const songsReducer = (state = initialState, action) => {
     case "RESET_STATUS":
       return { ...state, filter: null };
 
-    case "SEARCH_TOPICS":
+    case "SEARCH_SONGS":
       return { ...state, keyword: action.keyword };
     
-    case "RESET_SEARCH_TOPICS":
+    case "RESET_SEARCH_SONGS":
       return { ...state, keyword: "" };
       
     default:

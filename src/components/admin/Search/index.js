@@ -1,44 +1,48 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Input } from "antd";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { searchService } from "../../../services/admin/searchService";
 import "./Search.scss"
+import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { resetSearchAction, searchAction } from "../../../actions/admin/search.actions"
 
-function Search({ onSearchResult, type, placeholder }) {
+function Search2({ placeholder, type }) {
   const [keyword, setKeyword] = useState("");
   const [suggests, setSuggests] = useState([]);
-  const navigate = useNavigate();
+  const [skipSearch, setSkipSearch] = useState(false);
+  const { list } = useSelector((state) => state.admin[type]);
 
-  // Khi gõ từ khóa thì gọi API suggest
+  const dispatch = useDispatch();
+
   useEffect(() => {
+    if (skipSearch) {
+      setSkipSearch(false);
+      return;
+    }
+
     const delayDebounce = setTimeout(async () => {
       if (keyword.trim()) {
-        const data = await searchService(`${type}`, keyword);
-        setSuggests(data?.[type]);
+        dispatch(searchAction(keyword.trim(), type));
+        // Lọc có chứa keyword
+        const filtered = list[type].filter(item =>
+          item.title.toLowerCase().includes(keyword.toLowerCase()) // Kiểm tra nếu title chứa keyword
+        );
+        setSuggests(filtered); // Cập nhật gợi ý đã lọc
       } else {
         setSuggests([]);
+        dispatch(resetSearchAction(type));
       }
     }, 300);
 
     return () => clearTimeout(delayDebounce);
-  }, [keyword]);
+  }, [keyword, dispatch]);
+
 
   const handleSearch = async () => {
-    if (keyword) {
-      const data = await searchService(`${type}`, keyword);
-      if (data?.[type]) {
-        onSearchResult(data?.[type]);
-      }
-      navigate(`/admin/${type}?search-${type}=${encodeURIComponent(keyword)}`);
-
-      setSuggests([]);
+    if (keyword.trim()) {
+      dispatch(searchAction(keyword.trim(), type));
     } else {
-      navigate(`/admin/${type}`)
-      const data = await searchService(`${type}`, keyword);
-      if (data?.[type]) {
-        onSearchResult(data?.[type]);
-      }
+      dispatch(resetSearchAction(type));
     }
   }
 
@@ -48,9 +52,10 @@ function Search({ onSearchResult, type, placeholder }) {
         <Input.Search
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
-          onSearch={handleSearch} // xử lý cả Enter + click nút
+          onSearch={handleSearch} 
           enterButton="Tìm"
           size="middle"
+          allowClear={true}
           placeholder={placeholder}
         />
         {suggests.length > 0 &&
@@ -61,8 +66,9 @@ function Search({ onSearchResult, type, placeholder }) {
                   key={item._id}
                   className="search__suggest-item"
                   onClick={() => {
+                    setSkipSearch(true);
                     setKeyword(item.title);      // set lại input value
-                    onSearchResult([item]);      // click gợi ý nó trả về bái hát đó
+                    dispatch(searchAction(item.title, type)); // click gợi ý nó trả về bái hát đó
                     setSuggests([]);             // clear gợi ý
                   }}
                   style={{ cursor: "pointer" }}
@@ -86,4 +92,4 @@ function Search({ onSearchResult, type, placeholder }) {
   )
 }
 
-export default Search;
+export default Search2;

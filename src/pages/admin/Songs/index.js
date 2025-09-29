@@ -13,30 +13,21 @@ export const SongContext = createContext();
 
 function ListSong() {
   const dispatch = useDispatch();
-  const [songs, setSongs] = useState([]);
   const [topics, setTopics] = useState([]);
   const [singers, setSingers] = useState([]);
-  const [filterStatus, setFilterStatus] = useState([]);
-  const [pagination, setPagination] = useState({});
-  const [status, setStatus] = useState("");
-  const [sortKey, setSortKey] = useState(null);
-  const [sortValue, setSortValue] = useState(null);
-
+ 
   const { filter, keyword } = useSelector((state) => state.admin.songs);
 
   const [messageApi, contextHolder] = message.useMessage();
 
-  const fetchData = async (status = "", key = sortKey, value = sortValue, page = pagination.currentPage || 1, pageSize = pagination.limitItems || 2) => {
+  const fetchData = async () => {
     try {
       const [songRes, topicRes, singerRes] = await Promise.all([
-        getListSong(filter, key, value, page, pageSize),
+        getListSong(filter, keyword),
         getListTopic(),
         getListSinger(),
       ]);
 
-      setSongs(songRes?.songs || []);
-      setFilterStatus(songRes?.filterStatus || []);
-      setPagination(songRes?.pagination || "");
       setTopics(topicRes?.topics || []);
       setSingers(singerRes || []);
 
@@ -47,38 +38,16 @@ function ListSong() {
   };
 
   useEffect(() => {
-    fetchData(status, sortKey, sortValue);
-  }, [filter, sortKey, sortValue]);
-
-  const handleSearchResult = (newSongs) => {
-    setSongs(newSongs);
-  }
-
-  const handleSort = (sortKey, sortValue) => {
-    setSortKey(sortKey);
-    setSortValue(sortValue);
-  }
-
-  const handlePaginationChange = ({ page, pageSize }) => {
-    fetchData(status, sortKey, sortValue, page, pageSize);
-  };
+    fetchData();
+  }, [filter, keyword]);
 
   return (
     <>
       {contextHolder}
       <SongContext.Provider
         value={{
-          songs,
-          filterStatus,
           topics,
           singers,
-          pagination,
-          onReload: (page = pagination.currentPage) =>
-            fetchData(status, sortKey, sortValue, page, pagination.limitItems),
-          onFilterChange: setStatus,
-          onSearchResult: handleSearchResult,
-          onSort: handleSort,
-          onPaginationChange: handlePaginationChange,
           messageApi,
         }}
       >
