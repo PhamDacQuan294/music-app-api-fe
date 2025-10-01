@@ -1,5 +1,5 @@
 const initialState = {
-  listSongs: [],   
+  listSongs: { songs: [], filterStatus: [] },  
   filter: null,
   keyword: "",
 };
@@ -23,6 +23,15 @@ const songsReducer = (state = initialState, action) => {
 
     case "RESET_SEARCH_SONGS":
       return { ...state, keyword: "" };
+    
+    case "CREATE_SONG_SUCCESS":
+      return { 
+        ...state,
+        listSongs: {
+          ...state.listSongs,
+          songs: [...state.listSongs.songs, action.payload]
+        }
+      }
 
     default:
       return state;

@@ -1,6 +1,8 @@
-import { Table, Image, Tooltip, Tag, Space } from "antd";
+import { Table, Image, Tooltip, Tag, Space, Card, Row, Col, Button } from "antd";
 import FilterStatus from "../../../components/admin/FilterStatus";
 import { useSelector } from "react-redux";
+import { PlusOutlined } from "@ant-design/icons"
+import { Link } from "react-router-dom";
 
 function SongTable() {
   const { listSongs } = useSelector((state) => state.admin.songs);
@@ -109,6 +111,22 @@ function SongTable() {
         searchType="songs"
         list={listSongs?.songs || []}
       />
+
+      <Card>
+        <Row>
+          <Col sm={16}>
+            ok
+          </Col>
+
+          <Col sm={8} style={{ textAlign: "right", marginBottom: "20px" }}>
+            <Link to="/admin/create-song">
+              <Button type="primary" icon={<PlusOutlined />}>
+                Thêm bài hát
+              </Button>
+            </Link>
+          </Col>
+        </Row>
+      </Card>
 
       <Table dataSource={dataSource} columns={columns} rowKey="_id" />
     </>

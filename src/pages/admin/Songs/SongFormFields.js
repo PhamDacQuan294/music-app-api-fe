@@ -2,10 +2,16 @@ import { Form, Input, Select, Upload, Button, Switch, InputNumber } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
 import MyEditor from "../../../components/admin/TinymceConfig";
+import { useSelector } from "react-redux";
+import useFetchAdminData from "../../../hooks/admin/useFetchAdminData";
 
 const { Option } = Select;
 
-function SongFormFields({ topics, singers, fileList, fileListAudio, audioUrl, handleChange, handleAudioChange, rules}) {
+function SongFormFields({ fileList, fileListAudio, audioUrl, handleChange, handleAudioChange, rules}) {
+  useFetchAdminData();
+  const { listTopics } = useSelector((state) => state.admin.topics);
+  const { listSingers } = useSelector((state) => state.admin.singers);
+
   return (
     <>
       <Form.Item label="Tiêu đề" name="title" rules={rules}>
@@ -20,7 +26,7 @@ function SongFormFields({ topics, singers, fileList, fileListAudio, audioUrl, ha
             <div style={{ maxHeight: 200, overflowY: "auto" }}>{menu}</div>
           )}
         >
-          {topics?.map((item) => (
+          {listTopics.topics?.map((item) => (
             <Option key={item._id} value={item._id}>
               {item.title}
             </Option>
@@ -36,7 +42,7 @@ function SongFormFields({ topics, singers, fileList, fileListAudio, audioUrl, ha
             <div style={{ maxHeight: 200, overflowY: "auto" }}>{menu}</div>
           )}
         >
-          {singers?.map((item) => (
+          {listSingers.singers?.map((item) => (
             <Option key={item._id} value={item._id}>
               {item.fullName}
             </Option>

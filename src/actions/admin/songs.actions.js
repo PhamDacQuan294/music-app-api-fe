@@ -4,3 +4,10 @@ export const getListSongsAction = (songs) => {
     payload: songs,
   }
 }
+
+export const createSongAction = (song) => {
+  return {
+    type: "CREATE_SONG_SUCCESS",
+    payload: song
+  }
+}
