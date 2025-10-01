@@ -4,8 +4,19 @@ import { useSelector } from "react-redux";
 
 function SongTable() {
   const { listSongs } = useSelector((state) => state.admin.songs);
+  const { listTopics } = useSelector((state) => state.admin.topics);
+  const { listSingers } = useSelector((state) => state.admin.singers);
 
-  console.log(listSongs);
+  const dataSource = (listSongs?.songs || []).map((song) => {
+    const singer = listSingers?.singers?.find((s) => s._id === song.singerId);
+    const topic = listTopics?.topics?.find((t) => t._id === song.topicId);
+
+    return {
+      ...song,
+      singerName: singer ? singer.fullName : "Không rõ",
+      topicName: topic ? topic.title : "Không rõ",
+    };
+  });
 
   const columns = [
     {
@@ -99,7 +110,7 @@ function SongTable() {
         list={listSongs?.songs || []}
       />
 
-      <Table dataSource={listSongs.songs} columns={columns} rowKey="_id" />
+      <Table dataSource={dataSource} columns={columns} rowKey="_id" />
     </>
   )
 }

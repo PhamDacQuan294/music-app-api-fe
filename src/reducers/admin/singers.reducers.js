@@ -1,27 +1,27 @@
 const initialState = {
-  listSongs: [],   
+  listSingers: [],   
   filter: null,
   keyword: "",
 };
 
-const songsReducer = (state = initialState, action) => {
+const singersReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "GET_LIST_SONGS":
-      return { ...state, listSongs: action.payload }; 
+    case "GET_LIST_SINGERS":
+      return { ...state, listSingers: action.payload }; 
 
-    case "ACTIVE_SONGS":
+    case "ACTIVE_SINGERS":
       return { ...state, filter: "active" };
 
-    case "INACTIVE_SONGS":
+    case "INACTIVE_SINGERS":
       return { ...state, filter: "inactive" };
 
-    case "RESET_STATUS_SONGS":
+    case "RESET_STATUS_SINGERS":
       return { ...state, filter: null };
 
-    case "SEARCH_SONGS":
+    case "SEARCH_SINGERS":
       return { ...state, keyword: action.keyword };
 
-    case "RESET_SEARCH_SONGS":
+    case "RESET_SEARCH_SINGERS":
       return { ...state, keyword: "" };
 
     default:
@@ -30,4 +30,4 @@ const songsReducer = (state = initialState, action) => {
 };
 
 
-export default songsReducer;
+export default singersReducer;

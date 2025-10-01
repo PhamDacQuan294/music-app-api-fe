@@ -8,8 +8,6 @@ import FilterStatus from "../../../components/admin/FilterStatus";
 function TopicTable() {
   const { listTopics } = useSelector((state) => state.admin.topics);
 
-  console.log(listTopics);
-
   const columns = [
     {
       title: "STT",
