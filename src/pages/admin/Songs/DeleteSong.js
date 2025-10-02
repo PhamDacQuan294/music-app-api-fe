@@ -1,27 +1,23 @@
 import { Button, Popconfirm } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { deleteSong } from "../../../services/admin/songService";
-import { SongContext } from "./index";
-import { useContext } from "react";
+import { useDispatch } from "react-redux";
+import { deleteSongAction } from "../../../actions/admin/songs.actions";
 
-function DeleteSong(props) {
-  const  songContexts = useContext(SongContext);
-
-  const { record } = props;
+function DeleteSong({ record, messageApi }) {
+   const dispatch = useDispatch();
 
   const handleDelete = async () => {
     const response = await deleteSong(record._id);
 
-    if (response) {
-      songContexts.messageApi.open({
-        type: 'success',
+    if (response.code === 200) {
+      messageApi.success({
         content: 'Xoá bài hát thành công',
         duration: 5,
       });
-      songContexts.onReload();
+      dispatch(deleteSongAction(response))
     } else {
-      songContexts.messageApi.open({
-        type: 'error',
+      messageApi.error({
         content: 'Xoá bài hát chưa thành công',
         duration: 5,
       });
@@ -31,7 +27,7 @@ function DeleteSong(props) {
   return (
     <>
       <Popconfirm title="Sure to delete?" onConfirm={handleDelete}>
-        <Button danger size="small" icon={<DeleteOutlined />}/>
+        <Button danger size="small" icon={<DeleteOutlined />} />
       </Popconfirm>
     </>
   )

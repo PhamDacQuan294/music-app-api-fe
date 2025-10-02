@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { PlusOutlined } from "@ant-design/icons"
 import { Link } from "react-router-dom";
 import { hanleStatusChange } from "../../../components/admin/ChangeStatus";
-import { updateSongStatus } from "../../../actions/admin/songs.actions";
+import { updateSongStatusAction } from "../../../actions/admin/songs.actions";
+import DeleteSong from "./DeleteSong";
 
 function SongTable() {
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ function SongTable() {
   });
   
   const changeStatusSong = (song) => {
-    dispatch(updateSongStatus(song))
+    dispatch(updateSongStatusAction(song))
   }
 
   const columns = [
@@ -112,6 +113,7 @@ function SongTable() {
       render: (_, record) => {
         return <>
           <Space>
+            <DeleteSong record={record} messageApi={messageApi} />
           </Space>
         </>
       }

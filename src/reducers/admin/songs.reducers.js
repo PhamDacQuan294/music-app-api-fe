@@ -35,7 +35,14 @@ const songsReducer = (state = initialState, action) => {
         },
       };
 
-
+    case "DELETE_SONG":
+      return {
+        ...state,
+        listSongs: {
+          ...state.listSongs,
+          songs: state.listSongs.songs.filter((song) => song._id !== action.payload.id),
+        }
+      }
     default:
       return state;
   }
