@@ -7,12 +7,16 @@ import { hanleStatusChange } from "../../../components/admin/ChangeStatus";
 import { updateSongStatusAction } from "../../../actions/admin/songs.actions";
 import DeleteSong from "./DeleteSong";
 import EditSong from "./EditSong";
+import DetailSong from "./DetailSong";
+import { useState } from "react";
+import { ChangeStatusMulti } from "../../../components/admin/ChangeMulti";
 
 function SongTable() {
   const dispatch = useDispatch();
   const { listSongs } = useSelector((state) => state.admin.songs);
   const { listTopics } = useSelector((state) => state.admin.topics);
   const { listSingers } = useSelector((state) => state.admin.singers);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [messageApi, contextHolder] = message.useMessage();
 
   const dataSource = (listSongs?.songs || []).map((song) => {
@@ -116,6 +120,7 @@ function SongTable() {
           <Space>
             <DeleteSong record={record} messageApi={messageApi} />
             <EditSong record={record} />
+            <DetailSong record={record} />
           </Space>
         </>
       }
@@ -137,7 +142,10 @@ function SongTable() {
       <Card title="Danh sách">
         <Row>
           <Col sm={16}>
-            ok
+            <ChangeStatusMulti
+              selectedRowKeys={selectedRowKeys} 
+              type="songs"
+            />
           </Col>
 
           <Col sm={8} style={{ textAlign: "right", marginBottom: "20px" }}>
@@ -156,6 +164,12 @@ function SongTable() {
               rowKey="_id"
               scroll={{ x: "max-content" }}
               className="custom-table"
+              rowSelection={{
+                selectedRowKeys,
+                onChange: (newSelectedRowKeys) => {
+                  setSelectedRowKeys(newSelectedRowKeys);
+                },
+              }}
             />
           </Col>
         </Row>

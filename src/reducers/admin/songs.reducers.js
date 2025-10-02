@@ -53,6 +53,37 @@ const songsReducer = (state = initialState, action) => {
           ))
         }
       }
+    case "CHANGE_MULTI_STATUS_SONGS": {
+      const { ids, status } = action.payload;
+
+      // Nếu xoá nhiều bản ghi -> lọc ra khỏi state
+      if (status === "delete-all") {
+        return {
+          ...state,
+          listSongs: {
+            ...state.listSongs,
+            songs: state.listSongs.songs.filter(
+              (song) => !ids.includes(String(song._id))
+            ),
+          },
+        };
+      }
+
+      // Trường hợp mặc định: thay đổi status (active / inactive)
+      return {
+        ...state,
+        listSongs: {
+          ...state.listSongs,
+          songs: state.listSongs.songs.map((song) =>
+            ids.includes(String(song._id))
+              ? { ...song, status: status }
+              : song
+          ),
+        },
+      };
+    }
+
+
     default:
       return state;
   }

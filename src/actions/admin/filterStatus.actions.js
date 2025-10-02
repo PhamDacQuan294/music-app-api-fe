@@ -15,3 +15,4 @@ export const resetStatus = (type) => {
     type: `RESET_STATUS_${type}`
   }
 }
+

@@ -1,10 +1,14 @@
 import { Button, Form, Select, message, Modal } from "antd";
 import { ChangeMulti } from "../../../services/admin/changeStatusService";
+import { useDispatch } from "react-redux";
+import { changeMultiStatus } from "../../../actions/admin/changeMulti.action";
 
 const { Option } = Select;
 
-export const ChangeStatusMulti = ({ selectedRowKeys, type, songContexts }) => {
+export const ChangeStatusMulti = ({ selectedRowKeys, type }) => {
   const [form] = Form.useForm();
+  const dispatch = useDispatch();
+  const typeChangeMulti = type.toUpperCase();
 
   const handleSubmit = async () => {
     const { status } = form.getFieldsValue();
@@ -49,7 +53,7 @@ export const ChangeStatusMulti = ({ selectedRowKeys, type, songContexts }) => {
         } else {
           message.success("Cập nhật thành công!");
         }
-        songContexts.onReload(songContexts.pagination.currentPage);
+        dispatch(changeMultiStatus(typeChangeMulti, { ids: selectedRowKeys, status }));
       } else {
         message.error("Có lỗi xảy ra!");
       }
