@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { deleteSongAction } from "../../../actions/admin/songs.actions";
 
 function DeleteSong({ record, messageApi }) {
-   const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const handleDelete = async () => {
     const response = await deleteSong(record._id);

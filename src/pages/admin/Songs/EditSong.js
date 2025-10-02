@@ -1,69 +1,53 @@
 import { Button, Form, Modal, notification, Spin } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import { updateSong } from "../../../services/admin/songService"
-import { SongContext } from "./index";
-import { useContext } from "react";
+import { updateSong } from "../../../services/admin/songService";
 import SongFormFields from "./SongFormFields";
+import { useDispatch } from "react-redux";
+import { editSongAction } from "../../../actions/admin/songs.actions";
 
-function EditSong(props) {
-  const  songContexts = useContext(SongContext);
-  const { record } = props;
+function EditSong({ record }) {
+  const dispatch = useDispatch();
+  const [form] = Form.useForm();
 
   const [fileList, setFileList] = useState([]);
   const [fileListAudio, setFileListAudio] = useState([]);
   const [audioUrl, setAudioUrl] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [form] = Form.useForm();
-  const [notiApi, contextHolder] = notification.useNotification();
   const [spinning, setSpinning] = useState(false);
 
+  const [notiApi, contextHolder] = notification.useNotification();
+
+  const rules = [{ required: true, message: "Bắt buộc" }];
+
   const handleShowModal = () => {
-
-    if (record.avatar) {
-      setFileList([
-        {
-          url: record.avatar,
-        }
-      ]);
-    } else {
-      setFileList([]);
-    }
-
-    if (record.audio) {
-      setFileListAudio([
-        {
-          url: record.audio,
-        },
-      ]);
-      setAudioUrl(record.audio);
-    } else {
-      setFileListAudio([]);
-      setAudioUrl(null);
-    }
-
+    setFileList(record.avatar ? [{ url: record.avatar }] : []);
+    setFileListAudio(record.audio ? [{ url: record.audio }] : []);
+    setAudioUrl(record.audio || null);
     setShowModal(true);
-  }
+  };
 
   const handleCancel = () => {
-    setShowModal(false);
     form.resetFields();
-  }
+    setFileList([]);
+    setFileListAudio([]);
+    setAudioUrl(null);
+    setShowModal(false);
+  };
 
-  const rules = [
-    {
-      required: true,
-      message: 'Bắt buộc'
-    },
-  ];
-
-  const handleChange = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
+  const appendFileToForm = (formData, key, fileList) => {
+    if (fileList.length > 0) {
+      const file = fileList[0];
+      if (file.originFileObj) {
+        formData.append(key, file.originFileObj);
+      } else if (file.url) {
+        formData.append(key, file.url);
+      }
+    }
   };
 
   const handleSubmit = async (values) => {
     const formData = new FormData();
-
     formData.append("title", values.title);
     formData.append("topicId", values.topicId);
     formData.append("singerId", values.singerId);
@@ -72,72 +56,75 @@ function EditSong(props) {
     formData.append("status", values.status ? "true" : "false");
     formData.append("position", values.position);
 
-    if (fileList.length > 0) {
-      if (fileList[0].originFileObj) {
-        formData.append("avatar", fileList[0].originFileObj);
-      } else if (fileList[0].url) {
-        formData.append("avatar", fileList[0].url); // giữ link cũ
-      }
-    }
-
-    if (fileListAudio.length > 0) {
-      if (fileListAudio[0].originFileObj) {
-        formData.append("audio", fileListAudio[0].originFileObj);
-      } else if (fileListAudio[0].url) {
-        formData.append("audio", fileListAudio[0].url);
-      }
-    }
+    appendFileToForm(formData, "avatar", fileList);
+    appendFileToForm(formData, "audio", fileListAudio);
 
     setSpinning(true);
-    
-    const response = await updateSong(record._id, formData);
-    setTimeout(() => {
-      if (response) {
+    try {
+      const response = await updateSong(record._id, formData);
+      if (response?.code === 200) {
         notiApi.success({
-          message: 'Cập nhật thành công',
-          description: `Bạn đã cập nhật bài hát thành công`
+          message: "Cập nhật thành công",
+          description: "Bạn đã cập nhật bài hát thành công",
         });
+        dispatch(editSongAction(response));
         setShowModal(false);
-        songContexts.onReload(songContexts.pagination.currentPage);
       } else {
         notiApi.error({
-          message: 'Cập nhật thất bại',
-          description: `Bạn đã cập nhật bài hát thất bại`
+          message: "Cập nhật thất bại",
+          description: "Không thể cập nhật bài hát",
         });
       }
-      setSpinning(false);
-    }, 2000);
+    } catch (error) {
+      notiApi.error({
+        message: "Lỗi server",
+        description: "Vui lòng thử lại sau",
+      });
+    }
+    setSpinning(false);
   };
 
   const handleAudioChange = ({ fileList: newFileList }) => {
     setFileListAudio(newFileList);
-    if (newFileList.length > 0) {
-      const file = newFileList[0].originFileObj;
-      setAudioUrl(URL.createObjectURL(file)); // Tạo URL audio để phát thử
+    if (newFileList.length > 0 && newFileList[0].originFileObj) {
+      setAudioUrl(URL.createObjectURL(newFileList[0].originFileObj));
     } else {
-      setAudioUrl(null); // Reset audioUrl nếu không có file nào
+      setAudioUrl(newFileList[0]?.url || null);
     }
   };
 
   return (
     <>
       {contextHolder}
-      <Button size="small" type="primary" icon={<EditOutlined />} onClick={handleShowModal} />
+      <Button
+        size="small"
+        type="primary"
+        icon={<EditOutlined />}
+        onClick={handleShowModal}
+      />
 
-      <Modal open={showModal} onCancel={handleCancel} title="Chỉnh sửa bài hát" footer={null}>
-        <Spin spinning={spinning} tip="Đang cập nhật">
-          <Form layout="vertical" onFinish={handleSubmit} form={form} initialValues={record}>
+      <Modal
+        open={showModal}
+        onCancel={handleCancel}
+        title="Chỉnh sửa bài hát"
+        footer={null}
+      >
+        <Spin spinning={spinning} tip="Đang cập nhật...">
+          <Form
+            layout="vertical"
+            onFinish={handleSubmit}
+            form={form}
+            initialValues={record}
+          >
             <SongFormFields
-              topics={songContexts.topics}
-              singers={songContexts.singers?.singers}
               fileList={fileList}
               fileListAudio={fileListAudio}
               audioUrl={audioUrl}
-              handleChange={handleChange}
+              handleChange={({ fileList }) => setFileList(fileList)}
               handleAudioChange={handleAudioChange}
               rules={rules}
             />
-            <Form.Item label={null}>
+            <Form.Item>
               <Button type="primary" htmlType="submit">
                 Cập nhật
               </Button>
@@ -146,7 +133,7 @@ function EditSong(props) {
         </Spin>
       </Modal>
     </>
-  )
+  );
 }
 
 export default EditSong;

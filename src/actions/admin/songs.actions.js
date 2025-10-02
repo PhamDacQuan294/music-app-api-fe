@@ -18,3 +18,10 @@ export const deleteSongAction = (song) => {
     payload: song
   }
 }
+
+export const editSongAction = (song) => {
+  return {
+    type: "EDIT_SONG",
+    payload: song
+  }
+}

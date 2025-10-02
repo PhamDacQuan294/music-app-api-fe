@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { hanleStatusChange } from "../../../components/admin/ChangeStatus";
 import { updateSongStatusAction } from "../../../actions/admin/songs.actions";
 import DeleteSong from "./DeleteSong";
+import EditSong from "./EditSong";
 
 function SongTable() {
   const dispatch = useDispatch();
@@ -24,7 +25,7 @@ function SongTable() {
       topicName: topic ? topic.title : "Không rõ",
     };
   });
-  
+
   const changeStatusSong = (song) => {
     dispatch(updateSongStatusAction(song))
   }
@@ -82,9 +83,9 @@ function SongTable() {
           {record.status === "active" ? (
             <>
               <Tooltip title="Chủ đề chưa bị dừng hoạt động" color="green">
-                <Tag 
+                <Tag
                   color="green"
-                  style={{ cursor: "pointer" }} 
+                  style={{ cursor: "pointer" }}
                   onClick={() => hanleStatusChange(record, "songs", messageApi, changeStatusSong)}
                 >
                   Active
@@ -94,9 +95,9 @@ function SongTable() {
           ) : (
             <>
               <Tooltip title="Chủ đề đã bị dừng hoạt động" color="red">
-                <Tag 
+                <Tag
                   color="red"
-                  style={{ cursor: "pointer" }} 
+                  style={{ cursor: "pointer" }}
                   onClick={() => hanleStatusChange(record, "songs", messageApi, changeStatusSong)}
                 >
                   InActive
@@ -114,6 +115,7 @@ function SongTable() {
         return <>
           <Space>
             <DeleteSong record={record} messageApi={messageApi} />
+            <EditSong record={record} />
           </Space>
         </>
       }
@@ -126,13 +128,13 @@ function SongTable() {
       {contextHolder}
 
       <FilterStatus
-        filterStatus={listSongs?.filterStatus || []}     
+        filterStatus={listSongs?.filterStatus || []}
         placeholder="Tìm kiếm bài hát..."
         searchType="songs"
         list={listSongs?.songs || []}
       />
 
-      <Card>
+      <Card title="Danh sách">
         <Row>
           <Col sm={16}>
             ok
@@ -146,13 +148,19 @@ function SongTable() {
             </Link>
           </Col>
         </Row>
+        <Row>
+          <Col sm={24}>
+            <Table
+              dataSource={dataSource}
+              columns={columns}
+              rowKey="_id"
+              scroll={{ x: "max-content" }}
+              className="custom-table"
+            />
+          </Col>
+        </Row>
       </Card>
 
-      <Table 
-        dataSource={dataSource} 
-        columns={columns} 
-        rowKey="_id"
-      />
     </>
   )
 }

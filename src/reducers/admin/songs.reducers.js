@@ -43,6 +43,16 @@ const songsReducer = (state = initialState, action) => {
           songs: state.listSongs.songs.filter((song) => song._id !== action.payload.id),
         }
       }
+    case "EDIT_SONG":
+      return {
+        ...state,
+        listSongs: {
+          ...state.listSongs,
+          songs: state.listSongs.songs.map((song) => (
+            song._id === action.payload.song._id ? { ...song, ...action.payload.song } : song
+          ))
+        }
+      }
     default:
       return state;
   }
