@@ -1,23 +1,14 @@
 import { Button, Form, message } from "antd";
-import { useEffect, useState } from "react";
-import { createSong, createSongPost } from "../../../services/admin/songService";
+import { useState } from "react";
+import { createSongPost } from "../../../services/admin/songService";
 import SongFormFields from "./SongFormFields";
 
 function CreateSong() {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
   const [fileListAudio, setFileListAudio] = useState([]);
-  const [data, setData] = useState([]);
   const [messageApi, contextHolder] = message.useMessage();
   const [audioUrl, setAudioUrl] = useState(null); // State để lưu URL audio
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await createSong();
-      setData(data);
-    }
-    fetchData();
-  }, []);
 
   const handleChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
@@ -50,7 +41,7 @@ function CreateSong() {
     formData.append("lyrics", values.lyrics || "");
     formData.append("description", values.description || "");
     formData.append("status", values.status ? "true" : "false");
-    formData.append("position", values.position);
+    formData.append("position", values.position || "");
 
     // append avatar (nếu có chọn)
     if (fileList.length > 0) {
@@ -62,22 +53,39 @@ function CreateSong() {
       formData.append("audio", fileListAudio[0].originFileObj);
     }
 
-    const response = await createSongPost(formData);
+    try {
+      const response = await createSongPost(formData);
 
-    if (response) {
-      form.resetFields();
-      setFileList([]);
-      setFileListAudio([]);
-      setAudioUrl(null);
-      messageApi.open({
-        type: "success",
-        content: "Tạo bài hát mới thành công",
-        duration: 5,
-      });
-    } else {
+      if (response.data.code === 200) {
+        form.resetFields();
+        setFileList([]);
+        setFileListAudio([]);
+        setAudioUrl(null);
+
+        setTimeout(() => {
+          messageApi.open({
+            type: "success",
+            content: "Tạo bài hát mới thành công",
+            duration: 5,
+          });
+        }, 0);
+      } else if (response.data.code === 400) {
+        messageApi.open({
+          type: "error",
+          content: response.data.message,
+          duration: 5,
+        });
+      } else {
+        messageApi.open({
+          type: "error",
+          content: "Tạo bài hát mới không thành công",
+          duration: 5,
+        });
+      }
+    } catch (error) {
       messageApi.open({
         type: "error",
-        content: "Tạo bài hát mới không thành công",
+        content: "Có lỗi kết nối server!",
         duration: 5,
       });
     }
@@ -90,11 +98,9 @@ function CreateSong() {
 
       <h2>Thêm bài hát</h2>
 
-      <Form layout="vertical" name="create-song" form={form} onFinish={handleSubmit}  initialValues={{ status: true }}>
-        
-        <SongFormFields 
-          topics={data?.topics}
-          singers={data?.singers}
+      <Form layout="vertical" name="create-song" form={form} onFinish={handleSubmit} initialValues={{ status: true }}>
+
+        <SongFormFields
           fileList={fileList}
           fileListAudio={fileListAudio}
           audioUrl={audioUrl}

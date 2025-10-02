@@ -10,8 +10,8 @@ function SongTable() {
   const { listSingers } = useSelector((state) => state.admin.singers);
 
   const dataSource = (listSongs?.songs || []).map((song) => {
-    const singer = listSingers?.singers?.find((s) => s._id === song.singerId);
-    const topic = listTopics?.topics?.find((t) => t._id === song.topicId);
+    const singer = listSingers?.singers?.find((s) => s._id === song?.singerId);
+    const topic = listTopics?.topics?.find((t) => t._id === song?.topicId);
 
     return {
       ...song,
@@ -68,9 +68,9 @@ function SongTable() {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      render: (status) => {
+      render: (_, record) => {
         return <>
-          {status === "active" ? (
+          {record.status === "active" ? (
             <>
               <Tooltip title="Chủ đề chưa bị dừng hoạt động" color="green">
                 <Tag color="green">
@@ -90,16 +90,16 @@ function SongTable() {
         </>
       }
     },
-    {
-      title: "Hành động",
-      key: "actions",
-      render: (_, record) => {
-        return <>
-          <Space>
-          </Space>
-        </>
-      }
-    },
+    // {
+    //   title: "Hành động",
+    //   key: "actions",
+    //   render: (_, record) => {
+    //     return <>
+    //       <Space>
+    //       </Space>
+    //     </>
+    //   }
+    // },
   ];
 
 
@@ -128,7 +128,11 @@ function SongTable() {
         </Row>
       </Card>
 
-      <Table dataSource={dataSource} columns={columns} rowKey="_id" />
+      <Table 
+        dataSource={dataSource} 
+        columns={columns} 
+        rowKey="_id"
+      />
     </>
   )
 }
