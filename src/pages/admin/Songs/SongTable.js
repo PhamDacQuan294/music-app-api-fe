@@ -1,13 +1,17 @@
-import { Table, Image, Tooltip, Tag, Space, Card, Row, Col, Button } from "antd";
+import { Table, Image, Tooltip, Tag, Space, Card, Row, Col, Button, message } from "antd";
 import FilterStatus from "../../../components/admin/FilterStatus";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { PlusOutlined } from "@ant-design/icons"
 import { Link } from "react-router-dom";
+import { hanleStatusChange } from "../../../components/admin/ChangeStatus";
+import { updateSongStatus } from "../../../actions/admin/songs.actions";
 
 function SongTable() {
+  const dispatch = useDispatch();
   const { listSongs } = useSelector((state) => state.admin.songs);
   const { listTopics } = useSelector((state) => state.admin.topics);
   const { listSingers } = useSelector((state) => state.admin.singers);
+  const [messageApi, contextHolder] = message.useMessage();
 
   const dataSource = (listSongs?.songs || []).map((song) => {
     const singer = listSingers?.singers?.find((s) => s._id === song?.singerId);
@@ -19,6 +23,10 @@ function SongTable() {
       topicName: topic ? topic.title : "Không rõ",
     };
   });
+  
+  const changeStatusSong = (song) => {
+    dispatch(updateSongStatus(song))
+  }
 
   const columns = [
     {
@@ -73,7 +81,11 @@ function SongTable() {
           {record.status === "active" ? (
             <>
               <Tooltip title="Chủ đề chưa bị dừng hoạt động" color="green">
-                <Tag color="green">
+                <Tag 
+                  color="green"
+                  style={{ cursor: "pointer" }} 
+                  onClick={() => hanleStatusChange(record, "songs", messageApi, changeStatusSong)}
+                >
                   Active
                 </Tag>
               </Tooltip>
@@ -81,7 +93,11 @@ function SongTable() {
           ) : (
             <>
               <Tooltip title="Chủ đề đã bị dừng hoạt động" color="red">
-                <Tag color="red">
+                <Tag 
+                  color="red"
+                  style={{ cursor: "pointer" }} 
+                  onClick={() => hanleStatusChange(record, "songs", messageApi, changeStatusSong)}
+                >
                   InActive
                 </Tag>
               </Tooltip>
@@ -90,21 +106,23 @@ function SongTable() {
         </>
       }
     },
-    // {
-    //   title: "Hành động",
-    //   key: "actions",
-    //   render: (_, record) => {
-    //     return <>
-    //       <Space>
-    //       </Space>
-    //     </>
-    //   }
-    // },
+    {
+      title: "Hành động",
+      key: "actions",
+      render: (_, record) => {
+        return <>
+          <Space>
+          </Space>
+        </>
+      }
+    },
   ];
 
 
   return (
     <>
+      {contextHolder}
+
       <FilterStatus
         filterStatus={listSongs?.filterStatus || []}     
         placeholder="Tìm kiếm bài hát..."

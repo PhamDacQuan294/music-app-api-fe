@@ -1,5 +1,5 @@
 const initialState = {
-  listSongs: [],  
+  listSongs: { songs: [], filterStatus: [] },
   filter: null,
   keyword: "",
 };
@@ -7,7 +7,7 @@ const initialState = {
 const songsReducer = (state = initialState, action) => {
   switch (action.type) {
     case "GET_LIST_SONGS":
-      return { ...state, listSongs: action.payload }; 
+      return { ...state, listSongs: action.payload };
 
     case "ACTIVE_SONGS":
       return { ...state, filter: "active" };
@@ -23,6 +23,18 @@ const songsReducer = (state = initialState, action) => {
 
     case "RESET_SEARCH_SONGS":
       return { ...state, keyword: "" };
+
+    case "UPDATE_SONG_STATUS":
+      return {
+        ...state,
+        listSongs: {
+          ...state.listSongs,
+          songs: state.listSongs.songs.map((song) =>
+            song._id === action.payload.id ? { ...song, status: action.payload.status } : song
+          ),
+        },
+      };
+
 
     default:
       return state;

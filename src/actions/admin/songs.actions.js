@@ -4,3 +4,10 @@ export const getListSongsAction = (songs) => {
     payload: songs,
   }
 }
+
+export const updateSongStatus = (song) => {
+  return {
+    type: "UPDATE_SONG_STATUS",
+    payload: song
+  }
+}
