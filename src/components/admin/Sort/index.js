@@ -1,8 +1,11 @@
 import { Button, Form, Select, Card, Row, Col, message } from "antd";
+import { useDispatch } from "react-redux";
+import { sortAction } from "../../../actions/admin/sort.action";
 
 const { Option } = Select;
 
-export const SortType = ({ songContexts }) => {
+export const SortType = ({ fetchData, type, params = [] }) => {
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
 
   const handleSubmit = async () => {
@@ -14,7 +17,8 @@ export const SortType = ({ songContexts }) => {
       message.warning("Vui lòng chọn kiểu sắp xếp!");
       return;
     } else {
-      songContexts.onSort(sortKey, sortValue);
+      const response = await fetchData(...params, sortKey, sortValue);
+      dispatch(sortAction(type, response));
       message.success("Sắp xếp thành công!");
     }
   };

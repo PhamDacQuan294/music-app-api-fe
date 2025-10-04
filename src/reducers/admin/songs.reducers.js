@@ -110,6 +110,14 @@ const songsReducer = (state = initialState, action) => {
         }
       }
     
+    case "SORT_SONGS":
+      return {
+        ...state,
+        listSongs: {
+          ...state.listSongs,
+          songs: action.payload.songs
+        }
+      }
     default:
       return state;
   }

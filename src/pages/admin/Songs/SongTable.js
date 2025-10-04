@@ -3,7 +3,7 @@ import { Table, Image, Tooltip, Tag, Space, Card, Row, Col, Button, message, Inp
 import FilterStatus from "../../../components/admin/FilterStatus";
 import { useDispatch, useSelector } from "react-redux";
 import { PlusOutlined } from "@ant-design/icons"
-import { Link, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { hanleStatusChange } from "../../../components/admin/ChangeStatus";
 import { updateSongStatusAction } from "../../../actions/admin/songs.actions";
 import DeleteSong from "./DeleteSong";
@@ -14,6 +14,7 @@ import { ChangeStatusMulti } from "../../../components/admin/ChangeMulti";
 import { getListSong } from "../../../services/admin/songService";
 import { pagination } from "../../../actions/admin/pagination.action";
 import usePaginationQuery from "../../../hooks/admin/usePaginationQuery.hook";
+import { SortType } from "../../../components/admin/Sort";
 
 function SongTable() {
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ function SongTable() {
   const { listSingers } = useSelector((state) => state.admin.singers);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [messageApi, contextHolder] = message.useMessage();
-  const [page, setPage] = usePaginationQuery();
+  const [, setPage] = usePaginationQuery();
 
   const [positions, setPositions] = useState({});
 
@@ -175,6 +176,12 @@ function SongTable() {
         placeholder="Tìm kiếm bài hát..."
         searchType="songs"
         list={listSongs?.songs || []}
+      />
+
+      <SortType 
+        fetchData={getListSong}
+        type="SONGS"
+        params={["", "", ""]}
       />
 
       <Card title="Danh sách">
