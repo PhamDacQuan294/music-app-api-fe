@@ -1,5 +1,5 @@
 const initialState = {
-  listSongs: { songs: [], filterStatus: [] },
+  listSongs: { songs: [], filterStatus: [], pagination: {} },
   filter: null,
   keyword: "",
 };
@@ -100,7 +100,16 @@ const songsReducer = (state = initialState, action) => {
       };
     }
 
-
+    case "PAGINATION_SONGS": 
+      return { 
+        ...state,
+        listSongs: {
+          ...state.listSongs,
+          songs: action.payload.songs,
+          pagination: action.payload.pagination
+        }
+      }
+    
     default:
       return state;
   }

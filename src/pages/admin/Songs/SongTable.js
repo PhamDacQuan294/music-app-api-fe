@@ -3,7 +3,7 @@ import { Table, Image, Tooltip, Tag, Space, Card, Row, Col, Button, message, Inp
 import FilterStatus from "../../../components/admin/FilterStatus";
 import { useDispatch, useSelector } from "react-redux";
 import { PlusOutlined } from "@ant-design/icons"
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { hanleStatusChange } from "../../../components/admin/ChangeStatus";
 import { updateSongStatusAction } from "../../../actions/admin/songs.actions";
 import DeleteSong from "./DeleteSong";
@@ -11,6 +11,9 @@ import EditSong from "./EditSong";
 import DetailSong from "./DetailSong";
 import { useEffect, useState } from "react";
 import { ChangeStatusMulti } from "../../../components/admin/ChangeMulti";
+import { getListSong } from "../../../services/admin/songService";
+import { pagination } from "../../../actions/admin/pagination.action";
+import usePaginationQuery from "../../../hooks/admin/usePaginationQuery.hook";
 
 function SongTable() {
   const dispatch = useDispatch();
@@ -19,6 +22,7 @@ function SongTable() {
   const { listSingers } = useSelector((state) => state.admin.singers);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [messageApi, contextHolder] = message.useMessage();
+  const [page, setPage] = usePaginationQuery();
 
   const [positions, setPositions] = useState({});
 
@@ -162,7 +166,6 @@ function SongTable() {
     },
   ];
 
-
   return (
     <>
       {contextHolder}
@@ -199,6 +202,21 @@ function SongTable() {
               rowKey="_id"
               scroll={{ x: "max-content" }}
               className="custom-table"
+              pagination={{
+                current: listSongs?.pagination?.currentPage,
+                pageSize: listSongs?.pagination?.limitItems,
+                total: listSongs?.pagination?.totalPage * listSongs?.pagination?.limitItems,
+                onChange: async (page, _) => {
+                  try {
+                    setPage(page); 
+                    const response = await getListSong("", "", page);
+                    dispatch(pagination("SONGS", response));
+                  } catch (error) {
+                    console.error("Fetch songs failed", error);
+                  }
+                },
+                showSizeChanger: false, 
+              }}
               rowSelection={{
                 onChange: (newSelectedRowKeys) => {
                   setSelectedRowKeys(newSelectedRowKeys);
