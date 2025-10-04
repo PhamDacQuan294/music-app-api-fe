@@ -1,4 +1,5 @@
-import { Table, Image, Tooltip, Tag, Space, Card, Row, Col, Button, message } from "antd";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Table, Image, Tooltip, Tag, Space, Card, Row, Col, Button, message, InputNumber } from "antd";
 import FilterStatus from "../../../components/admin/FilterStatus";
 import { useDispatch, useSelector } from "react-redux";
 import { PlusOutlined } from "@ant-design/icons"
@@ -8,7 +9,7 @@ import { updateSongStatusAction } from "../../../actions/admin/songs.actions";
 import DeleteSong from "./DeleteSong";
 import EditSong from "./EditSong";
 import DetailSong from "./DetailSong";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChangeStatusMulti } from "../../../components/admin/ChangeMulti";
 
 function SongTable() {
@@ -19,6 +20,16 @@ function SongTable() {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [messageApi, contextHolder] = message.useMessage();
 
+  const [positions, setPositions] = useState({});
+
+  useEffect(() => {
+    const pos = {};
+    listSongs.songs.forEach(song => {
+      pos[song._id] = song.position;
+    });
+    setPositions(pos);
+  }, [listSongs.songs])
+  
   const dataSource = (listSongs?.songs || []).map((song) => {
     const singer = listSingers?.singers?.find((s) => s._id === song?.singerId);
     const topic = listTopics?.topics?.find((t) => t._id === song?.topicId);
@@ -77,6 +88,30 @@ function SongTable() {
       title: "Vị trí",
       dataIndex: "position",
       key: "position",
+      render: (position, record) => (
+        <InputNumber
+          min={1}
+          value={positions[record._id]} 
+          onChange={(value) => {
+            setPositions(prev => ({
+              ...prev,
+              [record._id]: value,
+            }));
+
+            // Cập nhật selectedRowKeys theo logic cũ
+            const updatedSelectedRowKeys = selectedRowKeys.map((key) => {
+              const [id] = key.split("-");
+              if (id === record._id) {
+                return `${id}-${value}`; 
+              }
+              return key;
+            });
+
+            setSelectedRowKeys(updatedSelectedRowKeys);
+          }}
+          style={{ width: "70px" }}
+        />
+      ),
     },
     {
       title: "Trạng thái",
@@ -165,7 +200,6 @@ function SongTable() {
               scroll={{ x: "max-content" }}
               className="custom-table"
               rowSelection={{
-                selectedRowKeys,
                 onChange: (newSelectedRowKeys) => {
                   setSelectedRowKeys(newSelectedRowKeys);
                 },

@@ -55,7 +55,7 @@ const songsReducer = (state = initialState, action) => {
       }
     case "CHANGE_MULTI_STATUS_SONGS": {
       const { ids, status } = action.payload;
-
+      
       // Nếu xoá nhiều bản ghi -> lọc ra khỏi state
       if (status === "delete-all") {
         return {
@@ -67,6 +67,23 @@ const songsReducer = (state = initialState, action) => {
             ),
           },
         };
+      }
+
+      if (status=== "change-position") {
+        return {
+          ...state,
+          listSongs: {
+            ...state.listSongs,
+            songs: state.listSongs.songs.map((song) => {
+              const found = ids.find((item) => item.split("-")[0] === song._id);
+              if (found) {
+                const newPos = parseInt(found.split("-")[1], 10);
+                return { ...song, position: newPos }
+              }
+              return song;
+            })
+          }
+        }
       }
 
       // Trường hợp mặc định: thay đổi status (active / inactive)
