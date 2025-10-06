@@ -41,13 +41,18 @@ function TopicTable() {
       dataIndex: "avatar",
       key: "avatar",
       render: (avatar) => (
-        <Image
-          src={avatar}
-          alt="avatar"
-          width={80}
-          height={60}
-          style={{ objectFit: "cover", borderRadius: 8 }}
-        />
+        avatar ? (
+         <Image
+            src={avatar} 
+            alt="avatar"
+            width={80}
+            height={60}
+            style={{ objectFit: "cover", borderRadius: 8 }}
+          />
+        ) : (
+          <span style={{ color: "#999" }}>No image</span>
+        )
+       
       ),
     },
     {

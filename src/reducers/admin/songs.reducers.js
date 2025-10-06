@@ -53,55 +53,33 @@ const songsReducer = (state = initialState, action) => {
           ))
         }
       }
-    case "CHANGE_MULTI_STATUS_SONGS": {
-      const { ids, status } = action.payload;
-      
-      // Nếu xoá nhiều bản ghi -> lọc ra khỏi state
+
+    case "CHANGE_MULTI_STATUS_SONGS":
+      const { newType, status } = action.payload;
+
       if (status === "delete-all") {
         return {
           ...state,
           listSongs: {
             ...state.listSongs,
-            songs: state.listSongs.songs.filter(
-              (song) => !ids.includes(String(song._id))
-            ),
+            songs: newType
           },
         };
       }
 
-      if (status=== "change-position") {
-        return {
-          ...state,
-          listSongs: {
-            ...state.listSongs,
-            songs: state.listSongs.songs.map((song) => {
-              const found = ids.find((item) => item.split("-")[0] === song._id);
-              if (found) {
-                const newPos = parseInt(found.split("-")[1], 10);
-                return { ...song, position: newPos }
-              }
-              return song;
-            })
-          }
-        }
-      }
-
-      // Trường hợp mặc định: thay đổi status (active / inactive)
       return {
         ...state,
         listSongs: {
           ...state.listSongs,
-          songs: state.listSongs.songs.map((song) =>
-            ids.includes(String(song._id))
-              ? { ...song, status: status }
-              : song
-          ),
+          songs: state.listSongs.songs.map((song) => {
+            const found = newType.find((t) => t._id === song._id);
+
+            return found ? { ...song, ...found } : song;
+          })
         },
       };
-    }
-
-    case "PAGINATION_SONGS": 
-      return { 
+    case "PAGINATION_SONGS":
+      return {
         ...state,
         listSongs: {
           ...state.listSongs,
@@ -109,7 +87,7 @@ const songsReducer = (state = initialState, action) => {
           pagination: action.payload.pagination
         }
       }
-    
+
     case "SORT_SONGS":
       return {
         ...state,

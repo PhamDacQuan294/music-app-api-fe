@@ -1,6 +1,6 @@
 const initialState = {
   listTopics: { topics: [], filterStatus: [], pagination: {} },
-  filter: null, 
+  filter: null,
   keyword: "",
 };
 
@@ -20,10 +20,10 @@ const topicsReducer = (state = initialState, action) => {
 
     case "SEARCH_TOPICS":
       return { ...state, keyword: action.keyword };
-    
+
     case "RESET_SEARCH_TOPICS":
       return { ...state, keyword: "" };
-    
+
     case "SORT_TOPICS":
       return {
         ...state,
@@ -32,50 +32,31 @@ const topicsReducer = (state = initialState, action) => {
           topics: action.payload.topics
         }
       }
-    
-    case "CHANGE_MULTI_STATUS_TOPICS": {
-      const { ids, status } = action.payload;
+
+    case "CHANGE_MULTI_STATUS_TOPICS":
+      const { newType, status } = action.payload;
 
       if (status === "delete-all") {
         return {
           ...state,
           listTopics: {
             ...state.listTopics,
-            topics: state.listTopics.topics.filter(
-              (topic) => !ids.includes(String(topic._id))
-            )
-          }
+            topics: newType
+          },
         };
-      }
-
-      if (status === "change-position") {
-        return {
-          ...state,
-          listTopics: {
-            ...state.listTopics,
-            topics: state.listTopics.topics.map((topic) => {
-              const found = ids.find((item) => item.split("-")[0] === topic._id);
-              if (found) {
-                const newPos = parseInt(found.split("-")[1], 10);
-                return { ...topic, position: newPos }
-              }
-              return topic
-            })
-          }
-        }
       }
 
       return {
         ...state,
         listTopics: {
           ...state.listTopics,
-          topics: state.listTopics.topics.map((topic) => (
-            ids.includes(String(topic._id)) ? { ...topic, status: status } : topic
-          ))
-        }
-      }
+          topics: state.listTopics.topics.map((topic) => {
+            const found = newType.find((t) => t._id === topic._id);
 
-    }
+            return found ? { ...topic, ...found } : topic;
+          })
+        },
+      };
 
     default:
       return state;

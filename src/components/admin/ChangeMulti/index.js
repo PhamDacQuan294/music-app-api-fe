@@ -22,7 +22,7 @@ export const ChangeStatusMulti = ({ selectedRowKeys, type }) => {
       message.warning("Vui lòng chọn ít nhất một bản ghi!");
       return;
     }
-
+    
     // Nếu chọn xoá → confirm
     if (status === "delete-all") {
       Modal.confirm({
@@ -55,7 +55,7 @@ export const ChangeStatusMulti = ({ selectedRowKeys, type }) => {
         } else {
           message.success("Cập nhật thành công!");
         }
-        dispatch(changeMultiStatus(typeChangeMulti, { ids: selectedRowKeys, status }));
+        dispatch(changeMultiStatus(typeChangeMulti, { newType: result.newType, status }));
       } else {
         message.error("Có lỗi xảy ra!");
       }
