@@ -32,6 +32,51 @@ const topicsReducer = (state = initialState, action) => {
           topics: action.payload.topics
         }
       }
+    
+    case "CHANGE_MULTI_STATUS_TOPICS": {
+      const { ids, status } = action.payload;
+
+      if (status === "delete-all") {
+        return {
+          ...state,
+          listTopics: {
+            ...state.listTopics,
+            topics: state.listTopics.topics.filter(
+              (topic) => !ids.includes(String(topic._id))
+            )
+          }
+        };
+      }
+
+      if (status === "change-position") {
+        return {
+          ...state,
+          listTopics: {
+            ...state.listTopics,
+            topics: state.listTopics.topics.map((topic) => {
+              const found = ids.find((item) => item.split("-")[0] === topic._id);
+              if (found) {
+                const newPos = parseInt(found.split("-")[1], 10);
+                return { ...topic, position: newPos }
+              }
+              return topic
+            })
+          }
+        }
+      }
+
+      return {
+        ...state,
+        listTopics: {
+          ...state.listTopics,
+          topics: state.listTopics.topics.map((topic) => (
+            ids.includes(String(topic._id)) ? { ...topic, status: status } : topic
+          ))
+        }
+      }
+
+    }
+
     default:
       return state;
   }

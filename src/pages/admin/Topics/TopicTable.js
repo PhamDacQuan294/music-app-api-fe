@@ -1,4 +1,4 @@
-import { Table, Image, Tooltip, Tag, Space } from "antd";
+import { Table, Image, Tooltip, Tag, Space, Card, Row, Col, Button, InputNumber } from "antd";
 import DeleteTopic from "./DeleteTopic";
 import EditTopic from "./EditTopic";
 import DetailTopic from "./DetailTopic";
@@ -6,9 +6,29 @@ import { useSelector } from "react-redux";
 import FilterStatus from "../../../components/admin/FilterStatus";
 import { SortType } from "../../../components/admin/Sort";
 import { getListTopic } from "../../../services/admin/topicsService";
+import { ChangeStatusMulti } from "../../../components/admin/ChangeMulti";
+import { Link } from "react-router-dom";
+import { PlusOutlined } from "@ant-design/icons"
+import { useEffect, useState } from "react";
 
 function TopicTable() {
   const { listTopics } = useSelector((state) => state.admin.topics);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [positions, setPositions] = useState({});
+
+  useEffect(() => {
+    const pos = {};
+    listTopics.topics.forEach(topic => {
+      pos[topic._id] = topic.position;
+    });
+    setPositions(pos);
+  }, [listTopics.topics]);
+
+  const dataSource = (listTopics?.topics || []).map((topic) => {
+    return {
+      ...topic,
+    }
+  });
 
   const columns = [
     {
@@ -39,6 +59,29 @@ function TopicTable() {
       title: "Vị trí",
       dataIndex: "position",
       key: "position",
+      render: (_, record) => (
+        <InputNumber 
+          min={1}
+          value={positions[record._id]} 
+          onChange={(value) => {
+            setPositions(prev => ({
+              ...prev,
+              [record._id]: value,
+            }));
+
+            const updatedSelectedRowKeys = selectedRowKeys.map((key) => {
+              const [id] = key.split("-");
+              if (id === record._id) {
+                return `${id}-${value}`;
+              }
+              return key;
+            });
+
+            setSelectedRowKeys(updatedSelectedRowKeys);
+          }}
+          style={{ width: "70px" }}
+        />
+      )
     },
     {
       title: "Trạng thái",
@@ -96,7 +139,39 @@ function TopicTable() {
         params={["", ""]}
       />
 
-      <Table dataSource={listTopics.topics} columns={columns} rowKey="_id" />
+      <Card title="Danh sách">
+        <Row>
+          <Col sm={16}>
+            <ChangeStatusMulti
+              selectedRowKeys={selectedRowKeys}
+              type="topics"
+            />
+          </Col>
+          <Col sm={8} style={{ textAlign: "right", marginBottom: "20px" }}>
+            <Link to="admin/create-topic">
+              <Button type="primary" icon={<PlusOutlined />}>
+                Thêm chủ đề
+              </Button>
+            </Link>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={24}>
+            <Table 
+              dataSource={dataSource} 
+              columns={columns}
+              rowKey="_id" 
+              scroll={{ x: "max-content" }}
+              className="custom-table"
+              rowSelection={{
+                onChange: (newSelectedRowKeys) => {
+                  setSelectedRowKeys(newSelectedRowKeys);
+                }
+              }}
+            />
+          </Col>
+        </Row>
+      </Card>
     </>
   )
 }

@@ -47,6 +47,8 @@ export const ChangeStatusMulti = ({ selectedRowKeys, type }) => {
         status,
       });
 
+      console.log(result);
+
       if (result.code === 200) {
         if (status === "delete-all") {
           message.success("Xoá thành công!");
