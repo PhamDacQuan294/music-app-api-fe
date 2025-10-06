@@ -4,6 +4,8 @@ import EditTopic from "./EditTopic";
 import DetailTopic from "./DetailTopic";
 import { useSelector } from "react-redux";
 import FilterStatus from "../../../components/admin/FilterStatus";
+import { SortType } from "../../../components/admin/Sort";
+import { getListTopic } from "../../../services/admin/topicsService";
 
 function TopicTable() {
   const { listTopics } = useSelector((state) => state.admin.topics);
@@ -32,6 +34,11 @@ function TopicTable() {
       title: "Tiêu đề",
       dataIndex: "title",
       key: "title"
+    },
+    {
+      title: "Vị trí",
+      dataIndex: "position",
+      key: "position",
     },
     {
       title: "Trạng thái",
@@ -81,6 +88,12 @@ function TopicTable() {
         placeholder="Tìm kiếm chủ đe"
         searchType="topics"
         list={listTopics?.topics || []}
+      />
+
+      <SortType 
+        fetchData={getListTopic}
+        type="TOPICS"
+        params={["", ""]}
       />
 
       <Table dataSource={listTopics.topics} columns={columns} rowKey="_id" />

@@ -1,5 +1,5 @@
 const initialState = {
-  listTopics: [],
+  listTopics: { topics: [], filterStatus: [], pagination: {} },
   filter: null, 
   keyword: "",
 };
@@ -23,7 +23,15 @@ const topicsReducer = (state = initialState, action) => {
     
     case "RESET_SEARCH_TOPICS":
       return { ...state, keyword: "" };
-      
+    
+    case "SORT_TOPICS":
+      return {
+        ...state,
+        listTopics: {
+          ...state.listTopics,
+          topics: action.payload.topics
+        }
+      }
     default:
       return state;
   }

@@ -1,7 +1,7 @@
 import { del, get } from "../../utils/request";
 import { API_PREFIX, PREFIX_ADMIN } from "../../components/admin/Contants";
 
-export const getListTopic = async (status, keyword) => {
+export const getListTopic = async (status, keyword, sortKey, sortValue) => {
   let url = `${API_PREFIX}/${PREFIX_ADMIN}/topics`;
 
   const params = [];
@@ -12,6 +12,10 @@ export const getListTopic = async (status, keyword) => {
 
   if (keyword) {
     params.push(`keyword=${keyword}`);
+  }
+
+  if (sortKey && sortValue) {
+    params.push(`sortKey=${sortKey}&sortValue=${sortValue}`);
   }
 
   if (params.length > 0) {
