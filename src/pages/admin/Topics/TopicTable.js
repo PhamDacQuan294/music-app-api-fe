@@ -153,7 +153,7 @@ function TopicTable() {
             />
           </Col>
           <Col sm={8} style={{ textAlign: "right", marginBottom: "20px" }}>
-            <Link to="admin/create-topic">
+            <Link to="/admin/create-topic">
               <Button type="primary" icon={<PlusOutlined />}>
                 Thêm chủ đề
               </Button>

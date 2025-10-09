@@ -1,5 +1,6 @@
 import { del, get } from "../../utils/request";
 import { API_PREFIX, PREFIX_ADMIN } from "../../components/admin/Contants";
+import { post2 } from "../../utils/request2";
 
 export const getListTopic = async (status, keyword, sortKey, sortValue) => {
   let url = `${API_PREFIX}/${PREFIX_ADMIN}/topics`;
@@ -28,5 +29,10 @@ export const getListTopic = async (status, keyword, sortKey, sortValue) => {
 
 export const deleteTopic = async () => {
   const result = await del(`${API_PREFIX}/${PREFIX_ADMIN}/topics`);
+  return result;
+}
+
+export const createTopicPost = async (formData) => {
+  const result = await post2(`${API_PREFIX}/${PREFIX_ADMIN}/topics/create`, formData);
   return result;
 }
