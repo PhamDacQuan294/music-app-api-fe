@@ -10,11 +10,13 @@ import { ChangeStatusMulti } from "../../../components/admin/ChangeMulti";
 import { Link } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons"
 import { useEffect, useState } from "react";
+import { useSuccessMessage } from "../../../hooks/admin/useSuccessMessage";
 
 function TopicTable() {
   const { listTopics } = useSelector((state) => state.admin.topics);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [positions, setPositions] = useState({});
+  const { contextHolder } = useSuccessMessage();
 
   useEffect(() => {
     const pos = {};
@@ -131,6 +133,8 @@ function TopicTable() {
 
   return (
     <>
+      {contextHolder}
+      
       <FilterStatus 
         filterStatus={listTopics?.filterStatus || []}
         placeholder="Tìm kiếm chủ đe"

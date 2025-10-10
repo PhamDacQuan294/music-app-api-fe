@@ -34,7 +34,6 @@ function CreateSong() {
   const handleSubmit = async (values) => {
     const formData = new FormData();
 
-    // append text fields
     formData.append("title", values.title);
     formData.append("topicId", values.topicId);
     formData.append("singerId", values.singerId);
@@ -43,12 +42,10 @@ function CreateSong() {
     formData.append("status", values.status ? "true" : "false");
     formData.append("position", values.position || "");
 
-    // append avatar (nếu có chọn)
     if (fileList.length > 0) {
       formData.append("avatar", fileList[0].originFileObj);
     }
-
-    // append audio (nếu có chọn)
+    
     if (fileListAudio.length > 0) {
       formData.append("audio", fileListAudio[0].originFileObj);
     }

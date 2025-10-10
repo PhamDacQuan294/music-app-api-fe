@@ -9,6 +9,15 @@ const topicsReducer = (state = initialState, action) => {
     case "GET_LIST_TOPICS":
       return { ...state, listTopics: action.payload };
 
+    case "CREATE_TOPIC":
+      return {
+        ...state,
+        listTopics: {
+          ...state.listTopics,
+          topics: [action.payload, ...state.listTopics.topics],
+        }
+      }
+
     case "ACTIVE_TOPICS":
       return { ...state, filter: "active" };
 

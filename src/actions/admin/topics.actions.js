@@ -4,3 +4,10 @@ export const getListTopicsAction = (topics) => {
     payload: topics,
   }
 }
+
+export const createTopic = (topic) => {
+  return {
+    type: "CREATE_TOPIC",
+    payload: topic
+  }
+}

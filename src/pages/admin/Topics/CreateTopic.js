@@ -2,11 +2,16 @@ import { Button, Form, message } from "antd";
 import TopicFormFields from "./TopicFormFields";
 import { useState } from "react";
 import { createTopicPost } from "../../../services/admin/topicsService";
+import { useDispatch } from "react-redux";
+import { createTopic } from "../../../actions/admin/topics.actions";
+import { useNavigate } from "react-router-dom";
 
 function CreateTopic() {
-  const [form]= Form.useForm();
+  const dispatch = useDispatch();
+  const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
   const [messageApi, contextHolder] = message.useMessage();
+  const navigate = useNavigate();
 
   const handleChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
@@ -21,7 +26,7 @@ function CreateTopic() {
 
   const handleSubmit = async (values) => {
     const formData = new FormData();
-    
+
     formData.append("title", values.title);
     formData.append("description", values.description || "");
     formData.append("position", values.position || "");
@@ -37,14 +42,12 @@ function CreateTopic() {
       if (response.data.code === 200) {
         form.resetFields();
         setFileList([]);
-
-        setTimeout(() => {
-          messageApi.open({
-            type: "success",
-            content: "Tạo chủ đề mới thành công",
-            duration: 5,
-          });
-        }, 0);
+        dispatch(createTopic(response.data.topic));
+        navigate("/admin/topics", {
+          state: {
+            successMessage: "Tạo chủ đề mới thành công!"
+          }
+        });
       } else if (response.data.code === 400) {
         messageApi.open({
           type: "error",
@@ -74,17 +77,17 @@ function CreateTopic() {
       <h2>Thêm chủ đề</h2>
 
       <Form layout="vertical" name="create-song" form={form} onFinish={handleSubmit} initialValues={{ status: true }}>
-          <TopicFormFields 
-            fileList={fileList}
-            handleChange={handleChange}
-            rules={rules}
-          />
+        <TopicFormFields
+          fileList={fileList}
+          handleChange={handleChange}
+          rules={rules}
+        />
 
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Tạo mới
-            </Button>
-          </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Tạo mới
+          </Button>
+        </Form.Item>
       </Form>
     </>
   )
