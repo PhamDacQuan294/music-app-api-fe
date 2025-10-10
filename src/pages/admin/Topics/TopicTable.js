@@ -2,7 +2,7 @@ import { Table, Image, Tooltip, Tag, Space, Card, Row, Col, Button, InputNumber 
 import DeleteTopic from "./DeleteTopic";
 import EditTopic from "./EditTopic";
 import DetailTopic from "./DetailTopic";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FilterStatus from "../../../components/admin/FilterStatus";
 import { SortType } from "../../../components/admin/Sort";
 import { getListTopic } from "../../../services/admin/topicsService";
@@ -11,12 +11,16 @@ import { Link } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons"
 import { useEffect, useState } from "react";
 import { useSuccessMessage } from "../../../hooks/admin/useSuccessMessage";
+import usePaginationQuery from "../../../hooks/admin/usePaginationQuery.hook";
+import { pagination } from "../../../actions/admin/pagination.action";
 
 function TopicTable() {
+  const dispatch = useDispatch();
   const { listTopics } = useSelector((state) => state.admin.topics);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [positions, setPositions] = useState({});
   const { contextHolder } = useSuccessMessage();
+  const [, setPage] = usePaginationQuery();
 
   useEffect(() => {
     const pos = {};
@@ -134,7 +138,7 @@ function TopicTable() {
   return (
     <>
       {contextHolder}
-      
+
       <FilterStatus 
         filterStatus={listTopics?.filterStatus || []}
         placeholder="Tìm kiếm chủ đe"
@@ -172,6 +176,21 @@ function TopicTable() {
               rowKey="_id" 
               scroll={{ x: "max-content" }}
               className="custom-table"
+              pagination={{
+                current: listTopics?.pagination?.current,
+                pageSize: listTopics?.pagination?.limitItems,
+                total: listTopics?.pagination?.totalPage * listTopics?.pagination?.limitItems,
+                onChange: async (page, _) => {
+                  try {
+                    setPage(page);
+                    const response = await getListTopic("", "", page);
+                    dispatch(pagination("TOPICS", response));
+                  } catch (error) {
+                    console.error("Fetch songs failed", error);
+                  }
+                },
+                showSizeChanger: false
+              }}
               rowSelection={{
                 onChange: (newSelectedRowKeys) => {
                   setSelectedRowKeys(newSelectedRowKeys);

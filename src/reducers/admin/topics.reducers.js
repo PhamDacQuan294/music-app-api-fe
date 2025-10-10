@@ -67,6 +67,15 @@ const topicsReducer = (state = initialState, action) => {
         },
       };
 
+    case "PAGINATION_TOPICS":
+      return {
+        ...state,
+        listTopics: {
+          ...state.listTopics,
+          topics: action.payload.topics,
+          pagination: action.payload.pagination
+        }
+      }
     default:
       return state;
   }

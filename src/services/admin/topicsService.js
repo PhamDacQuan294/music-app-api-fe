@@ -2,7 +2,7 @@ import { del, get } from "../../utils/request";
 import { API_PREFIX, PREFIX_ADMIN } from "../../components/admin/Contants";
 import { post2 } from "../../utils/request2";
 
-export const getListTopic = async (status, keyword, sortKey, sortValue) => {
+export const getListTopic = async (status, keyword, page, sortKey, sortValue) => {
   let url = `${API_PREFIX}/${PREFIX_ADMIN}/topics`;
 
   const params = [];
@@ -17,6 +17,10 @@ export const getListTopic = async (status, keyword, sortKey, sortValue) => {
 
   if (sortKey && sortValue) {
     params.push(`sortKey=${sortKey}&sortValue=${sortValue}`);
+  }
+
+  if (page) {
+    params.push(`page=${page}`);
   }
 
   if (params.length > 0) {
