@@ -13,6 +13,7 @@ export const hanleStatusChange = async (record, type, messageApi, changeStatusTy
       messageApi.error("Cập nhật trạng thái thất bại");
     }
   } catch (error) {
+    console.log(error);
     messageApi.error("Lỗi hệ thống, vui lòng thử lại");
   }
 }

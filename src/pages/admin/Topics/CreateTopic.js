@@ -3,15 +3,13 @@ import TopicFormFields from "./TopicFormFields";
 import { useState } from "react";
 import { createTopicPost } from "../../../services/admin/topicsService";
 import { useDispatch } from "react-redux";
-import { createTopic } from "../../../actions/admin/topics.actions";
-import { useNavigate } from "react-router-dom";
+import { createTopicAction } from "../../../actions/admin/topics.actions";
 
 function CreateTopic() {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
   const [messageApi, contextHolder] = message.useMessage();
-  const navigate = useNavigate();
 
   const handleChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
@@ -42,12 +40,14 @@ function CreateTopic() {
       if (response.data.code === 200) {
         form.resetFields();
         setFileList([]);
-        dispatch(createTopic(response.data.topic));
-        navigate("/admin/topics", {
-          state: {
-            successMessage: "Tạo chủ đề mới thành công!"
-          }
-        });
+        dispatch(createTopicAction(response.data.topic));
+        setTimeout(() => {
+          messageApi.open({
+            type: "success",
+            content: "Tạo chủ đề mới thành công",
+            duration: 5,
+          });
+        }, 0);
       } else if (response.data.code === 400) {
         messageApi.open({
           type: "error",

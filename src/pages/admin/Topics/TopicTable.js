@@ -1,4 +1,4 @@
-import { Table, Image, Tooltip, Tag, Space, Card, Row, Col, Button, InputNumber } from "antd";
+import { Table, Image, Tooltip, Tag, Space, Card, Row, Col, Button, InputNumber, message } from "antd";
 import DeleteTopic from "./DeleteTopic";
 import EditTopic from "./EditTopic";
 import DetailTopic from "./DetailTopic";
@@ -10,17 +10,18 @@ import { ChangeStatusMulti } from "../../../components/admin/ChangeMulti";
 import { Link } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons"
 import { useEffect, useState } from "react";
-import { useSuccessMessage } from "../../../hooks/admin/useSuccessMessage";
 import usePaginationQuery from "../../../hooks/admin/usePaginationQuery.hook";
 import { pagination } from "../../../actions/admin/pagination.action";
+import { updateTopicStatusAction } from "../../../actions/admin/topics.actions";
+import { hanleStatusChange } from "../../../components/admin/ChangeStatus";
 
 function TopicTable() {
   const dispatch = useDispatch();
   const { listTopics } = useSelector((state) => state.admin.topics);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [positions, setPositions] = useState({});
-  const { contextHolder } = useSuccessMessage();
   const [, setPage] = usePaginationQuery();
+  const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
     const pos = {};
@@ -35,6 +36,10 @@ function TopicTable() {
       ...topic,
     }
   });
+
+  const changeStatusTopic = (topic) => {
+    dispatch(updateTopicStatusAction(topic))
+  }
 
   const columns = [
     {
@@ -98,12 +103,16 @@ function TopicTable() {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      render: (status) => {
+      render: (_, record) => {
         return <>
-          {status === "active" ? (
+          {record.status === "active" ? (
             <>
               <Tooltip title="Chủ đề chưa bị dừng hoạt động" color="green">
-                <Tag color="green">
+                <Tag 
+                  color="green"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => hanleStatusChange(record, "topics", messageApi, changeStatusTopic)}
+                >
                   Active
                 </Tag>
               </Tooltip>
@@ -111,7 +120,11 @@ function TopicTable() {
           ) : (
             <>
               <Tooltip title="Chủ đề đã bị dừng hoạt động" color="red">
-                <Tag color="red">
+                <Tag 
+                  color="red"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => hanleStatusChange(record, "topics", messageApi, changeStatusTopic)}
+                >
                   InActive
                 </Tag>
               </Tooltip>
