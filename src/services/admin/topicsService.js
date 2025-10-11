@@ -1,6 +1,6 @@
 import { del, get } from "../../utils/request";
 import { API_PREFIX, PREFIX_ADMIN } from "../../components/admin/Contants";
-import { post2 } from "../../utils/request2";
+import { patch2, post2 } from "../../utils/request2";
 
 export const getListTopic = async (status, keyword, page, sortKey, sortValue) => {
   let url = `${API_PREFIX}/${PREFIX_ADMIN}/topics`;
@@ -40,3 +40,8 @@ export const createTopicPost = async (formData) => {
   const result = await post2(`${API_PREFIX}/${PREFIX_ADMIN}/topics/create`, formData);
   return result;
 }
+
+export const updateTopic = async (id, formData) => {
+  const result = await patch2(`${API_PREFIX}/${PREFIX_ADMIN}/topics/edit/${id}`, formData);
+  return result;
+} 

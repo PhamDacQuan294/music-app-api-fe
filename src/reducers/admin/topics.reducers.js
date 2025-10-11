@@ -52,6 +52,16 @@ const topicsReducer = (state = initialState, action) => {
           ))
         }
       }
+    case "EDIT_TOPIC":
+      return {
+        ...state,
+        listTopics: {
+          ...state.listTopics,
+          topics: state.listTopics.topics.map((topic) => (
+            topic._id === action.payload.topic._id ? { ...topic, ...action.payload.topic } : topic
+          ))
+        }
+      }
 
     case "CHANGE_MULTI_STATUS_TOPICS":
       const { newType, status } = action.payload;

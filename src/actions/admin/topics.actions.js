@@ -18,3 +18,10 @@ export const updateTopicStatusAction = (topic) => {
     payload: topic
   }
 }
+
+export const editTopicAction = (topic) => {
+  return {
+    type: "EDIT_TOPIC",
+    payload: topic
+  }
+}

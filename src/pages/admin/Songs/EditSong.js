@@ -5,6 +5,7 @@ import { updateSong } from "../../../services/admin/songService";
 import SongFormFields from "./SongFormFields";
 import { useDispatch } from "react-redux";
 import { editSongAction } from "../../../actions/admin/songs.actions";
+import { appendFileToForm } from "../../../helpers/appendFileToForm";
 
 function EditSong({ record }) {
   const dispatch = useDispatch();
@@ -33,17 +34,6 @@ function EditSong({ record }) {
     setFileListAudio([]);
     setAudioUrl(null);
     setShowModal(false);
-  };
-
-  const appendFileToForm = (formData, key, fileList) => {
-    if (fileList.length > 0) {
-      const file = fileList[0];
-      if (file.originFileObj) {
-        formData.append(key, file.originFileObj);
-      } else if (file.url) {
-        formData.append(key, file.url);
-      }
-    }
   };
 
   const handleSubmit = async (values) => {
