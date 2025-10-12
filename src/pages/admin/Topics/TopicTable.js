@@ -139,7 +139,7 @@ function TopicTable() {
       render: (_, record) => {
         return <>
           <Space>
-            <DeleteTopic record={record} />
+            <DeleteTopic record={record} messageApi={messageApi}/>
             <EditTopic record={record} />
             <DetailTopic record={record} />
           </Space>

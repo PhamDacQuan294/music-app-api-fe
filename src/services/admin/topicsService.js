@@ -31,8 +31,8 @@ export const getListTopic = async (status, keyword, page, sortKey, sortValue) =>
   return result;
 }
 
-export const deleteTopic = async () => {
-  const result = await del(`${API_PREFIX}/${PREFIX_ADMIN}/topics`);
+export const deleteTopic = async (id) => {
+  const result = await del(`${API_PREFIX}/${PREFIX_ADMIN}/topics/delete/${id}`);
   return result;
 }
 

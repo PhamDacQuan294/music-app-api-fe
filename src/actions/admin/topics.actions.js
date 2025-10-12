@@ -12,6 +12,14 @@ export const createTopicAction = (topic) => {
   }
 }
 
+export const deleteTopicAction = (topic) => {
+  return {
+    type: "DELETE_TOPIC",
+    payload: topic
+  }
+}
+
+
 export const updateTopicStatusAction = (topic) => {
   return {
     type: "UPDATE_TOPIC_STATUS",

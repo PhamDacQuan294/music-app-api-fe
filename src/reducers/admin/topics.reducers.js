@@ -62,7 +62,14 @@ const topicsReducer = (state = initialState, action) => {
           ))
         }
       }
-
+    case "DELETE_TOPIC":
+      return {
+        ...state,
+        listTopics: {
+          ...state.listTopics,
+          topics: state.listTopics.topics.filter((topic) => topic._id !== action.payload.id),
+        }
+      }
     case "CHANGE_MULTI_STATUS_TOPICS":
       const { newType, status } = action.payload;
 
