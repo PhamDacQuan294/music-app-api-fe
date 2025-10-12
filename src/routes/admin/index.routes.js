@@ -1,5 +1,6 @@
 import LayoutDefault from "../../layout/admin/LayoutDefault";
 import { dashboardRoutes } from "./dashboard.route";
+import { singerRoutes } from "./singer.route";
 import { songRoutes } from "./song.route";
 import { topicRoutes } from "./topic.routes";
 
@@ -12,7 +13,8 @@ export const routes = [
        {
         children: [
           ...topicRoutes,
-          ...songRoutes
+          ...songRoutes,
+          ...singerRoutes
         ]
       }
     ]

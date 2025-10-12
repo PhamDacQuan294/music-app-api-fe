@@ -1,0 +1,16 @@
+import { Button } from "antd";
+import { EditOutlined } from "@ant-design/icons";
+
+function EditSinger() {
+  return (
+    <>
+      <Button
+        size="small"
+        type="primary"
+        icon={<EditOutlined />}
+      />
+    </>
+  )
+}
+
+export default EditSinger;
