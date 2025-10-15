@@ -1,5 +1,5 @@
 const initialState = {
-  listSingers: [],   
+  listSingers: { singers: [], filterStatus: [], pagination: {} },  
   filter: null,
   keyword: "",
 };

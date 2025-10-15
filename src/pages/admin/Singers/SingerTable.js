@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import DeleteSinger from "./DeleteSinger";
 import DetailSinger from "./DetailSinger";
 import EditSinger from "./EditSinger";
+import FilterStatus from "../../../components/admin/FilterStatus";
 
 function SingerTable() {
   const { listSingers } = useSelector((state) => state.admin.singers);
@@ -91,6 +92,13 @@ function SingerTable() {
 
   return (
     <>
+      <FilterStatus 
+        filterStatus={listSingers?.filterStatus || []}
+        placeholder="Tìm kiếm ca sĩ"
+        searchType="singers"
+        list={listSingers?.singers || []}
+      />
+
       <Card title="Danh sách">
         <Row>
           <Col sm={24}>
