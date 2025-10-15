@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { resetSearchAction, searchAction } from "../../../actions/admin/search.actions"
 
-function Search({ placeholder, type, list }) {
+function Search({ placeholder, type, list, searchKey }) {
   const [keyword, setKeyword] = useState("");
   const [suggests, setSuggests] = useState([]);
   const [skipSearch, setSkipSearch] = useState(false);
@@ -23,7 +23,8 @@ function Search({ placeholder, type, list }) {
         dispatch(searchAction(keyword.trim(), type));
         // Lọc có chứa keyword
         const filtered = list.filter(item =>
-          item.title.toLowerCase().includes(keyword.toLowerCase())
+          // item.title.toLowerCase().includes(keyword.toLowerCase())
+          (item[searchKey] || "").toLowerCase().includes(keyword.toLowerCase())
         );
         setSuggests(filtered); // Cập nhật gợi ý đã lọc
       } else {
@@ -65,8 +66,8 @@ function Search({ placeholder, type, list }) {
                   className="search__suggest-item"
                   onClick={() => {
                     setSkipSearch(true);
-                    setKeyword(item.title);      // set lại input value
-                    dispatch(searchAction(item.title, type)); // click gợi ý nó trả về bái hát đó
+                    setKeyword(item[searchKey] || "");      // set lại input value
+                    dispatch(searchAction((item[searchKey] || ""), type)); // click gợi ý nó trả về bái hát đó
                     setSuggests([]);             // clear gợi ý
                   }}
                   style={{ cursor: "pointer" }}
@@ -75,9 +76,9 @@ function Search({ placeholder, type, list }) {
                     <img src={item.avatar} alt={item.title} />
                   </div>
                   <div className="search__suggest-info">
-                    <div className="search__suggest-title">{item.title}</div>
+                    <div className="search__suggest-title">{item[searchKey]}</div>
                     <div className="search__suggest-singer">
-                      {item.infoSinger?.fullName}
+                      {item.infoSinger?.fullName || item.fullName}
                     </div>
                   </div>
                 </div>

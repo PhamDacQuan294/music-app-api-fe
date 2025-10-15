@@ -97,6 +97,7 @@ function SingerTable() {
         placeholder="Tìm kiếm ca sĩ"
         searchType="singers"
         list={listSingers?.singers || []}
+        searchKey="fullName"
       />
 
       <Card title="Danh sách">

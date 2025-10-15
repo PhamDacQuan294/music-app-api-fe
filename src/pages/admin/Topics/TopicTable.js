@@ -157,6 +157,7 @@ function TopicTable() {
         placeholder="Tìm kiếm chủ đe"
         searchType="topics"
         list={listTopics?.topics || []}
+        searchKey="title"
       />
 
       <SortType 

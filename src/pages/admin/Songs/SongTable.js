@@ -176,6 +176,7 @@ function SongTable() {
         placeholder="Tìm kiếm bài hát..."
         searchType="songs"
         list={listSongs?.songs || []}
+        searchKey="title"
       />
 
       <SortType 

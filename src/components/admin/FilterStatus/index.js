@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { active, inActive, resetStatus } from "../../../actions/admin/filterStatus.actions";
 import Search from "../Search";
 
-function FilterStatus({ filterStatus, placeholder, searchType, list }) {
+function FilterStatus({ filterStatus, placeholder, searchType, list, searchKey }) {
   const dispatch = useDispatch();
   const typeFilterStatus = searchType.toUpperCase();
 
@@ -45,6 +45,7 @@ function FilterStatus({ filterStatus, placeholder, searchType, list }) {
             placeholder={placeholder}
             type={searchType}    
             list={list}     
+            searchKey={searchKey}
           />
         </Col>
       </Row>
