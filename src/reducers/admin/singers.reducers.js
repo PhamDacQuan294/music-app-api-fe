@@ -24,6 +24,15 @@ const singersReducer = (state = initialState, action) => {
     case "RESET_SEARCH_SINGERS":
       return { ...state, keyword: "" };
 
+    case "SORT_SINGERS":
+      return {
+        ...state,
+        listSingers: {
+          ...state.listSingers,
+          singers: action.payload.singers
+        }
+      }
+
     default:
       return state;
   }

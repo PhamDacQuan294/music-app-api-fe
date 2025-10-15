@@ -1,9 +1,11 @@
-import { Card, Col, Row, Table, Image, Tooltip, Tag, Space } from "antd";
+import { Card, Col, Row, Table, Image, Tooltip, Tag, Space, InputNumber } from "antd";
 import { useSelector } from "react-redux";
 import DeleteSinger from "./DeleteSinger";
 import DetailSinger from "./DetailSinger";
 import EditSinger from "./EditSinger";
 import FilterStatus from "../../../components/admin/FilterStatus";
+import { SortType } from "../../../components/admin/Sort";
+import { getListSinger } from "../../../services/admin/singerService";
 
 function SingerTable() {
   const { listSingers } = useSelector((state) => state.admin.singers);
@@ -44,6 +46,17 @@ function SingerTable() {
       )
     },
     {
+      title: "Vị trí",
+      dataIndex: "position",
+      key: "position",
+      render: (_, record) => (
+        <InputNumber 
+          min={1}
+          value={record.position} 
+        />
+      )
+    },
+    {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
@@ -81,7 +94,7 @@ function SingerTable() {
       render: (_, record) => {
         return <>
           <Space>
-            <DeleteSinger/>
+            <DeleteSinger />
             <EditSinger />
             <DetailSinger />
           </Space>
@@ -92,12 +105,18 @@ function SingerTable() {
 
   return (
     <>
-      <FilterStatus 
+      <FilterStatus
         filterStatus={listSingers?.filterStatus || []}
         placeholder="Tìm kiếm ca sĩ"
         searchType="singers"
         list={listSingers?.singers || []}
         searchKey="fullName"
+      />
+
+      <SortType
+        fetchData={getListSinger}
+        type="SINGERS"
+        params={["", "", ""]}
       />
 
       <Card title="Danh sách">

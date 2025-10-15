@@ -2,7 +2,7 @@ import { get } from "../../utils/request";
 import { API_PREFIX } from "../../components/admin/Contants";
 import { PREFIX_ADMIN } from "../../components/admin/Contants";
 
-export const getListSinger = async (status, keyword) => {
+export const getListSinger = async (status, keyword, page, sortKey, sortValue) => {
   let url = `${API_PREFIX}/${PREFIX_ADMIN}/singers`;
 
   const params = [];
@@ -13,6 +13,10 @@ export const getListSinger = async (status, keyword) => {
 
   if (keyword) {
     params.push(`keyword=${keyword}`);
+  }
+  
+  if (sortKey && sortValue) {
+    params.push(`sortKey=${sortKey}&sortValue=${sortValue}`);
   }
   
   if (params.length > 0) {
