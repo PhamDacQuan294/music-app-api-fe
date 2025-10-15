@@ -1,14 +1,17 @@
 import { Menu } from "antd";
 import { MenuUnfoldOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { PREFIX_ADMIN } from "../Contants";
 
 function MenuSider() {
+  const location = useLocation();
+  const currentPath = location.pathname.replace(`/${PREFIX_ADMIN}`, "");
+
   const items = [
     {
       label: <Link to={`/${PREFIX_ADMIN}/dashboard`}>Tổng quan</Link>,
       icon: <MenuUnfoldOutlined />,
-      key: "/"
+      key: "/dashboard",
     },
     {
       label: <Link to={`/${PREFIX_ADMIN}/topics`}>Quản lý chủ đề</Link>,
@@ -52,6 +55,7 @@ function MenuSider() {
       <Menu
         mode="inline"
         items={items}
+        selectedKeys={[currentPath]}
       />
     </>
   )
