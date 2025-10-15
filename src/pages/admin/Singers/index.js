@@ -11,7 +11,7 @@ function ListSinger() {
 
   const fetchData = async () => {
     try {
-      const singerRes = await getListSinger(filter);
+      const singerRes = await getListSinger(filter, keyword);
 
       dispatch(getListSingersAction(singerRes));
     } catch (error) {
