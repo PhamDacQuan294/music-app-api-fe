@@ -32,7 +32,31 @@ const singersReducer = (state = initialState, action) => {
           singers: action.payload.singers
         }
       }
+    
+    case "CHANGE_MULTI_STATUS_SINGERS":
+      const { newType, status } = action.payload;
 
+      if (status === "delete-all") {
+        return {
+          ...state,
+          listSingers: {
+            ...state.listSingers,
+            singers: newType
+          },
+        };
+      }
+
+      return {
+        ...state,
+        listSingers: {
+          ...state.listSingers,
+          singers: state.listSingers.singers.map((singer) => {
+            const found = newType.find((t) => t._id === singer._id);
+
+            return found ? { ...singer, ...found } : singer;
+          })
+        },
+      };
     default:
       return state;
   }

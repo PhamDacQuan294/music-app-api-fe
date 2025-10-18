@@ -1,4 +1,4 @@
-import { Card, Col, Row, Table, Image, Tooltip, Tag, Space, InputNumber } from "antd";
+import { Card, Col, Row, Table, Image, Tooltip, Tag, Space, InputNumber, Button } from "antd";
 import { useSelector } from "react-redux";
 import DeleteSinger from "./DeleteSinger";
 import DetailSinger from "./DetailSinger";
@@ -6,9 +6,23 @@ import EditSinger from "./EditSinger";
 import FilterStatus from "../../../components/admin/FilterStatus";
 import { SortType } from "../../../components/admin/Sort";
 import { getListSinger } from "../../../services/admin/singerService";
+import { useEffect, useState } from "react";
+import { ChangeStatusMulti } from "../../../components/admin/ChangeMulti";
+import { Link } from "react-router-dom";
+import { PlusOutlined } from "@ant-design/icons"
 
 function SingerTable() {
   const { listSingers } = useSelector((state) => state.admin.singers);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [positions, setPositions] = useState({});
+
+   useEffect(() => {
+      const pos = {};
+      listSingers.singers.forEach(singer => {
+        pos[singer._id] = singer.position;
+      });
+      setPositions(pos);
+    }, [listSingers.singers]);
 
   const dataSource = (listSingers?.singers || []).map((singer) => {
     return {
@@ -52,7 +66,24 @@ function SingerTable() {
       render: (_, record) => (
         <InputNumber 
           min={1}
-          value={record.position} 
+          value={positions[record._id]} 
+          onChange={(value) => {
+            setPositions(prev => ({
+              ...prev,
+              [record._id]: value,
+            }));
+
+            const updatedSelectedRowKeys = selectedRowKeys.map((key) => {
+              const [id] = key.split("-");
+              if (id === record._id) {
+                return `${id}-${value}`;
+              }
+              return key;
+            });
+
+            setSelectedRowKeys(updatedSelectedRowKeys);
+          }}
+          style={{ width: "70px" }}
         />
       )
     },
@@ -121,6 +152,21 @@ function SingerTable() {
 
       <Card title="Danh sách">
         <Row>
+          <Col sm={16}>
+            <ChangeStatusMulti
+              selectedRowKeys={selectedRowKeys}
+              type="singers"
+            />
+          </Col>
+          <Col sm={8} style={{ textAlign: "right", marginBottom: "20px" }}>
+            <Link to="/admin/create-singer">
+              <Button type="primary" icon={<PlusOutlined />}>
+                Thêm ca sĩ
+              </Button>
+            </Link>
+          </Col>
+        </Row>
+        <Row>
           <Col sm={24}>
             <Table
               dataSource={dataSource}
@@ -128,6 +174,11 @@ function SingerTable() {
               rowKey="_id"
               scroll={{ x: "max-content" }}
               className="custom-table"
+              rowSelection={{
+                onChange: (newSelectedRowKeys) => {
+                  setSelectedRowKeys(newSelectedRowKeys);
+                }
+              }}
             />
           </Col>
         </Row>
