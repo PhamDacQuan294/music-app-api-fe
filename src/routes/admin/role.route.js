@@ -4,6 +4,7 @@ import RoleCreateForm from "../../pages/admin/roles/CreateRole";
 export const roleRoutes= [
   {
     path: "roles",
+    element: <ListRoles />, 
     children: [
       {
         path: "permissions",

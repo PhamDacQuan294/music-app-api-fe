@@ -25,6 +25,13 @@ function RoleTable() {
       title: "Mô tả ngắn",
       dataIndex: "description",
       key: "description",
+      render: (text) => (
+        <div
+          dangerouslySetInnerHTML={{
+            __html: text || "<i>Không có mô tả</i>",
+          }}
+        />
+      ),
     },
     {
       title: "Hành động",
@@ -44,7 +51,7 @@ function RoleTable() {
   return (
     <>
       {contextHolder}
-      
+
       <Card title="Danh sách nhóm quyền">
         <Row>
           <Col sm={16}>

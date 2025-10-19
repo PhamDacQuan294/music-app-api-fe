@@ -29,6 +29,11 @@ function MenuSider() {
       key: "/singers"
     },
     {
+      label: <Link to={`/${PREFIX_ADMIN}/roles`}>Nhóm quyền</Link>,
+      icon: <MenuUnfoldOutlined />,
+      key: "/roles"
+    },
+    {
       label: <Link to={`/${PREFIX_ADMIN}/roles/permissions`}>Phân quyền</Link>,
       icon: <MenuUnfoldOutlined />,
       key: "/roles/permissions"
