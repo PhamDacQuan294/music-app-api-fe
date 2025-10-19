@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useDispatch } from "react-redux";
 import { getListRoles } from "../../../services/admin/rolesService";
 import { getListRolesAction } from "../../../actions/admin/roles.action";
@@ -19,7 +20,7 @@ function ListRoles() {
 
   useEffect(() => {
     fetchData();
-  })
+  }, [])
 
   return (
     <>

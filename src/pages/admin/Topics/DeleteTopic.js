@@ -12,13 +12,13 @@ function DeleteTopic({ record, messageApi }) {
 
     if (response.code === 200) {
       messageApi.success({
-        content: 'Xoá bài hát thành công',
+        content: 'Xoá chủ đề thành công',
         duration: 5,
       });
       dispatch(deleteTopicAction(response))
     } else {
       messageApi.error({
-        content: 'Xoá bài hát chưa thành công',
+        content: 'Xoá chủ đề chưa thành công',
         duration: 5,
       });
     }

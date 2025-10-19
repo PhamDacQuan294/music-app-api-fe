@@ -1,5 +1,5 @@
 import { API_PREFIX, PREFIX_ADMIN } from "../../components/admin/Contants";
-import { get, post } from "../../utils/request";
+import { del, get, patch, post } from "../../utils/request";
 
 export const getListRoles = async () => {
   let url = `${API_PREFIX}/${PREFIX_ADMIN}/roles/permissions`;
@@ -10,5 +10,15 @@ export const getListRoles = async () => {
 
 export const createRolePost = async (formData) => {
   const result = await post(`${API_PREFIX}/${PREFIX_ADMIN}/roles/create`, formData);
+  return result;
+}
+
+export const deleteRole = async (id) => {
+  const result = await del(`${API_PREFIX}/${PREFIX_ADMIN}/roles/delete/${id}`);
+  return result;
+}
+
+export const updateRole = async (id, formData) => {
+  const result = await patch(`${API_PREFIX}/${PREFIX_ADMIN}/roles/edit/${id}`, formData);
   return result;
 }
