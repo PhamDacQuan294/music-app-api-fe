@@ -1,0 +1,10 @@
+.permission-table {
+  .ant-checkbox-inner {
+    border: 2px solid #1677ff;
+  }
+
+  .ant-checkbox:hover .ant-checkbox-inner {
+    border-color: #4096ff;
+    box-shadow: 0 0 3px rgba(64, 150, 255, 0.4);
+  }
+}
