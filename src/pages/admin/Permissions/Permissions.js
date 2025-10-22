@@ -1,42 +1,89 @@
-import { Button, Card, Checkbox, Table } from "antd";
-import Title from "antd/es/skeleton/Title";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Button, Card, Checkbox, Table, message, Typography, Spin } from "antd";
 import { useSelector } from "react-redux";
+import { useState, useEffect, useMemo } from "react";
 import "./Permissions.scss";
+import { updatePermissions } from "../../../services/admin/rolesService";
+import { useFeaturesData } from "./PermissionsFeatures";
+
+const { Title } = Typography;
 
 function RolePermissions() {
   const { listRoles } = useSelector((state) => state.admin.roles);
+  const roles = listRoles?.records || [];
 
-  // Danh sách vai trò (các cột)
-  const roles = listRoles?.records?.map((r) => r.title) || [];
+  const features = useFeaturesData();
 
-  // Danh sách tính năng (các hàng)
-  const features = [
-    { group: "Quản lý chủ đề", actions: ["Xem", "Thêm mới", "Chỉnh sửa", "Xoá"] },
-    { group: "Quản lý bài hát", actions: ["Xem", "Thêm mới", "Chỉnh sửa", "Xoá"] },
-    { group: "Nhóm quyền", actions: ["Xem", "Thêm mới", "Chỉnh sửa", "Xoá", "Phân quyền"] },
-  ];
+  const [permissionsState, setPermissionsState] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const dataSource = [];
+  // Cập nhật lại state khi roles thay đổi
+  useEffect(() => {
+    if (roles.length > 0) {
+      const initialState = roles.map((role) => ({
+        id: role._id,
+        permissions: role.permissions || [],
+      }));
+      setPermissionsState(initialState);
+    }
+  }, [roles]);
 
-  features.forEach((feature) => {
-    dataSource.push({
-      feature: <b>{feature.group}</b>,
-      key: feature.group,
+ 
+  // Toggle checkbox
+  const handleCheckboxChange = (roleIndex, permissionKey, checked) => {
+    setPermissionsState((prev) => {
+      const newState = [...prev];
+      const role = { ...newState[roleIndex] };
+
+      if (checked) {
+        role.permissions = [...new Set([...role.permissions, permissionKey])];
+      } else {
+        role.permissions = role.permissions.filter((p) => p !== permissionKey);
+      }
+
+      newState[roleIndex] = role;
+      return newState;
     });
+  };
 
-    feature.actions.forEach((action) => {
-      const row = {
-        feature: action,
-        key: `${feature.group}-${action}`
-      };
-      roles.forEach((role) => {
-        row[role] = <Checkbox />;
+
+  // Tạo dataSource cho bảng
+  const dataSource = useMemo(() => {
+    const rows = [];
+
+    features.forEach((feature) => {
+      rows.push({
+        key: feature.group,
+        feature: <b>{feature.group}</b>,
       });
-      dataSource.push(row);
-    });
-  });
 
-  // Cấu hình cột
+      feature.actions.forEach((action, i) => {
+        const row = {
+          key: `${feature.group}-${action}`,
+          feature: feature.labels[i],
+        };
+
+        roles.forEach((role, rIndex) => {
+          const isChecked = permissionsState[rIndex]?.permissions?.includes(action);
+          row[role.title] = (
+            <Checkbox
+              checked={isChecked}
+              onChange={(e) =>
+                handleCheckboxChange(rIndex, action, e.target.checked)
+              }
+            />
+          );
+        });
+
+        rows.push(row);
+      });
+    });
+
+    return rows;
+  }, [roles, permissionsState, features]);
+
+ 
+  //  Cấu hình cột
   const columns = [
     {
       title: "Tính năng",
@@ -44,28 +91,48 @@ function RolePermissions() {
       key: "feature",
     },
     ...roles.map((role) => ({
-      title: role,
-      dataIndex: role,
-      key: role,
+      title: role.title,
+      dataIndex: role.title,
+      key: role.title,
       align: "center",
     })),
   ];
+
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      const data = await updatePermissions({ permissions: JSON.stringify(permissionsState) });
+      message.success(data.message);
+    } catch (error) {
+      console.error(error);
+      message.error("Có lỗi xảy ra khi cập nhật!");
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
   return (
     <Card>
       <Title level={3}>Phân quyền</Title>
 
-      <Table
-        columns={columns}
-        dataSource={dataSource}
-        bordered
-        className="permission-table"
-      />
+      <Spin spinning={loading}>
+        <Table
+          columns={columns}
+          dataSource={dataSource}
+          pagination={true}
+          bordered
+          className="permission-table"
+          scroll={{ x: true }}
+        />
 
-      <div style={{ textAlign: "right", marginTop: 16 }}>
-        <Button type="primary">Cập nhật</Button>
-      </div>
+        <div style={{ textAlign: "right", marginTop: 16 }}>
+          <Button type="primary" onClick={handleSubmit}>
+            Cập nhật
+          </Button>
+        </div>
+      </Spin>
     </Card>
   );
 }

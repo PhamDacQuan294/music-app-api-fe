@@ -32,7 +32,7 @@ export const patch = async (path, options) => {
   const response = await fetch(API_DOMAIN + path, {
     method: "PATCH",
     headers: {
-        Accept: "application/json",
+      Accept: "application/json",
       "Content-Type": "application/json"
     },
     body: JSON.stringify(options) 
