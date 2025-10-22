@@ -1,4 +1,5 @@
 import LayoutDefault from "../../layout/admin/LayoutDefault";
+import { accountRoutes } from "./account.route";
 import { dashboardRoutes } from "./dashboard.route";
 import { roleRoutes } from "./role.route";
 import { singerRoutes } from "./singer.route";
@@ -16,7 +17,8 @@ export const routes = [
           ...topicRoutes,
           ...songRoutes,
           ...singerRoutes,
-          ...roleRoutes
+          ...roleRoutes,
+          ...accountRoutes
         ]
       }
     ]
