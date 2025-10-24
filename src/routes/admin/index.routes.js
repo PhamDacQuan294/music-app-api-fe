@@ -1,5 +1,7 @@
+import LayoutAuth from "../../layout/admin/LayoutAuth";
 import LayoutDefault from "../../layout/admin/LayoutDefault";
 import { accountRoutes } from "./account.route";
+import { authRoutes } from "./auth.route";
 import { dashboardRoutes } from "./dashboard.route";
 import { roleRoutes } from "./role.route";
 import { singerRoutes } from "./singer.route";
@@ -22,5 +24,10 @@ export const routes = [
         ]
       }
     ]
+  },
+  {
+    path: "/admin/auth",
+    element: <LayoutAuth />,
+    children: [...authRoutes],
   }
 ];
