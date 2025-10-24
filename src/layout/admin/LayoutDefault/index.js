@@ -26,15 +26,15 @@ function LayoutDefault() {
               <div className="header__collapse" onClick={() => setCollapsed(!collapsed)}>
                 <MenuUnfoldOutlined />
               </div>
-              <Link to={`${PREFIX_ADMIN}/dashboard`} className="header__nav-admin">
+              <Link to={`/${PREFIX_ADMIN}/dashboard`} className="header__nav-admin">
                  ADMIN
               </Link>
             </div>
             <div className="header__nav-right">
-              <Link to={`${PREFIX_ADMIN}/my-account`} className="header__nav-account">
+              <Link to={`/${PREFIX_ADMIN}/my-account`} className="header__nav-account">
                 Le Van A
               </Link>
-              <Link to={`${PREFIX_ADMIN}/auth/logout`} className="header__nav-logout">
+              <Link to={`/${PREFIX_ADMIN}/auth/logout`} className="header__nav-logout">
                 Đăng xuất
               </Link>
             </div>

@@ -8,7 +8,7 @@ function Dashboard() {
 
   useEffect(() => {
     if (location.state?.message) {
-      message.success(location.state.message);
+      message.success(location.state.message, 1);
 
       //  Xóa message khỏi state để F5 không hiển thị lại
       navigate(location.pathname, { replace: true });
