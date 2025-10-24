@@ -5,3 +5,8 @@ export const loginService = async (formData) => {
   const result = await post(`${API_PREFIX}/${PREFIX_ADMIN}/auth/login`, formData);
   return result;
 }
+
+export const verifyService = async (token) => {
+  const result = await post(`${API_PREFIX}/${PREFIX_ADMIN}/auth/varify`, { token });
+  return result;
+}

@@ -27,7 +27,9 @@ function Login() {
         setCookie("email", response.data.email, 1);
         setCookie("token", response.data.token, 1);
         dispatch(checkLogin(true));
-        navigate("/admin/dashboard");
+        navigate("/admin/dashboard", {
+          state: { message: "Đăng nhập thành công!" }
+        });
       } else if (response.code === 400) {
         messageApi.error(`${response.message}`);
       }
