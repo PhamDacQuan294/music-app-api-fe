@@ -5,7 +5,7 @@ import songsReducer from "./songs.reducers";
 import singersReducer from "./singers.reducers";
 import rolesReducer from "./roles.reducers";
 import accountsReducer from "./accounts.reducers";
-import loginReducer from "./auth.reducers";
+import authReducer from "./auth.reducers";
 
 const allReducersAdmin = combineReducers({
   topics: topicsReducer, 
@@ -13,7 +13,7 @@ const allReducersAdmin = combineReducers({
   singers: singersReducer,
   roles: rolesReducer,
   accounts: accountsReducer,
-  login: loginReducer
+  auth: authReducer
 });
 
 export default allReducersAdmin;

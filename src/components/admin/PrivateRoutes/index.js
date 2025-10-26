@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 import { getCookie } from "../../../helpers/cookie";
-import { checkLogin } from "../../../actions/admin/auth.action";
+import { checkLogin, loginSuccess } from "../../../actions/admin/auth.action";
 import { verifyService } from "../../../services/admin/authService"; 
 
 function PrivateRouters() {
   const dispatch = useDispatch();
-  const isLogin = useSelector((state) => state.admin.login);
+  const { login } = useSelector((state) => state.admin.auth);
   const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
@@ -18,7 +18,10 @@ function PrivateRouters() {
         try {
           const res = await verifyService(token); 
           if (res.code === 200) {
-            dispatch(checkLogin(true));
+            dispatch(loginSuccess({
+              user: res.user,
+              role: res.role
+            }));
           } else {
             dispatch(checkLogin(false));
           }
@@ -38,7 +41,7 @@ function PrivateRouters() {
     return null;
   }
 
-  return isLogin ? <Outlet /> : <Navigate to="/admin/auth/login" />;
+  return login ? <Outlet /> : <Navigate to="/admin/auth/login" />;
 }
 
 export default PrivateRouters;

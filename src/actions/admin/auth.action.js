@@ -4,3 +4,15 @@ export const checkLogin = (status) => {
     status: status
   };
 }
+
+export const loginSuccess = (payload) => {
+  return {
+    type: "LOGIN_SUCCESS",
+    payload: payload
+  }
+}
+
+export const updateRoleAction = (newRole) => ({
+  type: "UPDATE_ROLE",
+  payload: newRole,
+});

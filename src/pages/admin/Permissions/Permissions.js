@@ -1,15 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Card, Checkbox, Table, message, Typography, Spin } from "antd";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect, useMemo } from "react";
 import "./Permissions.scss";
 import { updatePermissions } from "../../../services/admin/rolesService";
 import { useFeaturesData } from "./PermissionsFeatures";
+import { updateRoleAction } from "../../../actions/admin/auth.action";
 
 const { Title } = Typography;
 
 function RolePermissions() {
+  const dispatch = useDispatch();
   const { listRoles } = useSelector((state) => state.admin.roles);
+  const { role } = useSelector((state) => state.admin.auth);
   const roles = listRoles?.records || [];
 
   const features = useFeaturesData();
@@ -104,6 +107,12 @@ function RolePermissions() {
     try {
       const data = await updatePermissions({ permissions: JSON.stringify(permissionsState) });
       message.success(data.message);
+
+      const updatedRole = permissionsState.find((r) => r.id === role._id);
+
+      if (updatedRole) {
+        dispatch(updateRoleAction(updatedRole));
+      }
     } catch (error) {
       console.error(error);
       message.error("Có lỗi xảy ra khi cập nhật!");
