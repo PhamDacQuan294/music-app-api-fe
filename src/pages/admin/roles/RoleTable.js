@@ -8,7 +8,9 @@ import DetailRole from "./DetailRole";
 
 function RoleTable() {
   const { listRoles } = useSelector((state) => state.admin.roles);
+  const { role } = useSelector((state) => state.admin.auth);
   const [messageApi, contextHolder] = message.useMessage();
+  const hasPermission = (perm) => role?.permissions?.includes(perm);
 
   const columns = [
     {
@@ -39,9 +41,11 @@ function RoleTable() {
       render: (_, record) => {
         return <>
           <Space>
-            <DeleteRole record={record} messageApi={messageApi} />
-            <EditRole record={record} />
-            <DetailRole record={record} />
+            {hasPermission("roles_delete") && (
+              <DeleteRole record={record} messageApi={messageApi} />
+            )}
+            {hasPermission("roles_edit") && <EditRole record={record} />}
+            {hasPermission("roles_view") && <DetailRole record={record} />}
           </Space>
         </>
       }
@@ -58,11 +62,13 @@ function RoleTable() {
             <h2 style={{ marginBottom: 0 }}>Nhóm quyền</h2>
           </Col>
           <Col sm={8} style={{ textAlign: "right", marginBottom: "20px" }}>
-            <Link to="/admin/roles/create">
-              <Button type="primary" icon={<PlusOutlined />}>
-                Thêm mới nhóm quyền
-              </Button>
-            </Link>
+            {hasPermission("roles_create") && ( 
+              <Link to="/admin/roles/create">
+                <Button type="primary" icon={<PlusOutlined />}>
+                  Thêm mới nhóm quyền
+                </Button>
+              </Link>
+            )}
           </Col>
         </Row>
 
