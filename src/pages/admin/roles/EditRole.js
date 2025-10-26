@@ -5,8 +5,7 @@ import RoleFormFields from "./RoleFormFields";
 
 function EditRole({ record }) {
   const [showModal, setShowModal] = useState(false);
-  const [spinning, setSpinning] = useState(false);
-    const rules = [{ required: true, message: "Bắt buộc" }];
+  const rules = [{ required: true, message: "Bắt buộc" }];
 
   const handleShowModal = () => {
     setShowModal(true);
@@ -31,7 +30,7 @@ function EditRole({ record }) {
         title="Chỉnh sửa nhóm quyền"
         footer={null}
       >
-        <Spin spinning={spinning} tip="Đang cập nhật...">
+        <Spin>
           <Form
             layout="vertical"
             initialValues={record}

@@ -14,6 +14,7 @@ import usePaginationQuery from "../../../hooks/admin/usePaginationQuery.hook";
 import { pagination } from "../../../actions/admin/pagination.action";
 import { updateTopicStatusAction } from "../../../actions/admin/topics.actions";
 import { hanleStatusChange } from "../../../components/admin/ChangeStatus";
+import FormatDate from "../../../components/admin/Moment";
 
 function TopicTable() {
   const dispatch = useDispatch();
@@ -53,8 +54,8 @@ function TopicTable() {
       key: "avatar",
       render: (avatar) => (
         avatar ? (
-         <Image
-            src={avatar} 
+          <Image
+            src={avatar}
             alt="avatar"
             width={80}
             height={60}
@@ -63,7 +64,7 @@ function TopicTable() {
         ) : (
           <span style={{ color: "#999" }}>No image</span>
         )
-       
+
       ),
     },
     {
@@ -76,9 +77,9 @@ function TopicTable() {
       dataIndex: "position",
       key: "position",
       render: (_, record) => (
-        <InputNumber 
+        <InputNumber
           min={1}
-          value={positions[record._id]} 
+          value={positions[record._id]}
           onChange={(value) => {
             setPositions(prev => ({
               ...prev,
@@ -108,7 +109,7 @@ function TopicTable() {
           {record.status === "active" ? (
             <>
               <Tooltip title="Chủ đề chưa bị dừng hoạt động" color="green">
-                <Tag 
+                <Tag
                   color="green"
                   style={{ cursor: "pointer" }}
                   onClick={() => hanleStatusChange(record, "topics", messageApi, changeStatusTopic)}
@@ -120,7 +121,7 @@ function TopicTable() {
           ) : (
             <>
               <Tooltip title="Chủ đề đã bị dừng hoạt động" color="red">
-                <Tag 
+                <Tag
                   color="red"
                   style={{ cursor: "pointer" }}
                   onClick={() => hanleStatusChange(record, "topics", messageApi, changeStatusTopic)}
@@ -134,12 +135,34 @@ function TopicTable() {
       }
     },
     {
+      title: "Người tạo",
+      dataIndex: "createdByName",
+      key: "createdByName",
+      render: (_, record) => (
+        <>
+          <p>{record.createdByName}</p>
+          <p><FormatDate time={record.createdBy?.createdAt} type="date" /></p>
+        </>
+      ),
+    },
+    {
+      title: "Cập nhật gần nhất",
+      dataIndex: "updatedByName",
+      key: "updatedByName",
+      render: (_, record) => (
+        <>
+          <p>{record.updatedByName}</p>
+          <p><FormatDate time={record.createdBy?.createdAt} type="date" /></p>
+        </>
+      ),
+    },
+    {
       title: "Hành động",
       key: "actions",
       render: (_, record) => {
         return <>
           <Space>
-            <DeleteTopic record={record} messageApi={messageApi}/>
+            <DeleteTopic record={record} messageApi={messageApi} />
             <EditTopic record={record} />
             <DetailTopic record={record} />
           </Space>
@@ -152,7 +175,7 @@ function TopicTable() {
     <>
       {contextHolder}
 
-      <FilterStatus 
+      <FilterStatus
         filterStatus={listTopics?.filterStatus || []}
         placeholder="Tìm kiếm chủ đe"
         searchType="topics"
@@ -160,7 +183,7 @@ function TopicTable() {
         searchKey="title"
       />
 
-      <SortType 
+      <SortType
         fetchData={getListTopic}
         type="TOPICS"
         params={["", ""]}
@@ -184,10 +207,10 @@ function TopicTable() {
         </Row>
         <Row>
           <Col sm={24}>
-            <Table 
-              dataSource={dataSource} 
+            <Table
+              dataSource={dataSource}
               columns={columns}
-              rowKey="_id" 
+              rowKey="_id"
               scroll={{ x: "max-content" }}
               className="custom-table"
               pagination={{

@@ -37,10 +37,12 @@ function CreateTopic() {
     try {
       const response = await createTopicPost(formData);
 
-      if (response.data.code === 200) {
+      console.log(response);
+
+      if (response.code === 200) {
         form.resetFields();
         setFileList([]);
-        dispatch(createTopicAction(response.data.topic));
+        dispatch(createTopicAction(response.topic));
         setTimeout(() => {
           messageApi.open({
             type: "success",
@@ -48,10 +50,10 @@ function CreateTopic() {
             duration: 5,
           });
         }, 0);
-      } else if (response.data.code === 400) {
+      } else if (response.code === 400) {
         messageApi.open({
           type: "error",
-          content: response.data.message,
+          content: response.message,
           duration: 5,
         });
       } else {
@@ -62,6 +64,7 @@ function CreateTopic() {
         });
       }
     } catch (error) {
+      console.log(error);
       messageApi.open({
         type: "error",
         content: "Có lỗi kết nối server!",

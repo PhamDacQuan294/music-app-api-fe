@@ -1,19 +1,20 @@
 import axios from "axios";
+import { getCookie } from "../helpers/cookie";
 
 const API_DOMAIN = "http://localhost:5000";
 
 export const post2 = async (path, formData) => {
   try {
-    const result = await axios.post(
-      `${API_DOMAIN}${path}`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
-    return result;
+    const token = getCookie("token"); 
+
+    const result = await axios.post(`${API_DOMAIN}${path}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    return result.data; 
   } catch (error) {
     console.error("Error while making the post request:", error);
     throw error;
@@ -22,15 +23,18 @@ export const post2 = async (path, formData) => {
 
 export const patch2 = async (path, formData) => {
   try {
+    const token = getCookie("token");
+
     const res = await axios.patch(`${API_DOMAIN}${path}`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
+        "Authorization": `Bearer ${token}`,
       },
     });
+
     return res.data;
   } catch (err) {
     console.error(err);
     return null;
   }
 };
-
