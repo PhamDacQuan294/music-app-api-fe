@@ -7,11 +7,12 @@ import "./LayoutDefault.scss";
 import MenuSider from "../../../components/admin/MenuSider";
 import { useState } from "react";
 import { PREFIX_ADMIN } from "../../../components/admin/Contants";
-
+import { useSelector } from "react-redux";
 const { Sider, Content } = Layout;
 
 function LayoutDefault() {
   const [collapsed, setCollapsed] = useState(false);
+  const { user } = useSelector((state) => state.admin.auth); 
 
   return (
     <>
@@ -32,7 +33,7 @@ function LayoutDefault() {
             </div>
             <div className="header__nav-right">
               <Link to={`/${PREFIX_ADMIN}/my-account`} className="header__nav-account">
-                Le Van A
+                {user?.fullName}
               </Link>
               <Link to={`/${PREFIX_ADMIN}/auth/logout`} className="header__nav-logout">
                 Đăng xuất

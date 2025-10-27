@@ -1,5 +1,5 @@
 import { Menu } from "antd";
-import { MenuUnfoldOutlined } from "@ant-design/icons";
+import { BarChartOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { Link, useLocation } from "react-router-dom";
 import { PREFIX_ADMIN } from "../Contants";
 
@@ -47,6 +47,11 @@ function MenuSider() {
       label: <Link to={`/${PREFIX_ADMIN}/users`}>Tài khoản user</Link>,
       icon: <MenuUnfoldOutlined />,
       key: "/users"
+    },
+    {
+      label: <Link to={`/${PREFIX_ADMIN}/statistics`}>Tổng quan hệ thống</Link>,
+      icon: <BarChartOutlined />,
+      key: "/statistics",
     },
     {
       label: <Link to={`/${PREFIX_ADMIN}/settings/general`}>Cài đặt chung</Link>,

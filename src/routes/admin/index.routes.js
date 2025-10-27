@@ -7,6 +7,7 @@ import { dashboardRoutes } from "./dashboard.route";
 import { roleRoutes } from "./role.route";
 import { singerRoutes } from "./singer.route";
 import { songRoutes } from "./song.route";
+import { statisticsRoutes } from "./statistics.route";
 import { topicRoutes } from "./topic.routes";
 
 export const routes = [
@@ -23,6 +24,7 @@ export const routes = [
           ...singerRoutes,
           ...roleRoutes,
           ...accountRoutes,
+          ...statisticsRoutes
         ],
       },
     ],

@@ -15,7 +15,6 @@ function ListRoles() {
   const fetchData = async () => {
     try {
       const roleRes = await getListRoles();
-      console.log(roleRes);
       dispatch(getListRolesAction(roleRes));
     } catch (error) {
       console.error("Error fetching data:", error);
